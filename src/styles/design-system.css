@@ -1,0 +1,334 @@
+/* Design System ECGNOW - Tokens Visuais */
+
+:root {
+  /* Cores principais */
+  --ds-primary: #033569;
+  --ds-primary-hover: #045293;
+  --ds-secondary: #0dcaf0;
+
+  /* Cores semânticas */
+  --ds-success: #198754;
+  --ds-danger: #dc3545;
+  --ds-warning: #ffc107;
+  --ds-info: #0dcaf0;
+
+  /* Cores neutras */
+  --ds-text-primary: #212529;
+  --ds-text-secondary: #6c757d;
+  --ds-border: #dee2e6;
+  --ds-bg-page: #f8f9fa;
+  --ds-bg-surface: #ffffff;
+
+  /* Tipografia */
+  --ds-font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --ds-font-size-sm: 14px;
+  --ds-font-size-base: 16px;
+  --ds-font-size-lg: 18px;
+  --ds-font-size-xl: 24px;
+  --ds-font-size-xxl: 20px;
+
+  /* Espaçamento */
+  --ds-space-xs: 4px;
+  --ds-space-sm: 8px;
+  --ds-space-md: 12px;
+  --ds-space-base: 16px;
+  --ds-space-lg: 24px;
+  --ds-space-xl: 32px;
+
+  /* Border radius */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+}
+
+/* Base */
+body {
+  font-family: var(--ds-font-family);
+  color: var(--ds-text-primary);
+  background-color: var(--ds-bg-page);
+}
+
+/* Botões */
+.ds-btn {
+  font-weight: 500;
+  border-radius: var(--ds-radius-md);
+  padding: 0.5rem 1rem;
+  font-size: var(--ds-font-size-base);
+  transition: all 0.2s ease;
+}
+
+.ds-btn-primary {
+  background-color: var(--ds-primary);
+  border-color: var(--ds-primary);
+  color: white;
+}
+
+.ds-btn-primary:hover {
+  background-color: var(--ds-primary-hover);
+  border-color: var(--ds-primary-hover);
+}
+
+.ds-btn-secondary {
+  background-color: var(--ds-secondary);
+  border-color: var(--ds-secondary);
+  color: white;
+}
+
+.ds-btn-success {
+  background-color: var(--ds-success);
+  border-color: var(--ds-success);
+  color: white;
+}
+
+.ds-btn-danger {
+  background-color: var(--ds-danger);
+  border-color: var(--ds-danger);
+  color: white;
+}
+
+.ds-btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--ds-primary);
+  color: var(--ds-primary);
+}
+
+.ds-btn-outline:hover {
+  background-color: var(--ds-primary);
+  color: white;
+}
+
+/* Cards */
+.ds-card {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background-color: var(--ds-bg-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: var(--ds-space-base);
+}
+
+.ds-card-header {
+  padding: 0 0 var(--ds-space-base) 0;
+  border-bottom: 1px solid var(--ds-border);
+  margin-bottom: var(--ds-space-base);
+}
+
+.ds-card-title {
+  font-size: var(--ds-font-size-xxl);
+  font-weight: 600;
+  margin: 0;
+  color: var(--ds-text-primary);
+}
+
+.ds-card-body {
+  padding: 0;
+}
+
+/* Badges */
+.ds-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--ds-font-size-sm);
+  font-weight: 500;
+  text-align: center;
+}
+
+.ds-badge-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.ds-badge-danger {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.ds-badge-warning {
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
+.ds-badge-info {
+  background-color: #cfe2ff;
+  color: #084298;
+}
+
+.ds-badge-neutral {
+  background-color: #e2e3e5;
+  color: #41464b;
+}
+
+/* Tabelas */
+.ds-table-wrapper {
+  border-radius: var(--ds-radius-md);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ds-table {
+  margin-bottom: 0;
+  border-collapse: collapse;
+}
+
+.ds-table thead {
+  background-color: var(--ds-bg-page);
+  border-bottom: 2px solid var(--ds-border);
+}
+
+.ds-table th {
+  padding: var(--ds-space-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  font-size: var(--ds-font-size-base);
+}
+
+.ds-table td {
+  padding: var(--ds-space-base);
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.ds-table tbody tr:hover {
+  background-color: var(--ds-bg-page);
+}
+
+.ds-table-actions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  justify-content: flex-end;
+}
+
+.ds-table-empty {
+  text-align: center;
+  padding: var(--ds-space-xl);
+  color: var(--ds-text-secondary);
+}
+
+/* Formulários */
+.ds-form-group {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.ds-label {
+  display: block;
+  margin-bottom: var(--ds-space-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  font-size: var(--ds-font-size-base);
+}
+
+.ds-input,
+.ds-select,
+.ds-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  font-family: var(--ds-font-family);
+  font-size: var(--ds-font-size-base);
+}
+
+.ds-input:focus,
+.ds-select:focus,
+.ds-textarea:focus {
+  outline: none;
+  border-color: var(--ds-primary);
+  box-shadow: 0 0 0 3px rgba(3, 53, 105, 0.1);
+}
+
+.ds-input.is-invalid,
+.ds-select.is-invalid {
+  border-color: var(--ds-danger);
+}
+
+.ds-feedback {
+  color: var(--ds-danger);
+  font-size: var(--ds-font-size-sm);
+  margin-top: var(--ds-space-sm);
+}
+
+.ds-help-text {
+  color: var(--ds-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  margin-top: var(--ds-space-sm);
+}
+
+/* Alertas */
+.ds-alert {
+  padding: var(--ds-space-base);
+  border-radius: var(--ds-radius-md);
+  margin-bottom: var(--ds-space-base);
+  font-size: var(--ds-font-size-base);
+}
+
+.ds-alert-success {
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+  color: #0f5132;
+}
+
+.ds-alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  color: #842029;
+}
+
+.ds-alert-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  color: #664d03;
+}
+
+.ds-alert-info {
+  background-color: #cfe2ff;
+  border: 1px solid #b6d4fe;
+  color: #084298;
+}
+
+/* Header da página */
+.ds-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--ds-space-xl);
+  padding-bottom: var(--ds-space-lg);
+  border-bottom: 2px solid var(--ds-border);
+}
+
+.ds-page-title {
+  font-size: var(--ds-font-size-xl);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.ds-page-subtitle {
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-text-secondary);
+  margin: var(--ds-space-sm) 0 0 0;
+}
+
+.ds-page-actions {
+  display: flex;
+  gap: var(--ds-space-md);
+}
+
+/* Estados */
+.is-invalid {
+  border-color: var(--ds-danger) !important;
+}
+
+.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.is-active {
+  background-color: var(--ds-primary);
+  color: white;
+}
