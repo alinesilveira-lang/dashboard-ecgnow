@@ -1,23 +1,39 @@
 {
   "name": "dashboard-ecgnow",
+  "description": "Dashboard Acadêmico ECGNOW - Sistema de indicadores educacionais",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "proxy": "node api-proxy.js",
+    "dev:full": "concurrently \"npm run proxy\" \"npm run dev\"",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update-kpis": "node update-kpis.js"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
     "axios": "^1.17.0",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "lucide-react": "^1.17.0",
+    "node-fetch": "^3.3.0",
     "pinia": "^3.0.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "vue": "^3.5.34",
     "vue-chartjs": "^5.3.3"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
     "@vitejs/plugin-vue": "^6.0.6",
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^8.2.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0",
     "vite": "^8.0.12"
   }
 }
