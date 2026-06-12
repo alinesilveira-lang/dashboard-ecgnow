@@ -53,13 +53,21 @@ async function fetchSheetData() {
     const rows = response.values;
     const headers = rows[0];
 
+    // Função para normalizar strings (remover acentos)
+    const normalize = (str) => {
+      return String(str)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '');
+    };
+
     // Encontrar índices das colunas
     let teoricoIdx = -1;
     let engajamentoIdx = -1;
     let ativosIdx = -1;
 
     for (let i = 0; i < headers.length; i++) {
-      const h = String(headers[i]).toLowerCase();
+      const h = normalize(headers[i]);
       if (h.includes('conclusao') && h.includes('teorico')) teoricoIdx = i;
       if (h.includes('engajamento')) engajamentoIdx = i;
       if (h.includes('ativos') && h.includes('30')) ativosIdx = i;
