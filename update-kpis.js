@@ -66,7 +66,11 @@ async function fetchSheetData() {
     }
 
     if (teoricoIdx === -1 || engajamentoIdx === -1 || ativosIdx === -1) {
-      throw new Error('Colunas esperadas não encontradas na planilha');
+      console.log('❌ Colunas não encontradas. Colunas disponíveis:');
+      headers.forEach((h, i) => {
+        console.log(`   ${i}: ${h}`);
+      });
+      throw new Error('Colunas esperadas não encontradas. Veja acima a lista de colunas.');
     }
 
     // Processar dados
