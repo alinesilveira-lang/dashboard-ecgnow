@@ -605,10 +605,32 @@ function loadKPIsFromJSON() {
 
 function updateDashboardKPIs(kpis) {
   const total = kpis.total_alunos || 232;
+  const totalCadastrados = kpis.total_cadastrados || 232;
+  const ativoEstudando = kpis.ativo_estudando || 79;
+  const concluidos = kpis.concluidos || 95;
+  const taxaConclusao = kpis.taxa_conclusao || 41;
+
+  // Atualizar seção de cima (hero)
+  const alunoBig = document.querySelector('.rs-big');
+  if (alunoBig) {
+    alunoBig.innerHTML = `${totalCadastrados} <small>desde ago/2023</small>`;
+  }
+
+  // Atualizar "Estudando agora"
+  const heroGrid = document.querySelectorAll('.rs-hero-grid > div');
+  if (heroGrid.length >= 1) {
+    heroGrid[0].innerHTML = `<div class="rs-hl">Estudando agora</div><div class="rs-hv">${ativoEstudando} <small>alunos</small></div>`;
+  }
+
+  // Atualizar "Concluíram"
+  if (heroGrid.length >= 2) {
+    const porcentagem = ((concluidos / total) * 100).toFixed(0);
+    heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
+  }
 
   // Recalcular KPIs na visão de resumo
   const chips = [
-    { l: 'Taxa de conclusão', v: '41%', s: '95 de 232 alunos', f: 'g' },
+    { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
     {
       l: 'Engajamento A+M',
       v: kpis.engajamento_alto_medio.percentual + '%',
