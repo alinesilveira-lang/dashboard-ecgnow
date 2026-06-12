@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "message": "KPIs - Curso Profissão Viver de Holter",
+  "data": {
+    "engajamento_alto_medio": {
+      "valor": 198,
+      "percentual": "85.0",
+      "total": 233
+    },
+    "ativos_30_dias": {
+      "valor": 55,
+      "percentual": "23.6",
+      "total": 233
+    },
+    "progresso_medio_teorico": 53.2,
+    "total_alunos": 233,
+    "timestamp": "2026-06-12T15:48:02.040Z"
+  }
+}
