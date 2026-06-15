@@ -81,11 +81,51 @@ async function fetchDashboardData() {
   }
 }
 
+async function fetchMatriculasData() {
+  try {
+    // Fetch da aba Dashboard (colunas D e E para Mês e Matrículas)
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Dashboard!D:E?key=${API_KEY}`;
+    const response = await fetchJSON(url);
+
+    if (!response.values) {
+      return { labels: [], vals: [] };
+    }
+
+    const rows = response.values;
+    const labels = [];
+    const vals = [];
+
+    // Pular header (linha 0) e processar dados
+    rows.forEach((row, index) => {
+      if (index === 0) return; // Skip header
+      const mes = String(row[0] || '').trim();
+      const matriculas = parseInt(row[1]) || 0;
+
+      if (mes && matriculas > 0) {
+        // Extrair apenas mês/ano (ex: "jun./2025" → "Jun")
+        const mesAbrev = mes.split('.')[0].charAt(0).toUpperCase() + mes.split('.')[0].slice(1);
+        labels.push(mesAbrev);
+        vals.push(matriculas);
+      }
+    });
+
+    // Retornar apenas últimos 12 meses com dados
+    return {
+      labels: labels.slice(-12),
+      vals: vals.slice(-12)
+    };
+  } catch (error) {
+    console.warn('⚠️ Aviso: Não foi possível extrair dados de matrículas mensais');
+    return { labels: [], vals: [] };
+  }
+}
+
 async function updateKPIs() {
   console.log('📊 Carregando dados da aba Dashboard...');
 
   try {
     const dashData = await fetchDashboardData();
+    const matriculasData = await fetchMatriculasData();
 
     // Estruturar dados por categoria
     const kpis = {
@@ -179,6 +219,9 @@ async function updateKPIs() {
       // Demografia
       idade_media: dashData['Idade Média'] || 0,
       idade_nao_informada: dashData['Idade não informada (qtd)'] || 0,
+      alunos_menos_25: dashData['Alunos com menos de 25 anos'] || 0,
+      alunos_25_35: dashData['Alunos entre 25 e 35 anos'] || 0,
+      alunos_mais_35: dashData['Alunos com mais de 35 anos'] || 0,
 
       // Turnos
       turno_manha: dashData['Turno Manhã (qtd)'] || 0,
@@ -196,7 +239,10 @@ async function updateKPIs() {
       // Notas Médias
       nota_media_engajamento_alto: parseFloat((dashData['Nota Média - Engajamento Alto'] || 0).toFixed(2)),
       nota_media_engajamento_medio: parseFloat((dashData['Nota Média - Engajamento Médio'] || 0).toFixed(2)),
-      nota_media_engajamento_baixo: parseFloat((dashData['Nota Média - Engajamento Baixo'] || 0).toFixed(2))
+      nota_media_engajamento_baixo: parseFloat((dashData['Nota Média - Engajamento Baixo'] || 0).toFixed(2)),
+
+      // Matrículas últimos 12 meses
+      matriculas_12_meses: matriculasData
     };
 
     const output = {

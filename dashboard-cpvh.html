@@ -159,7 +159,7 @@ svg text{font-family:'Nunito',sans-serif}
       <div><div class="rs-hl">Inadimplência</div><div class="rs-hv">R$ 15,4 mil <small>25 alunos</small></div></div>
     </div>
     <div class="rs-proj"><span class="pl">Esteira de talentos · histórico</span>
-      <b>25 alunos</b> chegaram a Analista ECGNOW · <b>13 ativos</b> hoje na operação Holter</div>
+      <b>23 alunos</b> chegaram a Analista ECGNOW · <b>16 ativos</b> na ECGNOW</div>
     <button class="rs-cta" onclick="showDetalhe()">Expandir dashboard completo →</button>
   </div>
 
@@ -218,9 +218,9 @@ svg text{font-family:'Nunito',sans-serif}
   </div>
   <div class="grid g-2">
     <div class="card chart-card">
-      <h3>Matrículas por ano</h3>
-      <div class="hint">2026 acumula 32 matrículas até maio — ritmo anualizado de ~77, próximo da média 2024–2025.</div>
-      <div id="anosChart"></div>
+      <h3>Alunos em Risco</h3>
+      <div class="hint">Alunos com menos de 50% de progresso na trilha teórica.</div>
+      <div id="riscoCard"></div>
     </div>
     <div class="card chart-card">
       <h3>Vínculo com a ECGNow</h3>
@@ -236,9 +236,9 @@ svg text{font-family:'Nunito',sans-serif}
   <p class="sec-sub">Como os alunos avançam na trilha teórica e quanto interagem com a plataforma. A trilha prática só registra concluintes (41 alunos, todos a 100%).</p>
   <div class="grid g-3">
     <div class="card chart-card">
-      <h3>Progresso na trilha teórica</h3>
-      <div class="hint">Distribuição dos 222 alunos com registro. Quase metade (48,6%) ainda está abaixo de 50% da trilha.</div>
-      <div id="teoricoChart"></div>
+      <h3>Indicadores de Progresso e Engajamento</h3>
+      <div class="hint">Mapeamento consolidado de atividade, progressão teórica e desempenho por nível de engajamento.</div>
+      <div id="indicadoresCard"></div>
     </div>
     <div class="card chart-card">
       <h3>Engajamento na plataforma</h3>
@@ -263,24 +263,14 @@ svg text{font-family:'Nunito',sans-serif}
       <div class="hint">Conversão de ponta a ponta: 10,8% dos matriculados chegaram a Analista ECGNOW.</div>
       <div id="funilGrande"></div>
     </div>
-    <div class="card chart-card">
-      <h3>Status do processo seletivo</h3>
-      <div class="hint">62 candidatos avaliados. "Sem perfil" e reprovações em entrevista somam 15; 9 não deram sequência.</div>
-      <div id="psChart"></div>
-    </div>
   </div>
 </section>
 
 <!-- 5. FINANCEIRO -->
 <section id="financeiro">
   <div class="sec-head"><h2>Financeiro do Curso</h2><span class="tag">Cobranças ASAAS 2026 + inadimplência</span></div>
-  <p class="sec-sub">Recorrência das cobranças ASAAS (parcelas de curso e mentoria), formas de pagamento, e o quadro de inadimplência apurado na base de alunos.</p>
+  <p class="sec-sub">Formas de pagamento e o quadro de inadimplência apurado na base de alunos.</p>
   <div class="grid g-3">
-    <div class="card chart-card" style="grid-column:span 2">
-      <h3>Cobranças ASAAS por mês (R$)</h3>
-      <div class="hint">R$ 11,5 mil em 51 cobranças no ano; recorrência cresce mês a mês até R$ 3,8 mil em maio (junho parcial). Curso: R$ 10,7 mil · Mentoria: R$ 775.</div>
-      <div id="asaasChart"></div>
-    </div>
     <div class="card chart-card">
       <h3>Inadimplência & Formas de Pagamento</h3>
       <div class="hint">Apuração da aba Performance + boletos vencidos importados. Distribuição de cobranças por método.</div>
@@ -323,15 +313,20 @@ svg text{font-family:'Nunito',sans-serif}
 <section id="demo">
   <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
   <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
-  <div class="grid g-3">
+  <div class="grid g-2">
     <div class="card chart-card">
       <h3>Idade média dos alunos</h3>
       <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
       <div id="idadeCard"></div>
     </div>
     <div class="card chart-card">
+      <h3>Distribuição por faixa etária</h3>
+      <div class="hint">Alunos agrupados por idade: menores de 25, entre 25-35, maiores de 35 anos.</div>
+      <div id="faixaEtariaChart"></div>
+    </div>
+    <div class="card chart-card">
       <h3>Preferência de turnos</h3>
-      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite.</div>
+      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite, integral.</div>
       <div id="turnoChart"></div>
     </div>
     <div class="card chart-card">
@@ -410,8 +405,7 @@ const DADOS={
     {n:'Não respondeu',v:5,c:'#cbd5e1'},
     {n:'Sem interesse',v:4,c:'#94a3b8'},
     {n:'Outros',v:4,c:'#e2e8f0'}
-  ],
-  asaas:{labels:['Jan','Fev','Mar','Abr','Mai','Jun*'],vals:[249.75,1367.64,2286.58,2944.04,3764.02,843.54]}
+  ]
 };
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const fmtN=v=>v.toLocaleString('pt-BR');
@@ -507,8 +501,7 @@ function funil(cid,steps,opts={}){
 /* ============================================================
    CAPA
    ============================================================ */
-barChart('rsChart',DADOS.matr12.labels,DADOS.matr12.vals,{w:560,h:215,highlight:7,color:'#0a3d6e'});
-funil('rsFunil',DADOS.funil,{w:340,rowH:40});
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 
 /* ============================================================
    1. VISÃO GERAL — KPIs
@@ -522,7 +515,7 @@ funil('rsFunil',DADOS.funil,{w:340,rowH:40});
     {l:'Engajamento Alto+Médio',v:'76,7%',s:'227 de 296 contas Hotmart',f:'g'},
     {l:'Ativos em 30 dias',v:'65',s:'98 em 90 dias · progresso médio 44,6%',f:'y'},
     {l:'Inadimplência',v:'R$ 15,4 mil',s:'25 alunos · ~32% da base ativa',f:'r'},
-    {l:'Analistas formados',v:'25',s:'13 ativos hoje na operação Holter',f:'g'}
+    {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
   ];
   const g=document.getElementById('kpisGeral');
   kpis.forEach(k=>{
@@ -535,16 +528,12 @@ funil('rsFunil',DADOS.funil,{w:340,rowH:40});
 /* ============================================================
    2. BASE DE ALUNOS
    ============================================================ */
-donut('statusDonut',DADOS.status,'232','alunos',{w:420,h:260,lx:240});
-barChart('matriculasChart',DADOS.matr12.labels,DADOS.matr12.vals,{highlight:7});
-barChart('anosChart',DADOS.anos.labels,DADOS.anos.vals,{color:'#0a3d6e',highlight:3});
-hBars('vinculoChart',DADOS.vinculo);
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 
 /* ============================================================
    3. ENGAJAMENTO
    ============================================================ */
-barChart('teoricoChart',DADOS.teorico.labels,DADOS.teorico.vals,{w:380,h:250,color:'#0ea5e9',padL:36});
-donut('engajaDonut',DADOS.engaja,'296','contas',{w:380,h:250,cx:100,r:78,lx:212});
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 (function(){
   const c=document.getElementById('atividadeCard');
   c.innerHTML=`
@@ -571,14 +560,12 @@ donut('engajaDonut',DADOS.engaja,'296','contas',{w:380,h:250,cx:100,r:78,lx:212}
 /* ============================================================
    4. ESTEIRA DE TALENTOS
    ============================================================ */
-funil('funilGrande',DADOS.funil,{w:560,rowH:56});
-hBars('psChart',DADOS.ps,{padL:170});
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 
 /* ============================================================
    5. FINANCEIRO
    ============================================================ */
-barChart('asaasChart',DADOS.asaas.labels,DADOS.asaas.vals,{w:760,h:260,padL:60,color:'#0a3d6e',highlight:4,
-  fmt:v=>'R$ '+Math.round(v).toLocaleString('pt-BR')});
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 (function(){
   const c=document.getElementById('inadCard');
   c.innerHTML=`
@@ -664,10 +651,19 @@ function updateDashboardKPIs(kpis) {
   const ativoEstudando = kpis.ativo_estudando || 86;
   const concluidos = kpis.concluidos || 95;
   const taxaConclusao = kpis.taxa_conclusao || 57;
+  const analistas = kpis.analistas_ecgnow || 16;
+  const exAnalistas = kpis.ex_analistas_ecgnow || 7;
+  const analistasTotal = analistas + exAnalistas;
 
   // ============================================================
   // RESUMO (Capa)
   // ============================================================
+
+  // Atualizar texto do verdict (93 matrículas, 25 alunos formados)
+  const rsVerdict = document.querySelector('.rs-verdict');
+  if (rsVerdict) {
+    rsVerdict.textContent = `${kpis.total_alunos} matrículas desde ago/2023 e ${analistasTotal} alunos formados contratados como analistas — o curso é a esteira de talentos da operação Holter.`;
+  }
 
   // Atualizar seção de cima (hero)
   const alunoBig = document.querySelector('.rs-big');
@@ -692,7 +688,6 @@ function updateDashboardKPIs(kpis) {
   const engajAltaMedioP = parseFloat(kpis.engajamento_alto_medio.percentual);
   const teoricoMedio = kpis.progresso_medio_teorico;
   const ativos30 = kpis.ativos_30_dias.valor;
-  const analistas = kpis.analistas_ecgnow;
 
   const chips = [
     { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
@@ -853,6 +848,7 @@ function updateDashboardKPIs(kpis) {
     const turno_manha = kpis.turno_manha;
     const turno_tarde = kpis.turno_tarde;
     const turno_noite = kpis.turno_noite;
+    const turno_integral = kpis.turno_integral || 0;
     const sp = kpis.sp;
     const mg = kpis.mg;
     const pr = kpis.pr;
@@ -876,13 +872,29 @@ function updateDashboardKPIs(kpis) {
         </div>`;
     }
 
+    // Distribuição por faixa etária
+    const faixaEtariaChart = document.getElementById('faixaEtariaChart');
+    if(faixaEtariaChart) {
+      const alunos_menos_25 = kpis.alunos_menos_25 || 0;
+      const alunos_25_35 = kpis.alunos_25_35 || 0;
+      const alunos_mais_35 = kpis.alunos_mais_35 || 0;
+
+      const faixaEtaria = [
+        {n:'Menos de 25 anos',v:alunos_menos_25,c:'#10b981'},
+        {n:'Entre 25 e 35 anos',v:alunos_25_35,c:'#0ea5e9'},
+        {n:'Mais de 35 anos',v:alunos_mais_35,c:'#8b5cf6'}
+      ];
+      hBars('faixaEtariaChart', faixaEtaria, {w:400});
+    }
+
     // Turnos
     const turnoChart = document.getElementById('turnoChart');
     if(turnoChart) {
       const turnos = [
         {n:'Manhã',v:turno_manha,c:'#f59e0b'},
         {n:'Tarde',v:turno_tarde,c:'#0ea5e9'},
-        {n:'Noite',v:turno_noite,c:'#0a3d6e'}
+        {n:'Noite',v:turno_noite,c:'#0a3d6e'},
+        {n:'Integral',v:turno_integral,c:'#8b5cf6'}
       ];
       hBars('turnoChart', turnos, {w:400});
     }
@@ -912,6 +924,8 @@ function updateDashboardKPIs(kpis) {
     const trancado = kpis.trancado_qtd;
     const teorico = kpis.teorico_qtd;
     const pratico = kpis.pratico_qtd;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd;
+    const concluidos = kpis.concluidos;
 
     // Formas de pagamento
     const pagtoChart = document.getElementById('pagamentoChart');
@@ -919,8 +933,7 @@ function updateDashboardKPIs(kpis) {
       const pagto = [
         {n:'ASAAS',v:asaas,c:'#0a3d6e'},
         {n:'Boleto',v:boleto,c:'#0d5a94'},
-        {n:'Pix',v:pix,c:'#0ea5e9'},
-        {n:'Trancado',v:trancado,c:'#cbd5e1'}
+        {n:'Pix',v:pix,c:'#0ea5e9'}
       ];
       hBars('pagamentoChart', pagto, {w:400});
     }
@@ -948,11 +961,185 @@ function updateDashboardKPIs(kpis) {
           </div>
           <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
             <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix} · Trancado ${trancado}</div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix}</div>
           </div>
         </div>`;
     }
   })();
+
+  // ============================================================
+  // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 12 meses)
+  // ============================================================
+
+  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
+    barChart('rsChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {w:560,h:215,color:'#0a3d6e'});
+  }
+
+  // ============================================================
+  // ATUALIZAR FUNIL DA ESTEIRA
+  // ============================================================
+
+  const aprovados = kpis.taxa_aprovacao_qtd || 73;
+
+  // Funil pequeno (Capa)
+  const funilData = [
+    {n:'Matriculados',v:totalCadastrados},
+    {n:'Concluíram o curso',v:concluidos},
+    {n:'Aprovados',v:aprovados},
+    {n:'Analistas ECGNOW',v:analistas}
+  ];
+  funil('rsFunil', funilData, {w:340,rowH:40});
+
+  // Funil grande (Esteira de Talentos)
+  funil('funilGrande', funilData, {w:560,rowH:56});
+
+  // ============================================================
+  // RENDERIZAR GRÁFICOS DAS SEÇÕES
+  // ============================================================
+
+  // Gráfico de Matrículas por mês
+  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
+    barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
+  }
+
+  // Vínculo com a ECGNow (gráfico horizontal)
+  const vinculoChart = document.getElementById('vinculoChart');
+  if(vinculoChart) {
+    const vinculo = [
+      {n:'Aluno externo',v:alunoExterno,c:'#0a3d6e'},
+      {n:'Analista ECGNOW',v:analistas,c:'#0ea5e9'},
+      {n:'Ex-analista',v:exAnalistas,c:'#94c6e8'}
+    ];
+    hBars('vinculoChart', vinculo, {padL:170});
+  }
+
+  // Status do curso (Donut)
+  const trancado = kpis.trancado_qtd || 0;
+  const alunoExterno = kpis.aluno_externo || 0;
+  const statusChart = [
+    {n:'Concluído',v:concluidos,c:'#10b981'},
+    {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
+    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
+    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
+    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
+    {n:'Trancado',v:trancado,c:'#cbd5e1'},
+    {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
+  ];
+  donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+
+  // Card de Alunos em Risco (Abaixo dos 50%)
+  const riscoCard = document.getElementById('riscoCard');
+  if(riscoCard) {
+    const abaixo50 = baseAlunos.abaixo_50pct;
+    const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
+    riscoCard.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+        <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
+          <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Alunos em Risco</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:#92400e;margin-top:6px">${abaixo50}</div>
+          <div style="font-size:11.5px;font-weight:700;color:#92400e">${pctRisco}% da base · Progresso < 50%</div>
+        </div>
+      </div>`;
+  }
+
+  // Card de Indicadores (Progresso e Engajamento)
+  const indicadoresCard = document.getElementById('indicadoresCard');
+  if(indicadoresCard) {
+    const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
+    const abaixo_50 = baseAlunos.abaixo_50pct;
+    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct;
+
+    indicadoresCard.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${kpis.ativos_30_dias.percentual}% da base</div>
+        </div>
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${teoricoMedio}%</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progressão geral</div>
+        </div>
+        <div style="background:#fef3c7;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
+          <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
+        </div>
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${progresso_hotmart}%</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progresso médio</div>
+        </div>
+        <div style="background:#d1fae5;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajDetalhado.alto}</div>
+          <div style="font-size:9.5px;color:#047857;font-weight:700">${engajDetalhado.alto_pct}%</div>
+        </div>
+        <div style="background:#bfdbfe;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#0369a1">Engaj. Médio</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#0369a1;margin-top:4px">${engajDetalhado.medio}</div>
+          <div style="font-size:9.5px;color:#0369a1;font-weight:700">${engajDetalhado.medio_pct}%</div>
+        </div>
+        <div style="background:#fed7aa;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b45309">Engaj. Baixo</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b45309;margin-top:4px">${engajDetalhado.baixo}</div>
+          <div style="font-size:9.5px;color:#b45309;font-weight:700">${engajDetalhado.baixo_pct}%</div>
+        </div>
+        <div style="background:#fee2e2;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b91c1c">Engaj. Nenhum</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b91c1c;margin-top:4px">${engajDetalhado.nenhum}</div>
+          <div style="font-size:9.5px;color:#b91c1c;font-weight:700">${engajDetalhado.nenhum_pct}%</div>
+        </div>
+      </div>`;
+  }
+
+  // Engajamento detalhado (Donut)
+  const engajaTotal = engajDetalhado.alto + engajDetalhado.medio + engajDetalhado.baixo + engajDetalhado.nenhum;
+  const engajaChart = [
+    {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
+    {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
+    {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
+    {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
+  ];
+  donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+
+  // ============================================================
+  // ATUALIZAR TAGS E TEXTOS DAS SEÇÕES
+  // ============================================================
+
+  // Tag "Base de Alunos"
+  const baseTag = document.querySelector('#base .sec-head .tag');
+  if(baseTag) {
+    baseTag.textContent = `${totalCadastrados} matriculados desde ago/2023`;
+  }
+
+  // Tag "Engajamento"
+  const engajaTag = document.querySelector('#engaja .sec-head .tag');
+  if(engajaTag) {
+    engajaTag.textContent = `Plataforma Hotmart + trilha do curso`;
+  }
+
+  // ============================================================
+  // ATUALIZAR INSIGHTS (Destaques)
+  // ============================================================
+
+  const insightsContainer = document.querySelector('.wrap > .grid > div:last-child');
+  if(insightsContainer) {
+    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
+    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
+
+    const insights = `
+      <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão) e ${analistas} estão ativos na ECGNOW. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
+      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência financeira em construção.</b><p>As cobranças ASAAS crescem mensalmente — efeito do parcelamento no cartão das vendas recentes. Mantido o ritmo de vendas, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
+      <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos em crescimento.</b><p>${total} alunos matriculados desde ago/2023, com ${ativoEstudando} estudando agora. O potencial comercial segue alto com a base ativa na Hotmart.</p></div></div>
+      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${((kpis.inadimplencia_qtd/total)*100).toFixed(0)}% da base ativa). Um fluxo de cobrança automatizado protegeria a margem da linha.</p></div></div>
+      <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico deve ser reduzido.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Réguas de engajamento (e-mail/WhatsApp por marco da trilha) reduziriam o risco de abandono.</p></div></div>
+      <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico concentrado nas extremidades.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído e apenas ${ativos30} acessaram nos últimos 30 dias. Foco em reengajamento aumentaria conclusões.</p></div></div>
+    `;
+
+    insightsContainer.innerHTML = insights;
+  }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
