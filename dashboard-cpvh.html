@@ -136,7 +136,6 @@ svg text{font-family:'Nunito',sans-serif}
       <a href="#nps">Satisfação</a>
       <a href="#demo">Demografia</a>
       <a href="#leitura">Leitura Executiva</a>
-      <a href="#dados">Dados Brutos</a>
     </nav>
   </div>
 </div>
@@ -356,58 +355,6 @@ svg text{font-family:'Nunito',sans-serif}
       <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>R$ 15,4 mil distribuídos em 25 alunos (~32% da base ativa), além de R$ 3,3 mil em boletos vencidos importados. Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
       <div class="insight"><div class="ico y">📉</div><div><b>O 2º trimestre de vendas desacelerou.</b><p>Após o pico de janeiro (18), as matrículas caíram para 4, 7, 0 e 3 entre fevereiro e maio. Vale cruzar com o investimento em Ads — o forecast da empresa projeta retomada de mídia justamente a partir do 2º semestre.</p></div></div>
       <div class="insight"><div class="ico r">🕳️</div><div><b>Metade da base está parada no meio da trilha.</b><p>48,6% dos alunos têm menos de 50% do teórico concluído e apenas 65 contas acessaram a plataforma nos últimos 30 dias. Réguas de engajamento (e-mail/WhatsApp por marco da trilha) atacariam diretamente o risco de abandono.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- 9. DADOS BRUTOS -->
-<section id="dados">
-  <div class="sec-head"><h2>Dados Brutos</h2><span class="tag">Performance (Dados dinâmicos)</span></div>
-  <p class="sec-sub">Visualização completa de todos os alunos com suas informações de desempenho, engajamento e progresso. Use os filtros para análises específicas.</p>
-
-  <div class="card" style="margin-bottom:20px;padding:20px">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px">
-      <div>
-        <label style="font-weight:800;font-size:12px;color:#5b7187;display:block;margin-bottom:8px">🔍 Buscar por nome</label>
-        <input type="text" id="searchInput" placeholder="Digite o nome..." style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px">
-      </div>
-      <div>
-        <label style="font-weight:800;font-size:12px;color:#5b7187;display:block;margin-bottom:8px">Resultado final</label>
-        <select id="filterResultado" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px">
-          <option value="">Todos</option>
-          <option value="Ativo (estudando)">Ativo (estudando)</option>
-          <option value="Aprovado">Aprovado</option>
-          <option value="Reprovado">Reprovado</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-weight:800;font-size:12px;color:#5b7187;display:block;margin-bottom:8px">Engajamento</label>
-        <select id="filterEngajamento" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px">
-          <option value="">Todos</option>
-          <option value="Alto">Alto</option>
-          <option value="Médio">Médio</option>
-          <option value="Baixo">Baixo</option>
-          <option value="Nenhum">Nenhum</option>
-        </select>
-      </div>
-    </div>
-
-    <div style="overflow-x:auto">
-      <table id="alunosTable" style="width:100%;border-collapse:collapse;font-size:13px">
-        <thead>
-          <tr style="background:#f4f8fb;border-bottom:2px solid #e2e8f0">
-            <th style="padding:12px;text-align:left;font-weight:800;color:#0D2137">Nome</th>
-            <th style="padding:12px;text-align:left;font-weight:800;color:#0D2137">Matrícula</th>
-            <th style="padding:12px;text-align:left;font-weight:800;color:#0D2137">Resultado final</th>
-            <th style="padding:12px;text-align:left;font-weight:800;color:#0D2137">Engajamento</th>
-            <th style="padding:12px;text-align:center;font-weight:800;color:#0D2137">% Teórico</th>
-            <th style="padding:12px;text-align:center;font-weight:800;color:#0D2137">Ativos 30d</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaBody">
-          <tr><td colspan="6" style="padding:20px;text-align:center;color:#5b7187">Carregando dados...</td></tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </section>
@@ -1010,99 +957,8 @@ function updateDashboardKPIs(kpis) {
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
 
-// ============================================================
-// TABELA DE DADOS BRUTOS
-// ============================================================
-let alunosData = [];
-
-async function loadAlunosData() {
-  const API_KEY = 'AIzaSyDS9RH8hRY6t4KKhRHEGXciqKrKQ-B8rC4';
-  const SHEET_ID = '1t5gLpn9HdfOSoPgWawsslfQjOfqsMMa5k5o9wjaHeHA';
-
-  try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Performance%20(Dados%20dinâmicos)?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (!data.values) return;
-
-    const rows = data.values;
-    const headers = rows[0];
-
-    // Encontrar índices das colunas
-    const normalize = (str) => String(str).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    let nomeIdx = 0, matriculaIdx = 1, resultadoIdx = -1, engajamentoIdx = -1, teoricoIdx = -1, ativosIdx = -1;
-
-    for (let i = 0; i < headers.length; i++) {
-      const h = normalize(headers[i]);
-      if (h.includes('nome')) nomeIdx = i;
-      if (h.includes('matricula')) matriculaIdx = i;
-      if (h.includes('resultado') && h.includes('final')) resultadoIdx = i;
-      if (h.includes('engajamento')) engajamentoIdx = i;
-      if (h.includes('conclusao') && h.includes('teorico')) teoricoIdx = i;
-      if (h.includes('ativos') && h.includes('30')) ativosIdx = i;
-    }
-
-    // Processar linhas
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i];
-      if (!row[nomeIdx] || String(row[nomeIdx]).trim() === '') continue;
-
-      alunosData.push({
-        nome: row[nomeIdx] || '',
-        matricula: row[matriculaIdx] || '',
-        resultado: row[resultadoIdx] ? String(row[resultadoIdx]).trim() : '',
-        engajamento: row[engajamentoIdx] ? String(row[engajamentoIdx]).trim() : '',
-        teorico: row[teoricoIdx] ? String(row[teoricoIdx]).replace('%', '').trim() : '0',
-        ativos: row[ativosIdx] ? String(row[ativosIdx]).trim() : ''
-      });
-    }
-
-    renderTable();
-  } catch (err) {
-    console.error('Erro ao carregar dados:', err);
-  }
-}
-
-function renderTable() {
-  const searchVal = document.getElementById('searchInput')?.value?.toLowerCase() || '';
-  const resultadoVal = document.getElementById('filterResultado')?.value || '';
-  const engajamentoVal = document.getElementById('filterEngajamento')?.value || '';
-
-  const filtered = alunosData.filter(a => {
-    const matchNome = a.nome.toLowerCase().includes(searchVal);
-    const matchResultado = !resultadoVal || a.resultado === resultadoVal;
-    const matchEngajamento = !engajamentoVal || a.engajamento === engajamentoVal;
-    return matchNome && matchResultado && matchEngajamento;
-  });
-
-  const tbody = document.getElementById('tabelaBody');
-  tbody.innerHTML = filtered.map((a, i) => `
-    <tr style="border-bottom:1px solid #e2e8f0;${i % 2 === 0 ? 'background:#fafbfc' : ''}">
-      <td style="padding:12px">${a.nome}</td>
-      <td style="padding:12px">${a.matricula}</td>
-      <td style="padding:12px"><span style="padding:4px 8px;border-radius:4px;font-weight:700;font-size:11px;${a.resultado === 'Aprovado' ? 'background:#d1fae5;color:#047857' : a.resultado === 'Reprovado' ? 'background:#fee2e2;color:#b91c1c' : 'background:#e0f2fe;color:#0369a1'}">${a.resultado}</span></td>
-      <td style="padding:12px"><span style="padding:4px 8px;border-radius:4px;font-weight:700;font-size:11px;${a.engajamento === 'Alto' ? 'background:#d1fae5;color:#047857' : a.engajamento === 'Médio' ? 'background:#dbeafe;color:#0369a1' : 'background:#fed7aa;color:#b45309'}">${a.engajamento}</span></td>
-      <td style="padding:12px;text-align:center">${a.teorico}%</td>
-      <td style="padding:12px;text-align:center">${a.ativos === 'Sim' ? '✓' : '—'}</td>
-    </tr>
-  `).join('') || `<tr><td colspan="6" style="padding:20px;text-align:center;color:#5b7187">Nenhum resultado</td></tr>`;
-}
-
-// Adicionar event listeners aos filtros
-document.addEventListener('DOMContentLoaded', () => {
-  loadAlunosData();
-
-  const searchInput = document.getElementById('searchInput');
-  const filterResultado = document.getElementById('filterResultado');
-  const filterEngajamento = document.getElementById('filterEngajamento');
-
-  if (searchInput) searchInput.addEventListener('input', renderTable);
-  if (filterResultado) filterResultado.addEventListener('change', renderTable);
-  if (filterEngajamento) filterEngajamento.addEventListener('change', renderTable);
-
-  loadKPIsFromJSON();
-});
+// Carregar KPIs automaticamente
+document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 </script>
 </body>
 </html>
