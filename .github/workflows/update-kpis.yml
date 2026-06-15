@@ -1,0 +1,37 @@
+name: Atualizar KPIs
+
+on:
+  schedule:
+    # Roda todo dia às 8h da manhã (UTC)
+    - cron: '0 8 * * *'
+  # Permite rodar manualmente
+  workflow_dispatch:
+
+jobs:
+  update-kpis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Atualizar KPIs
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: npm run update-kpis
+
+      - name: Commit e Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kpis.json
+          git commit -m "Atualizar KPIs - $(date +'%Y-%m-%d')" || echo "Sem mudanças"
+          git push
