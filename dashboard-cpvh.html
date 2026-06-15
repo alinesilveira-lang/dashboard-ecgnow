@@ -1121,24 +1121,31 @@ function updateDashboardKPIs(kpis) {
   }
 
   // ============================================================
-  // ATUALIZAR INSIGHTS (Destaques)
+  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos)
   // ============================================================
 
-  const insightsContainer = document.querySelector('.wrap > .grid > div:last-child');
-  if(insightsContainer) {
+  const leituraExecutiva = document.querySelector('#leitura .grid');
+  if(leituraExecutiva) {
     const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
+    const taxa_aprov = kpis.taxa_aprovacao_pct || 0;
+    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
+    const pct_abaixo50 = ((baseAlunos.abaixo_50pct / total) * 100).toFixed(1);
 
     const insights = `
-      <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão) e ${analistas} estão ativos na ECGNOW. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
-      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência financeira em construção.</b><p>As cobranças ASAAS crescem mensalmente — efeito do parcelamento no cartão das vendas recentes. Mantido o ritmo de vendas, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
-      <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos em crescimento.</b><p>${total} alunos matriculados desde ago/2023, com ${ativoEstudando} estudando agora. O potencial comercial segue alto com a base ativa na Hotmart.</p></div></div>
-      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${((kpis.inadimplencia_qtd/total)*100).toFixed(0)}% da base ativa). Um fluxo de cobrança automatizado protegeria a margem da linha.</p></div></div>
-      <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico deve ser reduzido.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Réguas de engajamento (e-mail/WhatsApp por marco da trilha) reduziriam o risco de abandono.</p></div></div>
-      <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico concentrado nas extremidades.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído e apenas ${ativos30} acessaram nos últimos 30 dias. Foco em reengajamento aumentaria conclusões.</p></div></div>
+      <div>
+        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${taxa_aprov}% de conversão no seletivo) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
+        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência financeira em construção.</b><p>As cobranças ASAAS crescem mensalmente — efeito do parcelamento no cartão das vendas recentes. Mantido o ritmo de vendas, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
+        <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos com forte potencial.</b><p>${total} alunos matriculados desde ago/2023, com ${ativoEstudando} estudando agora. O progresso teórico médio de ${teoricoMedio}% indica engajamento consistente.</p></div></div>
+      </div>
+      <div>
+        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem.</p></div></div>
+        <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico precisa redução.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Réguas de engajamento (e-mail/WhatsApp por marco da trilha) atacariam o risco de abandono.</p></div></div>
+        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico demanda reengajamento.</b><p>${baseAlunos.abaixo_50pct} alunos (${pct_abaixo50}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias. Campanhas de reativação aumentariam conclusões.</p></div></div>
+      </div>
     `;
 
-    insightsContainer.innerHTML = insights;
+    leituraExecutiva.innerHTML = insights;
   }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
