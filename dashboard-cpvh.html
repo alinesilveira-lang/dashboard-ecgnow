@@ -133,6 +133,8 @@ svg text{font-family:'Nunito',sans-serif}
       <a href="#engaja">Engajamento</a>
       <a href="#esteira">Esteira de Talentos</a>
       <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
       <a href="#leitura">Leitura Executiva</a>
       <a href="#dados">Dados Brutos</a>
     </nav>
@@ -273,7 +275,7 @@ svg text{font-family:'Nunito',sans-serif}
 <!-- 5. FINANCEIRO -->
 <section id="financeiro">
   <div class="sec-head"><h2>Financeiro do Curso</h2><span class="tag">Cobranças ASAAS 2026 + inadimplência</span></div>
-  <p class="sec-sub">Recorrência das cobranças ASAAS (parcelas de curso e mentoria) e o quadro de inadimplência apurado na base de alunos.</p>
+  <p class="sec-sub">Recorrência das cobranças ASAAS (parcelas de curso e mentoria), formas de pagamento, e o quadro de inadimplência apurado na base de alunos.</p>
   <div class="grid g-3">
     <div class="card chart-card" style="grid-column:span 2">
       <h3>Cobranças ASAAS por mês (R$)</h3>
@@ -281,14 +283,67 @@ svg text{font-family:'Nunito',sans-serif}
       <div id="asaasChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Inadimplência</h3>
-      <div class="hint">Apuração da aba Performance + boletos vencidos importados.</div>
+      <h3>Inadimplência & Formas de Pagamento</h3>
+      <div class="hint">Apuração da aba Performance + boletos vencidos importados. Distribuição de cobranças por método.</div>
       <div id="inadCard"></div>
+    </div>
+  </div>
+  <div class="grid g-2" style="margin-top:16px">
+    <div class="card chart-card">
+      <h3>Cobranças por forma de pagamento</h3>
+      <div class="hint">Distribuição entre ASAAS, Boleto, Pix e Trancado.</div>
+      <div id="pagamentoChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Status de conclusão (Teórico vs Prático)</h3>
+      <div class="hint">Alunos que completaram teórico, prático ou ambos.</div>
+      <div id="statusConclusaoChart"></div>
     </div>
   </div>
 </section>
 
-<!-- 6. LEITURA EXECUTIVA -->
+<!-- 6. SATISFAÇÃO (NPS) -->
+<section id="nps">
+  <div class="sec-head"><h2>Satisfação do Aluno (NPS)</h2><span class="tag">Net Promoter Score</span></div>
+  <p class="sec-sub">Medição de satisfação e disposição de recomendação dos alunos. O NPS consolida promotores, neutros e detratores em um índice único (-100 a 100).</p>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>NPS Score & Segmentação</h3>
+      <div class="hint">NPS = Promotores% - Detratores%. Gráfico mostra distribuição de respondentes por categoria.</div>
+      <div id="npsDonut"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Detalhes da Pesquisa & Notas por Engajamento</h3>
+      <div class="hint">Total de respostas, taxa de resposta e nota média por nível de engajamento na plataforma.</div>
+      <div id="npsCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. DEMOGRAFIA -->
+<section id="demo">
+  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
+  <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
+  <div class="grid g-3">
+    <div class="card chart-card">
+      <h3>Idade média dos alunos</h3>
+      <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
+      <div id="idadeCard"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Preferência de turnos</h3>
+      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite.</div>
+      <div id="turnoChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Estados (UF) de origem</h3>
+      <div class="hint">SP concentra a base (78 alunos); demais estados: MG, PR, RJ, RS com 2-3 cada.</div>
+      <div id="estadosChart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. LEITURA EXECUTIVA -->
 <section id="leitura">
   <div class="sec-head"><h2>Leitura Executiva</h2><span class="tag">O que os números dizem</span></div>
   <div class="grid g-2">
@@ -305,7 +360,7 @@ svg text{font-family:'Nunito',sans-serif}
   </div>
 </section>
 
-<!-- 7. DADOS BRUTOS -->
+<!-- 9. DADOS BRUTOS -->
 <section id="dados">
   <div class="sec-head"><h2>Dados Brutos</h2><span class="tag">Performance (Dados dinâmicos)</span></div>
   <p class="sec-sub">Visualização completa de todos os alunos com suas informações de desempenho, engajamento e progresso. Use os filtros para análises específicas.</p>
@@ -657,11 +712,15 @@ function loadKPIsFromJSON() {
 }
 
 function updateDashboardKPIs(kpis) {
-  const total = kpis.total_alunos || 232;
-  const totalCadastrados = kpis.total_cadastrados || 232;
-  const ativoEstudando = kpis.ativo_estudando || 79;
+  const total = kpis.total_alunos || 233;
+  const totalCadastrados = kpis.total_cadastrados || 233;
+  const ativoEstudando = kpis.ativo_estudando || 86;
   const concluidos = kpis.concluidos || 95;
-  const taxaConclusao = kpis.taxa_conclusao || 41;
+  const taxaConclusao = kpis.taxa_conclusao || 57;
+
+  // ============================================================
+  // RESUMO (Capa)
+  // ============================================================
 
   // Atualizar seção de cima (hero)
   const alunoBig = document.querySelector('.rs-big');
@@ -681,28 +740,34 @@ function updateDashboardKPIs(kpis) {
     heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
   }
 
-  // Recalcular KPIs na visão de resumo
+  // Recalcular KPIs na visão de resumo (chips)
+  const engajAltaMedio = kpis.engajamento_alto_medio.valor;
+  const engajAltaMedioP = parseFloat(kpis.engajamento_alto_medio.percentual);
+  const teoricoMedio = kpis.progresso_medio_teorico;
+  const ativos30 = kpis.ativos_30_dias.valor;
+  const analistas = kpis.analistas_ecgnow;
+
   const chips = [
     { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
     {
       l: 'Engajamento A+M',
-      v: kpis.engajamento_alto_medio.percentual + '%',
-      s: kpis.engajamento_alto_medio.valor + ' de ' + total + ' alunos',
-      f: kpis.engajamento_alto_medio.percentual >= 70 ? 'g' : 'y'
+      v: engajAltaMedioP.toFixed(1) + '%',
+      s: engajAltaMedio + ' de ' + total + ' alunos',
+      f: engajAltaMedioP >= 70 ? 'g' : 'y'
     },
     {
       l: 'Teórico médio',
-      v: kpis.progresso_medio_teorico.toFixed(1) + '%',
+      v: teoricoMedio + '%',
       s: 'progresso da base',
-      f: kpis.progresso_medio_teorico >= 60 ? 'g' : 'y'
+      f: teoricoMedio >= 60 ? 'g' : 'y'
     },
     {
       l: 'Ativos 30 dias',
-      v: kpis.ativos_30_dias.valor,
-      s: 'de ' + total + ' alunos',
-      f: kpis.ativos_30_dias.valor >= 50 ? 'g' : 'y'
+      v: ativos30,
+      s: 'da base · ' + kpis.ativos_30_dias.percentual + '%',
+      f: ativos30 >= 50 ? 'g' : 'y'
     },
-    { l: 'Conversão seletivo', v: '40%', s: '25 de 62 → analista', f: 'g' }
+    { l: 'Analistas formados', v: analistas, s: 'ativos na operação Holter', f: 'g' }
   ];
 
   const chipsContainer = document.querySelector('.rs-chips');
@@ -716,13 +781,26 @@ function updateDashboardKPIs(kpis) {
     `).join('');
   }
 
+  // ============================================================
+  // VISÃO GERAL (KPIs na seção expandida)
+  // ============================================================
+
   const kpisGeral = document.getElementById('kpisGeral');
   if (kpisGeral) {
+    const taxa_aprovacao = kpis.taxa_aprovacao_pct || 74;
+    const progresso_hotmart = kpis.progresso_medio_hotmart || 44;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd || 24;
+    const nps = kpis.nps_score || 24;
+
     const kpisData = [
       { l: 'Alunos matriculados', v: String(total), s: 'Histórico desde ago/2023', f: 'g' },
-      { l: 'Engajamento Alto+Médio', v: kpis.engajamento_alto_medio.percentual + '%', s: kpis.engajamento_alto_medio.valor + ' de ' + total, f: 'g' },
-      { l: 'Teórico médio', v: kpis.progresso_medio_teorico.toFixed(1) + '%', s: 'progresso da base', f: 'y' },
-      { l: 'Ativos em 30 dias', v: String(kpis.ativos_30_dias.valor), s: 'de ' + total + ' alunos', f: 'y' }
+      { l: 'Taxa aprovação', v: taxa_aprovacao + '%', s: kpis.taxa_aprovacao_qtd + ' alunos aprovados', f: 'g' },
+      { l: 'Teórico médio', v: teoricoMedio + '%', s: 'progresso da base', f: teoricoMedio >= 60 ? 'g' : 'y' },
+      { l: 'Progresso Hotmart', v: progresso_hotmart + '%', s: 'média de evolução', f: progresso_hotmart >= 50 ? 'g' : 'y' },
+      { l: 'Engajamento Alto+Médio', v: engajAltaMedioP.toFixed(1) + '%', s: engajAltaMedio + ' contas da plataforma', f: 'g' },
+      { l: 'Ativos em 30 dias', v: String(ativos30), s: kpis.ativos_30_dias.percentual + '% da base', f: 'y' },
+      { l: 'NPS Score', v: nps, s: 'Net Promoter Score', f: nps > 0 ? 'g' : 'r' },
+      { l: 'Inadimplência', v: String(inadimplencia_qtd), s: kpis.inadimplencia_valor, f: 'r' }
     ];
 
     kpisGeral.innerHTML = kpisData.map(k => `
@@ -734,7 +812,202 @@ function updateDashboardKPIs(kpis) {
     `).join('');
   }
 
-  console.log('✨ Dashboard atualizado com dados dinâmicos');
+  // ============================================================
+  // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
+  // ============================================================
+
+  const baseAlunos = kpis.base_alunos;
+  // Atualizar status do curso (Donut Status)
+  const statusAtualizado = [
+    {n:'Concluído',v:concluidos,c:'#10b981'},
+    {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
+    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
+    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
+    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
+    {n:'Só teoria',v:baseAlunos.so_teoria,c:'#f59e0b'}
+  ];
+  donut('statusDonut', statusAtualizado, String(total), 'alunos', {w:420,h:260,lx:240});
+
+  // ============================================================
+  // ENGAJAMENTO - Atualizar com dados detalhados
+  // ============================================================
+
+  const engajDetalhado = kpis.engajamento_detalhado;
+  const engajaAtualizado = [
+    {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
+    {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
+    {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
+    {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
+  ];
+  donut('engajaDonut', engajaAtualizado, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+
+  // ============================================================
+  // SEÇÃO NPS - Renderizar dados de satisfação
+  // ============================================================
+
+  (function(){
+    const nps_promotores = kpis.nps_promotores_pct;
+    const nps_neutros = kpis.nps_neutros_pct;
+    const nps_detratores = kpis.nps_detratores_pct;
+    const nps_respostas = kpis.nps_respostas;
+    const nps_nao_responderam = kpis.nps_nao_responderam;
+    const nps_score = kpis.nps_score;
+
+    const npsSlices = [
+      {n:'Promotores',v:nps_promotores,c:'#10b981'},
+      {n:'Neutros',v:nps_neutros,c:'#0ea5e9'},
+      {n:'Detratores',v:nps_detratores,c:'#ef4444'}
+    ];
+
+    const c = document.getElementById('npsDonut');
+    if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
+
+    const npsCard = document.getElementById('npsCard');
+    if(npsCard) {
+      const nota_alto = kpis.nota_media_engajamento_alto;
+      const nota_medio = kpis.nota_media_engajamento_medio;
+      const nota_baixo = kpis.nota_media_engajamento_baixo;
+
+      npsCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Pesquisa de Satisfação</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_respostas}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Respostas</div></div>
+              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam (${kpis.nps_nao_responderam_pct}%)</div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Nota média por engajamento</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#d1fae5;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#047857">Alto</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nota_alto}</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#bfdbfe;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#0369a1">Médio</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nota_medio}</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#fed7aa;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#b45309">Baixo</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nota_baixo}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+  })();
+
+  // ============================================================
+  // SEÇÃO DEMOGRAFIA - Renderizar dados de perfil
+  // ============================================================
+
+  (function(){
+    const idade_media = kpis.idade_media;
+    const idade_nao_info = kpis.idade_nao_informada;
+    const turno_manha = kpis.turno_manha;
+    const turno_tarde = kpis.turno_tarde;
+    const turno_noite = kpis.turno_noite;
+    const sp = kpis.sp;
+    const mg = kpis.mg;
+    const pr = kpis.pr;
+    const rj = kpis.rj;
+    const rs = kpis.rs;
+
+    // Idade
+    const idadeCard = document.getElementById('idadeCard');
+    if(idadeCard) {
+      idadeCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Idade média informada</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:var(--navy);margin-top:6px">${idade_media} <span style="font-size:14px;color:var(--muted);font-family:'Nunito';font-weight:700">anos</span></div>
+          </div>
+          <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Sem informação</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">${idade_nao_info}</div>
+            <div style="font-size:11.5px;font-weight:700;color:#92400e">~${((idade_nao_info/total)*100).toFixed(0)}% da base</div>
+          </div>
+        </div>`;
+    }
+
+    // Turnos
+    const turnoChart = document.getElementById('turnoChart');
+    if(turnoChart) {
+      const turnos = [
+        {n:'Manhã',v:turno_manha,c:'#f59e0b'},
+        {n:'Tarde',v:turno_tarde,c:'#0ea5e9'},
+        {n:'Noite',v:turno_noite,c:'#0a3d6e'}
+      ];
+      hBars('turnoChart', turnos, {w:400});
+    }
+
+    // Estados
+    const estadosChart = document.getElementById('estadosChart');
+    if(estadosChart) {
+      const estados = [
+        {n:'São Paulo (SP)',v:sp,c:'#0a3d6e'},
+        {n:'Minas Gerais (MG)',v:mg,c:'#0d5a94'},
+        {n:'Paraná (PR)',v:pr,c:'#0ea5e9'},
+        {n:'Rio de Janeiro (RJ)',v:rj,c:'#38bdf8'},
+        {n:'Rio Grande do Sul (RS)',v:rs,c:'#7dd3fc'}
+      ];
+      hBars('estadosChart', estados, {w:400});
+    }
+  })();
+
+  // ============================================================
+  // SEÇÃO FINANCEIRO - Adicionar gráficos de pagamento
+  // ============================================================
+
+  (function(){
+    const asaas = kpis.asaas_qtd;
+    const boleto = kpis.boleto_qtd;
+    const pix = kpis.pix_qtd;
+    const trancado = kpis.trancado_qtd;
+    const teorico = kpis.teorico_qtd;
+    const pratico = kpis.pratico_qtd;
+
+    // Formas de pagamento
+    const pagtoChart = document.getElementById('pagamentoChart');
+    if(pagtoChart) {
+      const pagto = [
+        {n:'ASAAS',v:asaas,c:'#0a3d6e'},
+        {n:'Boleto',v:boleto,c:'#0d5a94'},
+        {n:'Pix',v:pix,c:'#0ea5e9'},
+        {n:'Trancado',v:trancado,c:'#cbd5e1'}
+      ];
+      hBars('pagamentoChart', pagto, {w:400});
+    }
+
+    // Status de conclusão
+    const statusConclusao = document.getElementById('statusConclusaoChart');
+    if(statusConclusao) {
+      const conclusao = [
+        {n:'Só Teórico',v:teorico,c:'#f59e0b'},
+        {n:'Só Prático',v:pratico,c:'#0ea5e9'},
+        {n:'Teórico + Prático',v:concluidos,c:'#10b981'}
+      ];
+      hBars('statusConclusaoChart', conclusao, {w:400});
+    }
+
+    // Atualizar card de inadimplência
+    const inadCard = document.getElementById('inadCard');
+    if(inadCard) {
+      inadCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${kpis.inadimplencia_valor}</div>
+            <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${inadimplencia_qtd} alunos</div>
+          </div>
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix} · Trancado ${trancado}</div>
+          </div>
+        </div>`;
+    }
+  })();
+
+  console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
 
 // ============================================================
