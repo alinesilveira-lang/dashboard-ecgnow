@@ -23,8 +23,8 @@
       "percentual": "6.0"
     },
     "progresso_medio_teorico": 40,
-    "ativo_estudando": 86,
-    "concluidos": 95,
+    "ativo_estudando": 84,
+    "concluidos": 97,
     "taxa_conclusao": 57,
     "analistas_ecgnow": 16,
     "ex_analistas_ecgnow": 7,
@@ -38,11 +38,11 @@
       "bloqueado_pct": "4.00",
       "so_teoria": 11,
       "so_teoria_pct": "4.00",
-      "abaixo_50pct": 34,
-      "abaixo_50pct_pct": "14.00"
+      "abaixo_50pct": 45,
+      "abaixo_50pct_pct": "19.00"
     },
-    "taxa_aprovacao_qtd": 71,
-    "taxa_aprovacao_pct": 74,
+    "taxa_aprovacao_qtd": 73,
+    "taxa_aprovacao_pct": 75,
     "progresso_medio_hotmart": 44,
     "inadimplencia_qtd": 24,
     "inadimplencia_valor": "R$ 15.361,68",
@@ -56,12 +56,12 @@
     "trancado_pct": "3.00",
     "teorico_qtd": 55,
     "teorico_pct": "23.00",
-    "pratico_qtd": 26,
-    "pratico_pct": "11.00",
-    "nps_score": 24,
-    "nps_promotores_pct": 25,
-    "nps_neutros_pct": 2,
-    "nps_detratores_pct": 1,
+    "pratico_qtd": 25,
+    "pratico_pct": "10.00",
+    "nps_score": 82,
+    "nps_promotores_pct": 86,
+    "nps_neutros_pct": 8,
+    "nps_detratores_pct": 4,
     "nps_respostas": 69,
     "nps_nao_responderam": 164,
     "nps_nao_responderam_pct": "70.00",
@@ -69,7 +69,7 @@
     "idade_nao_informada": 140,
     "turno_manha": 87,
     "turno_tarde": 54,
-    "turno_noite": 22,
+    "turno_noite": 24,
     "turno_integral": 0,
     "sp": 78,
     "mg": 3,
@@ -79,6 +79,34 @@
     "nota_media_engajamento_alto": 67,
     "nota_media_engajamento_medio": 55,
     "nota_media_engajamento_baixo": 50,
-    "timestamp": "2026-06-15T12:10:25.180Z"
+    "matriculas_12_meses": {
+      "labels": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+        "Jan",
+        "Fev",
+        "Mar",
+        "Mai"
+      ],
+      "vals": [
+        6,
+        4,
+        9,
+        13,
+        5,
+        16,
+        8,
+        18,
+        4,
+        7,
+        3
+      ]
+    },
+    "timestamp": "2026-06-15T14:23:17.049Z"
   }
 }
