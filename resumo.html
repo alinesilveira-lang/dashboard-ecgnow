@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumo - Dashboard ECGNOW CPVH</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0D2137;
+      --cyan: #0ea5e9;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --good: #10b981;
+      --muted: #64748b;
+      --light-bg: #f1f7fc;
+      --bricolage: 'Bricolage Grotesque', serif;
+    }
+
+    * {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: var(--navy);
+    }
+
+    .navbar {
+      background: var(--navy);
+      border-bottom: 3px solid var(--cyan);
+      padding: 16px 0;
+    }
+
+    .navbar-brand {
+      font-family: var(--bricolage);
+      font-weight: 800;
+      color: var(--cyan) !important;
+      font-size: 18px;
+    }
+
+    .nav-link {
+      color: #dbeafe !important;
+      margin: 0 8px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      border-bottom-color: var(--cyan);
+      color: var(--cyan) !important;
+    }
+
+    .container-fluid {
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-family: var(--bricolage);
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--navy);
+    }
+
+    /* Hero card */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #0a3d6e 100%);
+      border-radius: 16px;
+      padding: 32px;
+      color: white;
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      font-family: var(--bricolage);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .hero-stat {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .hero-stat-value {
+      font-family: var(--bricolage);
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border-left: 4px solid var(--cyan);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.6px;
+    }
+
+    .kpi-value {
+      font-family: var(--bricolage);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-top: 6px;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .farol {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-left: 8px;
+    }
+
+    .farol.g { background: var(--good); }
+    .farol.y { background: var(--warn); }
+    .farol.r { background: var(--bad); }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .chart-title {
+      font-family: var(--bricolage);
+      font-weight: 800;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+
+    .spinner {
+      border: 3px solid var(--light-bg);
+      border-top: 3px solid var(--cyan);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index-dashboard.html">
+        ECGNow • CPVH • Viver de Holter
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="resumo.html">Resumo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="visao-geral.html">Visão Geral</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="base-alunos.html">Base de Alunos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="engajamento.html">Engajamento</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="esteira-talentos.html">Esteira de Talentos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="financeiro.html">Financeiro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="satisfacao.html">Satisfação</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="demografia.html">Demografia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="leitura-executiva.html">Leitura Executiva</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <div class="container-fluid">
+    <h1 class="page-title">Resumo Executivo</h1>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h2>Curso Profissão Viver de Holter</h2>
+      <p style="margin: 0; opacity: 0.9; margin-bottom: 16px;">Dashboard acadêmico de indicadores educacionais</p>
+
+      <div class="hero-grid">
+        <div class="hero-stat">
+          <div class="hero-stat-label">Alunos Matriculados</div>
+          <div class="hero-stat-value" id="heroTotal">232</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Estudando Agora</div>
+          <div class="hero-stat-value" id="heroAtivos">79</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Concluíram</div>
+          <div class="hero-stat-value" id="heroConcluidos">95</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Receita ASAAS</div>
+          <div class="hero-stat-value" id="heroRecBruta">R$ 3,8k</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <h3 style="font-family: var(--bricolage); font-weight: 800; margin-bottom: 16px;">Indicadores Principais</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Taxa de Conclusão <span class="farol g"></span></div>
+        <div class="kpi-value" id="kpiTaxaConclusao">41%</div>
+        <div class="kpi-sub" id="kpiTaxaConclusaoQtd">95 de 232 alunos</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Engajamento Alto+Médio <span class="farol g"></span></div>
+        <div class="kpi-value" id="kpiEngajamento">76,7%</div>
+        <div class="kpi-sub" id="kpiEngajamentoQtd">227 de 296 contas</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Teórico Médio <span class="farol y"></span></div>
+        <div class="kpi-value" id="kpiTeorico">51,5%</div>
+        <div class="kpi-sub">progresso da base</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ativos 30 Dias <span class="farol y"></span></div>
+        <div class="kpi-value" id="kpiAtivos30">65</div>
+        <div class="kpi-sub" id="kpiAtivos30Pct">28 em 90 dias</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Conversão Seletivo <span class="farol g"></span></div>
+        <div class="kpi-value" id="kpiConversao">40%</div>
+        <div class="kpi-sub" id="kpiConversaoQtd">25 de 62 → analista</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">NPS Score <span class="farol g"></span></div>
+        <div class="kpi-value" id="kpiNps">82</div>
+        <div class="kpi-sub">Net Promoter Score</div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="charts-grid">
+      <div class="chart-container">
+        <div class="chart-title">Matrículas - Últimos 12 Meses</div>
+        <svg id="matriculasChart" style="min-height: 250px;"></svg>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Funil da Esteira de Talentos</div>
+        <svg id="funilChart" style="min-height: 250px;"></svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Função auxiliar para criar SVG
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (tag, attrs, txt) => {
+      const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (txt != null) e.textContent = txt;
+      return e;
+    };
+
+    const sum = a => a.reduce((x, y) => x + y, 0);
+    const fmtN = v => v.toLocaleString('pt-BR');
+    const svgEl = (w, h) => {
+      const s = document.createElementNS(NS, 'svg');
+      s.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      s.setAttribute('xmlns', NS);
+      return s;
+    };
+
+    // Gráficos SVG
+    function barChart(cid, labels, vals, opts = {}) {
+      const c = document.getElementById(cid);
+      c.innerHTML = '';
+      if (!vals || vals.length === 0) return;
+      const w = opts.w || 560, h = opts.h || 250, padL = opts.padL || 44, padR = 12, padT = 22, padB = 28;
+      const max = Math.max(...vals.map(v => Number(v) || 0)) * 1.15 || 1;
+      const s = svgEl(w, h);
+      const x = i => padL + (w - padL - padR) * (i / (labels.length - 1 || 1));
+      const y = v => padT + (h - padT - padB) * (1 - v / max);
+      labels.forEach((l, i) => {
+        const v = vals[i];
+        s.appendChild(el('text', { x: x(i), y: h - 8, 'text-anchor': 'middle', 'font-size': 11, fill: '#64748b' }, l));
+        s.appendChild(el('rect', { x: x(i) - 12, y: y(v), width: 24, height: Math.max(y(0) - y(v), 1), rx: 4, fill: opts.color || '#0ea5e9' }));
+        s.appendChild(el('text', { x: x(i), y: y(v) - 4, 'text-anchor': 'middle', 'font-size': 10, 'font-weight': 700, fill: '#0D2137' }, fmtN(v)));
+      });
+      s.appendChild(el('line', { x1: padL, y1: h - padB, x2: w - padR, y2: h - padB, stroke: '#e2e8f0', 'stroke-width': 1 }));
+      c.appendChild(s);
+    }
+
+    function funil(cid, steps, opts = {}) {
+      const c = document.getElementById(cid);
+      c.innerHTML = '';
+      if (!steps || steps.length === 0) return;
+      const w = opts.w || 560, rowH = opts.rowH || 52, padL = 8, padR = 10, padT = 4;
+      const h = padT + steps.length * rowH + 4;
+      const max = Number(steps[0].v) || 1;
+      const maxBar = (w - padL - padR) * 0.52;
+      const cols = ['#0a3d6e', '#0d5a94', '#0ea5e9', '#38bdf8', '#10b981'];
+      const s = svgEl(w, h);
+      steps.forEach((st, i) => {
+        const y = padT + i * rowH;
+        const bwid = Math.max((st.v / max) * maxBar, 46);
+        s.appendChild(el('rect', { x: padL, y: y + 6, width: bwid, height: rowH - 12, rx: 6, fill: cols[i % cols.length] }));
+        s.appendChild(el('text', { x: padL + bwid / 2, y: y + rowH / 2 + 5, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 700, fill: 'white' }, fmtN(st.v)));
+        s.appendChild(el('text', { x: padL + bwid + 12, y: y + rowH / 2 + 5, 'font-size': 11, 'font-weight': 700, fill: '#0D2137' }, st.n));
+      });
+      c.appendChild(s);
+    }
+
+    // Carregar dados
+    function loadAndRender(kpis) {
+      const total = kpis.total_alunos || 232;
+      const ativoEstudando = kpis.ativo_estudando || 79;
+      const concluidos = kpis.concluidos || 95;
+      const taxaConclusao = kpis.taxa_conclusao || 41;
+      const analistas = kpis.analistas_ecgnow || 16;
+      const exAnalistas = kpis.ex_analistas_ecgnow || 7;
+
+      // Atualizar hero
+      document.getElementById('heroTotal').textContent = fmtN(total);
+      document.getElementById('heroAtivos').textContent = fmtN(ativoEstudando);
+      document.getElementById('heroConcluidos').textContent = fmtN(concluidos);
+
+      // Atualizar KPIs
+      document.getElementById('kpiTaxaConclusao').textContent = taxaConclusao + '%';
+      document.getElementById('kpiTaxaConclusaoQtd').textContent = fmtN(concluidos) + ' de ' + fmtN(total) + ' alunos';
+      document.getElementById('kpiTeorico').textContent = (kpis.progresso_medio_teorico || 40) + '%';
+
+      const nps = kpis.nps_score || 82;
+      document.getElementById('kpiNps').textContent = nps;
+
+      // Renderizar gráficos
+      if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) {
+        barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, { w: 400, h: 200 });
+      }
+
+      const funilData = [
+        { n: 'Matriculados', v: total },
+        { n: 'Concluíram', v: concluidos },
+        { n: 'Aprovados', v: kpis.taxa_aprovacao_qtd || 73 },
+        { n: 'Analistas', v: analistas }
+      ];
+      funil('funilChart', funilData, { w: 400, rowH: 40 });
+    }
+
+    // Buscar dados
+    fetch('./kpis.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(d => { if (d.data) loadAndRender(d.data); })
+      .catch(() => loadAndRender({}));
+  </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
-# Dashboard ECGNOW - Documentação
+# Dashboard Acadêmico ECGNOW - Documentação
 
 ## Objetivo
-Dashboard de indicadores acadêmicos para diretoria e coordenação. Conecta-se a Google Sheets para exibir dados de desempenho, inadimplência, NPS e progresso dos alunos.
+Dashboard acadêmico de indicadores educacionais para diretoria e coordenação. Conecta-se a Google Sheets para exibir dados de desempenho, inadimplência, NPS e progresso dos alunos.
 
 ## Stack Oficial (padrão_ecgnow)
 - **Frontend:** Vue 3 (Composition API) + Vite

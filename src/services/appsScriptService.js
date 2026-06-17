@@ -1,21 +1,35 @@
-import axios from 'axios'
+const PROXY_URL = 'http://localhost:3002/api/proxy'
 
-const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL || 'https://script.google.com/macros/d/YOUR_DEPLOYMENT_ID/usercontent'
+function getPassword() {
+  return sessionStorage.getItem('dashboardPassword')
+}
+
+function setPassword(password) {
+  sessionStorage.setItem('dashboardPassword', password)
+}
 
 export async function authenticate(password) {
   try {
-    const response = await axios.post(APPS_SCRIPT_URL, {
-      action: 'authenticate',
-      password
+    const response = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'authenticate',
+        password
+      })
     })
 
-    if (response.data.success) {
+    const data = await response.json()
+
+    if (data.success) {
+      setPassword(password)
       localStorage.setItem('dashboardAuth', 'true')
-      localStorage.setItem('authToken', response.data.token)
-      return { success: true, data: response.data }
+      return { success: true, data }
     }
 
-    return { success: false, error: response.data.error }
+    return { success: false, error: data.message }
   } catch (error) {
     console.error('Erro na autenticação:', error)
     return { success: false, error: 'Erro ao conectar com servidor' }
@@ -24,22 +38,30 @@ export async function authenticate(password) {
 
 export async function fetchDados() {
   try {
-    const token = localStorage.getItem('authToken')
+    const password = getPassword()
 
-    if (!token) {
+    if (!password) {
       return { success: false, error: 'Não autenticado' }
     }
 
-    const response = await axios.post(APPS_SCRIPT_URL, {
-      action: 'getData',
-      token
+    const response = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'getData',
+        password
+      })
     })
 
-    if (response.data.success) {
-      return { success: true, data: response.data.data }
+    const data = await response.json()
+
+    if (data.success) {
+      return { success: true, data: data.data }
     }
 
-    return { success: false, error: response.data.error }
+    return { success: false, error: data.message }
   } catch (error) {
     console.error('Erro ao buscar dados:', error)
     return { success: false, error: 'Erro ao buscar dados' }
@@ -51,6 +73,6 @@ export function isAuthenticated() {
 }
 
 export function logout() {
+  sessionStorage.removeItem('dashboardPassword')
   localStorage.removeItem('dashboardAuth')
-  localStorage.removeItem('authToken')
 }

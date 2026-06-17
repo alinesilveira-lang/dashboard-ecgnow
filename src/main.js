@@ -1,8 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './styles/design-system.css'
-import './style.css'
+import './styles/premium.css'
 import App from './App.vue'
 
 const app = createApp(App)

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base de Alunos - Dashboard ECGNOW CPVH</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0D2137;
+      --cyan: #0ea5e9;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --good: #10b981;
+      --muted: #64748b;
+      --light-bg: #f1f7fc;
+      --bricolage: 'Bricolage Grotesque', serif;
+    }
+
+    * {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: var(--navy);
+    }
+
+    .navbar {
+      background: var(--navy);
+      border-bottom: 3px solid var(--cyan);
+      padding: 16px 0;
+    }
+
+    .navbar-brand {
+      font-family: var(--bricolage);
+      font-weight: 800;
+      color: var(--cyan) !important;
+      font-size: 18px;
+    }
+
+    .nav-link {
+      color: #dbeafe !important;
+      margin: 0 8px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      border-bottom-color: var(--cyan);
+      color: var(--cyan) !important;
+    }
+
+    .container-fluid {
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-family: var(--bricolage);
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--navy);
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      background: var(--light-bg);
+      border: none;
+      font-family: var(--bricolage);
+      font-weight: 800;
+      padding: 16px;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+
+    .spinner {
+      border: 3px solid var(--light-bg);
+      border-top: 3px solid var(--cyan);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index-dashboard.html">
+        ECGNow • CPVH • Viver de Holter
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="resumo.html">Resumo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="visao-geral.html">Visão Geral</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="base-alunos.html">Base de Alunos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="engajamento.html">Engajamento</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="esteira-talentos.html">Esteira de Talentos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="financeiro.html">Financeiro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="satisfacao.html">Satisfação</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="demografia.html">Demografia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="leitura-executiva.html">Leitura Executiva</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <div class="container-fluid">
+    <h1 class="page-title">Base de Alunos</h1>
+
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
+
+    <div class="grid" id="content">
+      <p style="text-align: center; color: var(--muted);">Esta seção está em desenvolvimento. Dados serão exibidos aqui em breve.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Placeholder para carregamento de dados
+    fetch('./kpis.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        console.log('Dados carregados:', d.data);
+        // Aqui será adicionada lógica específica da página
+      })
+      .catch(e => console.error('Erro ao carregar:', e));
+
+    // Marcar link ativo no menu
+    const links = document.querySelectorAll('.nav-link');
+    const current = document.location.pathname.split('/').pop() || 'resumo.html';
+    links.forEach(l => {
+      if (l.href.includes(current)) {
+        l.classList.add('active');
+      } else {
+        l.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

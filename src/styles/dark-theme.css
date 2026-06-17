@@ -1,0 +1,175 @@
+/* Dark Theme */
+:root.dark-mode {
+  --ds-bg-primary: #1a1d23;
+  --ds-bg-secondary: #252a33;
+  --ds-bg-tertiary: #2d3139;
+  --ds-text-primary: #e4e6eb;
+  --ds-text-secondary: #b0b3b8;
+  --ds-border-color: #3a3f47;
+  --ds-card-bg: #252a33;
+  --ds-input-bg: #2d3139;
+  --ds-input-border: #3a3f47;
+}
+
+/* Body Dark Mode */
+:root.dark-mode body {
+  background-color: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+}
+
+/* Cards Dark Mode */
+:root.dark-mode .ds-card {
+  background-color: var(--ds-card-bg);
+  border-color: var(--ds-border-color);
+  color: var(--ds-text-primary);
+}
+
+:root.dark-mode .ds-card-header {
+  border-bottom-color: var(--ds-border-color);
+}
+
+:root.dark-mode .ds-card-title {
+  color: var(--ds-text-primary);
+}
+
+/* Tables Dark Mode */
+:root.dark-mode .table {
+  color: var(--ds-text-primary);
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .table thead th {
+  background-color: var(--ds-bg-tertiary);
+  color: var(--ds-text-primary);
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .table tbody tr {
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .table tbody tr:hover {
+  background-color: var(--ds-bg-tertiary);
+}
+
+/* Sidebar Dark Mode */
+:root.dark-mode .sidebar {
+  background-color: var(--ds-bg-secondary);
+  border-right-color: var(--ds-border-color);
+}
+
+:root.dark-mode .sidebar-menu-item {
+  color: var(--ds-text-secondary);
+  border-color: transparent;
+}
+
+:root.dark-mode .sidebar-menu-item:hover {
+  background-color: var(--ds-bg-tertiary);
+  color: var(--ds-text-primary);
+}
+
+:root.dark-mode .sidebar-menu-item.active {
+  background-color: #003d7a;
+  color: white;
+}
+
+/* Input Dark Mode */
+:root.dark-mode .form-control,
+:root.dark-mode .form-select {
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  color: var(--ds-text-primary);
+}
+
+:root.dark-mode .form-control:focus,
+:root.dark-mode .form-select:focus {
+  background-color: var(--ds-input-bg);
+  border-color: #003d7a;
+  color: var(--ds-text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(0, 61, 122, 0.25);
+}
+
+:root.dark-mode .form-control::placeholder {
+  color: var(--ds-text-secondary);
+}
+
+/* Badge Dark Mode */
+:root.dark-mode .badge {
+  background-color: var(--ds-bg-tertiary);
+  color: var(--ds-text-primary);
+  border: 1px solid var(--ds-border-color);
+}
+
+/* Progress Bar Dark Mode */
+:root.dark-mode .progress {
+  background-color: var(--ds-bg-tertiary);
+}
+
+/* Stats Card Dark Mode */
+:root.dark-mode .ds-stat-card {
+  background-color: var(--ds-bg-tertiary);
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .ds-stat-label {
+  color: var(--ds-text-secondary);
+}
+
+:root.dark-mode .ds-stat-value,
+:root.dark-mode .ds-stat-value-moeda {
+  color: #64b5f6;
+}
+
+/* Detail Card Dark Mode */
+:root.dark-mode .ds-detail-card {
+  background-color: var(--ds-bg-tertiary);
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .detail-valor {
+  color: #64b5f6;
+}
+
+:root.dark-mode .detail-qtd {
+  color: var(--ds-text-secondary);
+}
+
+/* Chart Card Dark Mode */
+:root.dark-mode .ds-chart-card {
+  background-color: var(--ds-bg-tertiary);
+  border-color: var(--ds-border-color);
+}
+
+:root.dark-mode .ds-chart-card h4 {
+  color: var(--ds-text-primary);
+}
+
+/* Section Title Dark Mode */
+:root.dark-mode .section-title {
+  color: var(--ds-text-primary);
+}
+
+:root.dark-mode .subsection-title {
+  color: var(--ds-text-primary);
+}
+
+/* KPI Dark Mode */
+:root.dark-mode .kpi-label {
+  color: var(--ds-text-secondary);
+}
+
+:root.dark-mode .kpi-value {
+  color: #64b5f6;
+}
+
+/* Table Empty Dark Mode */
+:root.dark-mode .ds-table-empty {
+  color: var(--ds-text-secondary);
+  background-color: var(--ds-bg-tertiary);
+}
+
+/* Filter Panel Dark Mode */
+:root.dark-mode .ds-filter-panel {
+  background-color: var(--ds-bg-tertiary);
+  border-color: var(--ds-border-color);
+}

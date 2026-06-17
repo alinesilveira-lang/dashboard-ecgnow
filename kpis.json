@@ -67,6 +67,9 @@
     "nps_nao_responderam_pct": "70.00",
     "idade_media": 38,
     "idade_nao_informada": 140,
+    "alunos_menos_25": 8,
+    "alunos_25_35": 28,
+    "alunos_mais_35": 57,
     "turno_manha": 87,
     "turno_tarde": 54,
     "turno_noite": 24,
@@ -107,6 +110,6 @@
         3
       ]
     },
-    "timestamp": "2026-06-15T14:23:17.049Z"
+    "timestamp": "2026-06-15T14:43:27.395Z"
   }
 }

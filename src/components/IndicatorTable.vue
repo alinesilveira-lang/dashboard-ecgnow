@@ -1,10 +1,26 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
-defineProps({
+const props = defineProps({
   alunos: {
     type: Array,
     default: () => []
+  },
+  somenteTeroria: {
+    type: Boolean,
+    default: false
+  }
+})
+
+onMounted(() => {
+  if (props.alunos && props.alunos.length > 0) {
+    console.log('DEBUG IndicatorTable:', {
+      totalAlunos: props.alunos.length,
+      primeiroAluno: props.alunos[0],
+      colunas: Object.keys(props.alunos[0]),
+      percentualTeoria: props.alunos[0].percentual_conclusao_teorico,
+      percentualPratica: props.alunos[0].percentual_conclusao_pratico
+    })
   }
 })
 
@@ -26,8 +42,13 @@ const getStatusBadgeClass = (status) => {
 }
 
 const formatPercentage = (value) => {
-  if (!value) return '0%'
-  return `${Math.round(value)}%`
+  if (!value && value !== 0) return '0%'
+  let num = parseFloat(value)
+  // Se o valor é decimal (0-1), multiplica por 100
+  if (num <= 1 && num >= 0) {
+    num = num * 100
+  }
+  return `${Math.round(num)}%`
 }
 
 const formatNPS = (nps) => {
@@ -53,18 +74,18 @@ const formatNPS = (nps) => {
           <thead>
             <tr>
               <th>Nome</th>
-              <th class="text-center">% Teória</th>
-              <th class="text-center">% Prática</th>
-              <th class="text-center">Prova</th>
-              <th class="text-center">Resultado</th>
-              <th class="text-center">NPS</th>
+              <th class="text-center">% Teoria</th>
+              <th v-if="!somenteTeroria" class="text-center">% Prática</th>
+              <th v-if="!somenteTeroria" class="text-center">Prova</th>
+              <th v-if="!somenteTeroria" class="text-center">Resultado</th>
+              <th v-if="!somenteTeroria" class="text-center">NPS</th>
               <th>Turma</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="alunos.length === 0">
-              <td colspan="8" class="ds-table-empty">
+              <td :colspan="somenteTeroria ? 4 : 8" class="ds-table-empty">
                 Nenhum aluno encontrado com os filtros selecionados
               </td>
             </tr>
@@ -83,7 +104,7 @@ const formatNPS = (nps) => {
                 </div>
               </td>
 
-              <td class="text-center">
+              <td v-if="!somenteTeroria" class="text-center">
                 <div class="progress" style="height: 20px;">
                   <div
                     class="progress-bar bg-success"
@@ -94,14 +115,14 @@ const formatNPS = (nps) => {
                 </div>
               </td>
 
-              <td class="text-center">
+              <td v-if="!somenteTeroria" class="text-center">
                 <span v-if="aluno.data_prova" class="ds-badge ds-badge-success">
                   ✓ {{ new Date(aluno.data_prova).toLocaleDateString('pt-BR') }}
                 </span>
                 <span v-else class="text-muted">-</span>
               </td>
 
-              <td class="text-center">
+              <td v-if="!somenteTeroria" class="text-center">
                 <span
                   v-if="aluno.resultado_final"
                   class="ds-badge"
@@ -112,7 +133,7 @@ const formatNPS = (nps) => {
                 <span v-else class="text-muted">-</span>
               </td>
 
-              <td class="text-center">
+              <td v-if="!somenteTeroria" class="text-center">
                 {{ formatNPS(aluno.nps) }}
               </td>
 

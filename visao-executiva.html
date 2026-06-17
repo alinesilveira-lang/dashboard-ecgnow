@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Executivo - Viver de Holter</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e8f4f5;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #17a2b8;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+            color: #17a2b8;
+        }
+
+        .menu-item.active {
+            background: #17a2b8;
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .update-time {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .kpis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #17a2b8;
+            margin: 6px 0;
+        }
+
+        .kpi-subtitle {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .details-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #17a2b8;
+        }
+
+        .detail-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .kpis-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-value {
+                font-size: 28px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #17a2b8;
+            font-size: 18px;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+
+        #visao-geral .kpis-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">📊 Dashboard</div>
+        <div class="menu">
+            <button class="menu-item active" data-page="visao-geral">📈 Visão Geral</button>
+            <button class="menu-item" data-page="alunos">👥 Alunos</button>
+            <button class="menu-item" data-page="desempenho">📚 Desempenho</button>
+            <button class="menu-item" data-page="financeiro">💰 Financeiro</button>
+            <button class="menu-item" data-page="satisfacao">⭐ Satisfação</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 id="pageTitle">Visão Geral</h1>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button id="refreshBtn" style="padding: 8px 15px; background: #17a2b8; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500;">🔄 Atualizar</button>
+                <div class="update-time">Última atualização: <span id="updateTime">--:--</span></div>
+            </div>
+        </header>
+
+        <!-- VISÃO GERAL -->
+        <div id="visao-geral" class="page active">
+            <!-- KPIs Principais -->
+            <div class="kpis-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">👥 Alunos Ativos</div>
+                    <div class="kpi-value" id="vg-alunosAtivos">0</div>
+                    <div class="kpi-subtitle" id="vg-alunosAtivosSubtitle">de 0 alunos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">✅ Taxa Aprovação</div>
+                    <div class="kpi-value" id="vg-taxaAprovacao">0%</div>
+                    <div class="kpi-subtitle">taxa geral</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">⭐ NPS</div>
+                    <div class="kpi-value" id="vg-npsScore">0%</div>
+                    <div class="kpi-subtitle">satisfação</div>
+                </div>
+            </div>
+
+            <!-- Modalidades -->
+            <div style="margin-top: 15px; margin-bottom: 15px;">
+                <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 10px; color: #333;">📚 Modalidades</h3>
+                <div class="kpis-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">📖 Só Teoria</div>
+                        <div class="kpi-value" id="vg-soteoria">0</div>
+                        <div class="kpi-subtitle">alunos</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">📚 Teoria</div>
+                        <div class="kpi-value" id="vg-teoria">0</div>
+                        <div class="kpi-subtitle">alunos</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">💻 Prática</div>
+                        <div class="kpi-value" id="vg-pratica">0</div>
+                        <div class="kpi-subtitle">alunos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inadimplência -->
+            <div class="details-card">
+                <div class="chart-title">⚠️ Inadimplência</div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Quantidade</div>
+                        <div class="detail-value" id="vg-inadimplentesQtd">0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Valor em Aberto</div>
+                        <div class="detail-value" id="vg-inadimplentesValor">R$ 0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">% do Total</div>
+                        <div class="detail-value" id="vg-inadimplentesPerc">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALUNOS -->
+        <div id="alunos" class="page">
+            <div class="kpis-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">📖 Só Teoria</div>
+                    <div class="kpi-value" id="modalidadeSoteoria">0</div>
+                    <div class="kpi-subtitle">alunos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">📚 Teoria</div>
+                    <div class="kpi-value" id="modalidadeTeoria">0</div>
+                    <div class="kpi-subtitle">alunos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">💻 Prática</div>
+                    <div class="kpi-value" id="modalidadePratica">0</div>
+                    <div class="kpi-subtitle">alunos</div>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Distribuição por Modalidade</div>
+                    <canvas id="modalidadesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- DESEMPENHO -->
+        <div id="desempenho" class="page">
+            <div class="kpis-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">✅ Taxa Aprovação</div>
+                    <div class="kpi-value" id="desempenhoAprovacao">0%</div>
+                    <div class="kpi-subtitle">de aprovação</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">🎓 Concluídos</div>
+                    <div class="kpi-value" id="desempenhoConcluidos">0</div>
+                    <div class="kpi-subtitle">concluíram</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">⚠️ Em Risco</div>
+                    <div class="kpi-value" id="desempenhoRisco">0</div>
+                    <div class="kpi-subtitle">bloqueados</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">🚫 Churn</div>
+                    <div class="kpi-value" id="desempenhoChurn">0</div>
+                    <div class="kpi-subtitle">desistentes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FINANCEIRO -->
+        <div id="financeiro" class="page">
+            <div class="details-card">
+                <div class="chart-title">⚠️ Inadimplência</div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Quantidade</div>
+                        <div class="detail-value" id="inadimplentesQtd">0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Valor em Aberto</div>
+                        <div class="detail-value" id="inadimplentesValor">R$ 0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">% do Total</div>
+                        <div class="detail-value" id="inadimplentesPerc">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SATISFAÇÃO -->
+        <div id="satisfacao" class="page">
+            <div class="kpis-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">⭐ NPS Score</div>
+                    <div class="kpi-value" id="npsScorePage">0%</div>
+                    <div class="kpi-subtitle">Net Promoter Score</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">👍 Promotores</div>
+                    <div class="kpi-value" id="promotores">0</div>
+                    <div class="kpi-subtitle">9-10 pontos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">😐 Passivos</div>
+                    <div class="kpi-value" id="passivos">0</div>
+                    <div class="kpi-subtitle">7-8 pontos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">👎 Detratores</div>
+                    <div class="kpi-value" id="detratores">0</div>
+                    <div class="kpi-subtitle">0-6 pontos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHEETS_ID = '1t5gLpn9HdfOSoPgWawsslfQjOfqsMMa5k5o9wjaHeHA';
+        const API_KEY = 'AIzaSyDtfjYfvuBzCufnW_idXetu7VUTOHr3buI';
+
+        let charts = {};
+        let currentKpis = null;
+
+        // Botão de atualização
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            document.getElementById('refreshBtn').textContent = '⏳ Carregando...';
+            loadData().then(() => {
+                document.getElementById('refreshBtn').textContent = '🔄 Atualizar';
+            });
+        });
+
+        // Navegação
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+                item.classList.add('active');
+                const pageId = item.dataset.page;
+                document.getElementById(pageId).classList.add('active');
+
+                // Atualizar título
+                const titles = {
+                    'visao-geral': 'Visão Geral',
+                    'alunos': 'Alunos',
+                    'desempenho': 'Desempenho',
+                    'financeiro': 'Financeiro',
+                    'satisfacao': 'Satisfação'
+                };
+                document.getElementById('pageTitle').textContent = titles[pageId];
+
+                // Renderizar gráficos se necessário
+                setTimeout(() => {
+                    if (pageId === 'alunos' && currentKpis) {
+                        renderModalidadesChart(currentKpis.modalidades);
+                    }
+                }, 100);
+            });
+        });
+
+        async function loadData() {
+            try {
+                const [performance, asaas, boletos] = await Promise.all([
+                    fetchSheetData('Performance (Dados dinâmicos)'),
+                    fetchSheetData('ASAAS_Import'),
+                    fetchSheetData('BOLETOS_Import')
+                ]);
+
+                currentKpis = calculateKPIs(performance, asaas, boletos);
+                renderDashboard(currentKpis);
+                updateTime();
+
+                return currentKpis;
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar dados. Verifique o console.');
+            }
+        }
+
+        async function fetchSheetData(sheetName) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/${encodeURIComponent(sheetName)}?key=${API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.values || [];
+        }
+
+        function rowsToObjects(rows) {
+            if (!rows || rows.length === 0) return [];
+            const headers = rows[0];
+            return rows.slice(1).map(row => {
+                const obj = {};
+                headers.forEach((header, idx) => {
+                    obj[header.toLowerCase().replace(/\s+/g, '_')] = row[idx] || '';
+                });
+                return obj;
+            });
+        }
+
+        function calculateKPIs(performance, asaas, boletos) {
+            const alunos = rowsToObjects(performance);
+            const inadimplencia = rowsToObjects(asaas).concat(rowsToObjects(boletos));
+
+            const alunosAtivos = alunos.filter(a =>
+                Object.values(a).some(v => typeof v === 'string' && v.trim() === 'Ativo')
+            ).length;
+
+            const aprovados = alunos.filter(a => a.resultado === 'Aprovado').length;
+            const comResultado = alunos.filter(a => a.resultado).length;
+            const taxaAprovacao = comResultado > 0 ? ((aprovados / comResultado) * 100).toFixed(1) : 0;
+
+            const npsData = alunos.filter(a => a.nps && a.nps.trim());
+            const promotores = npsData.filter(a => parseInt(a.nps) >= 9).length;
+            const passivos = npsData.filter(a => parseInt(a.nps) >= 7 && parseInt(a.nps) <= 8).length;
+            const detratores = npsData.filter(a => parseInt(a.nps) < 7).length;
+            const npsScore = npsData.length > 0 ? (((promotores - detratores) / npsData.length) * 100).toFixed(1) : 0;
+
+            const modalidades = { 'Só Teoria': 0, 'Teoria': 0, 'Prática': 0 };
+            alunos.forEach(a => {
+                const pilar = (a.pilar || '').trim();
+                if (pilar === 'Só Teoria') modalidades['Só Teoria']++;
+                else if (pilar === 'Teoria') modalidades['Teoria']++;
+                else if (pilar === 'Prática') modalidades['Prática']++;
+            });
+
+            const concluidos = alunos.filter(a =>
+                Object.values(a).some(v => typeof v === 'string' && v.trim() === 'Trancado')
+            ).length;
+
+            const emRisco = alunos.filter(a =>
+                Object.values(a).some(v => typeof v === 'string' && v.trim() === 'Bloqueado por inadimplência')
+            ).length;
+
+            const churn = alunos.filter(a =>
+                Object.values(a).some(v => typeof v === 'string' && (v.trim() === 'Desistente' || v.trim() === 'Churn'))
+            ).length;
+
+            const valorInadimplencia = inadimplencia
+                .reduce((sum, f) => sum + (parseFloat(f.valor) || 0), 0)
+                .toFixed(2);
+
+            return {
+                alunosAtivos,
+                totalAlunos: alunos.length,
+                taxaAprovacao,
+                aprovados,
+                npsScore,
+                promotores,
+                passivos,
+                detratores,
+                modalidades,
+                concluidos,
+                emRisco,
+                churn,
+                inadimplentes: inadimplencia.length,
+                valorInadimplencia
+            };
+        }
+
+        function renderDashboard(kpis) {
+            // Visão Geral
+            document.getElementById('vg-alunosAtivos').textContent = kpis.alunosAtivos;
+            document.getElementById('vg-alunosAtivosSubtitle').textContent = `de ${kpis.totalAlunos} alunos`;
+            document.getElementById('vg-taxaAprovacao').textContent = `${kpis.taxaAprovacao}%`;
+            document.getElementById('vg-npsScore').textContent = `${kpis.npsScore}%`;
+
+            // Modalidades na Visão Geral
+            document.getElementById('vg-soteoria').textContent = kpis.modalidades['Só Teoria'];
+            document.getElementById('vg-teoria').textContent = kpis.modalidades.Teoria;
+            document.getElementById('vg-pratica').textContent = kpis.modalidades.Prática;
+
+            // Inadimplência na Visão Geral
+            document.getElementById('vg-inadimplentesQtd').textContent = kpis.inadimplentes;
+            document.getElementById('vg-inadimplentesValor').textContent = `R$ ${parseFloat(kpis.valorInadimplencia).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('vg-inadimplentesPerc').textContent = `${((kpis.inadimplentes / kpis.totalAlunos) * 100).toFixed(1)}%`;
+
+            // Alunos
+            document.getElementById('modalidadeSoteoria').textContent = kpis.modalidades['Só Teoria'];
+            document.getElementById('modalidadeTeoria').textContent = kpis.modalidades.Teoria;
+            document.getElementById('modalidadePratica').textContent = kpis.modalidades.Prática;
+
+            // Desempenho
+            document.getElementById('desempenhoAprovacao').textContent = `${kpis.taxaAprovacao}%`;
+            document.getElementById('desempenhoConcluidos').textContent = kpis.concluidos;
+            document.getElementById('desempenhoRisco').textContent = kpis.emRisco;
+            document.getElementById('desempenhoChurn').textContent = kpis.churn;
+
+            // Financeiro
+            document.getElementById('inadimplentesQtd').textContent = kpis.inadimplentes;
+            document.getElementById('inadimplentesValor').textContent = `R$ ${parseFloat(kpis.valorInadimplencia).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('inadimplentesPerc').textContent = `${((kpis.inadimplentes / kpis.totalAlunos) * 100).toFixed(1)}%`;
+
+            // Satisfação
+            document.getElementById('npsScorePage').textContent = `${kpis.npsScore}%`;
+            document.getElementById('promotores').textContent = kpis.promotores;
+            document.getElementById('passivos').textContent = kpis.passivos;
+            document.getElementById('detratores').textContent = kpis.detratores;
+
+            // Gráfico de modalidades
+            setTimeout(() => renderModalidadesChart(kpis.modalidades), 100);
+        }
+
+        function renderModalidadesChart(modalidades) {
+            const canvas = document.getElementById('modalidadesChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            if (charts.modalidades) charts.modalidades.destroy();
+
+            charts.modalidades = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(modalidades),
+                    datasets: [{
+                        data: Object.values(modalidades),
+                        backgroundColor: ['#17a2b8', '#138496', '#0c5460', '#d1ecf1'],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('updateTime').textContent =
+                now.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        loadData();
+        // Atualizar a cada 5 minutos
+        setInterval(() => loadData(), 300000);
+    </script>
+</body>
+</html>
