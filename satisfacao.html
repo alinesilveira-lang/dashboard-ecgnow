@@ -3,10 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satisfação - Dashboard ECGNOW CPVH</title>
+<title>Dashboard Educação · CPVH · ECGNow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+
+/* ============================================================
+   DASHBOARD EDUCAÇÃO ECGNOW · CPVH (Curso Profissão Viver de Holter)
+   Design System oficial: Bricolage Grotesque + Nunito · navy/cyan
+   Capa compacta (1 tela) + visão expandida
+   ============================================================ */
 :root{
   --navy:#0D2137; --navy2:#0a3d6e; --cyan:#0ea5e9; --cyan-soft:#e0f2fe;
   --bg:#f4f8fb; --card:#ffffff; --line:#e2e8f0;
@@ -19,6 +25,7 @@
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5}
 h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
 
+/* ---------- Topbar ---------- */
 .topbar{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;box-shadow:0 2px 14px rgba(13,33,55,.25)}
 .topbar-inner{max-width:1280px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px}
@@ -26,7 +33,7 @@ h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
 .brand small{font-family:'Nunito';font-weight:700;font-size:11px;color:#9fd8f8;text-transform:uppercase;letter-spacing:1.5px;display:block}
 .period-chip{background:rgba(14,165,233,.18);border:1px solid rgba(14,165,233,.45);color:#bfe9ff;font-size:12px;font-weight:800;padding:5px 14px;border-radius:999px;white-space:nowrap}
 .nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-.nav a{color:#cfe7f7;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;transition:.2s;display:inline-block}
+.nav a{color:#cfe7f7;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;transition:.2s}
 .nav a:hover,.nav a.active{background:rgba(14,165,233,.25);color:#fff}
 
 .wrap{max-width:1280px;margin:0 auto;padding:30px 28px 70px}
@@ -36,6 +43,7 @@ section{margin-bottom:48px;scroll-margin-top:90px}
 .sec-head .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--cyan);background:var(--cyan-soft);padding:4px 12px;border-radius:999px}
 .sec-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;max-width:880px}
 
+/* ---------- Cards & grids ---------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px}
 .grid{display:grid;gap:16px}
 .g-2{grid-template-columns:1fr 1fr}
@@ -56,6 +64,9 @@ section{margin-bottom:48px;scroll-margin-top:90px}
 
 .chart-card h3{font-size:15.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
 .chart-card .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
 svg text{font-family:'Nunito',sans-serif}
 
 .insight{display:flex;gap:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;margin-bottom:12px;align-items:flex-start}
@@ -64,21 +75,51 @@ svg text{font-family:'Nunito',sans-serif}
 .insight p{font-size:13.5px;color:#3b536b;margin-top:2px}
 .ico.g{background:var(--ok-soft)}.ico.y{background:var(--warn-soft)}.ico.r{background:var(--bad-soft)}.ico.b{background:var(--cyan-soft)}
 
-#viewResumo{max-width:1280px;margin:0 auto;padding:16px 28px 20px;display:grid;grid-template-columns:370px minmax(0,1fr);gap:16px;overflow:auto}
+.pill{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:800}
+.pill.g{background:var(--ok-soft);color:#047857}.pill.y{background:var(--warn-soft);color:#92400e}.pill.r{background:var(--bad-soft);color:#b91c1c}
+
+.foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}
+
+/* ---------- Capa · Resumo (1 tela) ---------- */
+#viewResumo{max-width:1280px;margin:0 auto;padding:16px 28px 20px;display:grid;grid-template-columns:370px minmax(0,1fr);gap:16px;overflow:hidden}
 .rs-hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0c5a9e 100%);border-radius:22px;color:#fff;padding:26px 26px 22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 10px 30px rgba(13,33,55,.28);position:relative;overflow:hidden}
 .rs-hero::after{content:'';position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.35),transparent 70%)}
+.rs-kicker{font-size:10.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#9fd8f8}
+.rs-titulo{font-family:'Bricolage Grotesque';font-size:clamp(22px,3vh,28px);font-weight:800;line-height:1.15;margin-top:4px}
+.rs-verdict{font-size:12.5px;color:#cfe7f7;font-weight:600;margin-top:6px;line-height:1.45}
+.rs-big{font-family:'Bricolage Grotesque';font-size:clamp(34px,5vh,46px);font-weight:800;line-height:1.05;margin:2px 0 2px}
+.rs-big small{font-size:15px;font-weight:700;color:#9fd8f8;font-family:'Nunito'}
+.rs-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;position:relative;z-index:1}
+.rs-hl{font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#9fd8f8}
+.rs-hv{font-family:'Bricolage Grotesque';font-size:clamp(15px,2.1vh,19px);font-weight:700;margin-top:2px}
+.rs-hv small{font-family:'Nunito';font-size:11.5px;font-weight:700;color:#bfe9ff}
+.rs-proj{margin-top:auto;font-size:11.5px;font-weight:700;color:#bfe9ff;background:rgba(14,165,233,.16);border:1px solid rgba(14,165,233,.4);border-radius:12px;padding:9px 13px;line-height:1.5;position:relative;z-index:1}
+.rs-proj b{color:#fff;font-weight:800}
+.rs-proj .pl{font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#7dd3fc;display:block;margin-bottom:2px}
+.rs-cta{margin-top:12px;align-self:flex-start;border:none;cursor:pointer;font-family:'Nunito';font-weight:800;font-size:13.5px;color:var(--navy);background:linear-gradient(90deg,#7dd3fc,#38bdf8);padding:11px 20px;border-radius:999px;box-shadow:0 4px 16px rgba(14,165,233,.45);transition:.2s;position:relative;z-index:1}
+.rs-cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(14,165,233,.55)}
+.rs-right{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:14px;min-width:0}
 .rs-chips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .rs-chip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
 .rs-chip .l{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px}
 .rs-chip .v{font-family:'Bricolage Grotesque';font-size:clamp(18px,2.6vh,23px);font-weight:800;color:var(--navy);margin-top:3px}
-.rs-right{display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px;min-width:0}
+.rs-chip .s{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:2px}
 .rs-mid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;min-height:0}
-.rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px}
+.rs-card-title{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--navy)}
+.rs-card-sub{font-family:'Nunito';font-size:11px;color:var(--muted);font-weight:700;margin-left:6px}
 .rs-chart{flex:1;min-height:0;display:flex;align-items:center}
 .rs-chart svg{width:100%;max-height:100%}
 .rs-funil{flex:1;min-height:0;display:flex;align-items:center}
 .rs-funil svg{width:100%;max-height:100%}
-@media(max-width:1024px){#viewResumo{grid-template-columns:1fr}.rs-chips{grid-template-columns:repeat(2,1fr)}.rs-mid{grid-template-columns:1fr}}
+.rs-destaques{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 20px}
+.rs-dest{display:flex;gap:11px;align-items:flex-start}
+.rs-dest .ico{flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.rs-dest b{font-size:12.5px;color:var(--navy);display:block;margin-bottom:2px}
+.rs-dest p{font-size:11.8px;color:#3b536b;line-height:1.45}
+@media(max-width:1024px){#viewResumo{grid-template-columns:1fr;overflow:auto;height:auto !important}.rs-chips{grid-template-columns:repeat(2,1fr)}.rs-mid,.rs-destaques{grid-template-columns:1fr}}
+@media(max-height:760px) and (min-width:1024px){.rs-hero{padding:18px 22px 16px;gap:10px}.rs-destaques{padding:12px 16px}.rs-chip{padding:9px 12px}}
+
 </style>
 </head>
 <body>
@@ -86,32 +127,8 @@ svg text{font-family:'Nunito',sans-serif}
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
-    <span class="period-chip">Base atualizada · Jun/2026</span>
-    <nav class="nav">
-      <a href="resumo.html" class="">Resumo</a><a href="visao-geral.html" class="">Visão Geral</a><a href="base-alunos.html" class="">Base de Alunos</a><a href="engajamento.html" class="">Engajamento</a><a href="esteira-talentos.html" class="">Esteira de Talentos</a><a href="financeiro.html" class="">Financeiro</a><a href="satisfacao.html" class="active">Satisfação</a><a href="demografia.html" class="">Demografia</a><a href="leitura-executiva.html" class="">Leitura Executiva</a>
-    </nav>
-  </div>
-</div>
 
 <div class="wrap">
-<section id="nps">
-  <div class="sec-head"><h2>Satisfação do Aluno (NPS)</h2><span class="tag">Net Promoter Score</span></div>
-  <p class="sec-sub">Medição de satisfação e disposição de recomendação dos alunos. O NPS consolida promotores, neutros e detratores em um índice único (-100 a 100).</p>
-  <div class="grid g-2">
-    <div class="card chart-card">
-      <h3>NPS Score & Segmentação</h3>
-      <div class="hint">NPS = Promotores% - Detratores%. Gráfico mostra distribuição de respondentes por categoria.</div>
-      <div id="npsDonut"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Detalhes da Pesquisa & Notas por Engajamento</h3>
-      <div class="hint">Total de respostas, taxa de resposta e nota média por nível de engajamento na plataforma.</div>
-      <div id="npsCard"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. DEMOGRAFIA -->
 
 </div>
 
@@ -981,11 +998,8 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    loadKPIsFromJSON();
-  });
+  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {
   loadKPIsFromJSON();
 }
