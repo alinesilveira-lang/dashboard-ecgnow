@@ -997,6 +997,10 @@ function updateDashboardKPIs(kpis) {
   // RENDERIZAR GRÁFICOS DAS SEÇÕES
   // ============================================================
 
+  // Declarar variáveis necessárias
+  const trancado = kpis.trancado_qtd || 0;
+  const alunoExterno = kpis.aluno_externo || 0;
+
   // Gráfico de Matrículas por mês
   if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
     barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
@@ -1014,8 +1018,6 @@ function updateDashboardKPIs(kpis) {
   }
 
   // Status do curso (Donut)
-  const trancado = kpis.trancado_qtd || 0;
-  const alunoExterno = kpis.aluno_externo || 0;
   const statusChart = [
     {n:'Concluído',v:concluidos,c:'#10b981'},
     {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
