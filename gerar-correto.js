@@ -8,11 +8,18 @@ const original = fs.readFileSync('./dashboard-cpvh.html', 'utf-8');
 const headMatch = original.match(/<head>[\s\S]*?<\/head>/);
 const head = headMatch ? headMatch[0] : '';
 
-const topbarMatch = original.match(/<div class="topbar">[\s\S]*?<\/div>\s*<\/div>/);
-let topbar = topbarMatch ? topbarMatch[0] : '';
+// Extrair topbar completo com nav
+const topbarStart = original.indexOf('<div class="topbar">');
+const topbarEnd = original.indexOf('<!-- ===================== CAPA', topbarStart);
+let topbar = original.substring(topbarStart, topbarEnd).trim();
 
 // Remover onclick do topbar
 topbar = topbar.replace(/ onclick="showResumo\(\)"/g, '');
+
+// Garantir que fecha corretamente
+if (!topbar.includes('</div>\n  </div>\n</div>')) {
+  topbar += '\n  </div>\n</div>';
+}
 
 // Extrair apenas as funções essenciais do script
 const essentialFunctions = [
