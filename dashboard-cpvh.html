@@ -631,6 +631,8 @@ const KPIS_URL = './kpis.json';
 
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
+
+  // Tentar primeiro com fetch (moderno)
   fetch(KPIS_URL + '?t=' + Date.now(), {
     method: 'GET',
     cache: 'no-cache'
@@ -644,19 +646,50 @@ function loadKPIsFromJSON() {
     console.log('📊 JSON parseado:', result);
     if (result.success && result.data) {
       const kpis = result.data;
-      console.log('✅ KPIs carregados com sucesso:', kpis);
+      console.log('✅ KPIs carregados com sucesso via fetch:', kpis);
       updateDashboardKPIs(kpis);
     } else {
       console.error('❌ Resposta inválida:', result.message || 'success=false');
-      // Fallback: tentar recarregar após 2 segundos
-      setTimeout(loadKPIsFromJSON, 2000);
+      throw new Error('Invalid response format');
     }
   })
   .catch(err => {
-    console.error('❌ Erro ao carregar kpis.json:', err.message);
-    console.warn('⚠️ Usando valores padrão. Tentando recarregar em 3s...');
-    setTimeout(loadKPIsFromJSON, 3000);
+    console.error('❌ Fetch falhou:', err.message);
+    console.log('🔄 Tentando fallback com XMLHttpRequest...');
+    loadKPIsWithXHR();
   });
+}
+
+function loadKPIsWithXHR() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', KPIS_URL + '?t=' + Date.now(), true);
+  xhr.onload = function() {
+    console.log('📡 XHR Resposta recebida, status:', xhr.status);
+    if (xhr.status === 200) {
+      try {
+        const result = JSON.parse(xhr.responseText);
+        console.log('📊 JSON parseado via XHR:', result);
+        if (result.success && result.data) {
+          console.log('✅ KPIs carregados com sucesso via XHR:', result.data);
+          updateDashboardKPIs(result.data);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (e) {
+        console.error('❌ Erro ao parsear JSON:', e.message);
+      }
+    } else {
+      console.error('❌ XHR falhou com status:', xhr.status);
+    }
+  };
+  xhr.onerror = function() {
+    console.error('❌ XHR erro ao carregar:', xhr.statusText);
+  };
+  try {
+    xhr.send();
+  } catch (e) {
+    console.error('❌ XHR não pode enviar requisição:', e.message);
+  }
 }
 
 function updateDashboardKPIs(kpis) {
