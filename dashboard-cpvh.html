@@ -759,16 +759,6 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   const baseAlunos = kpis.base_alunos;
-  // Atualizar status do curso (Donut Status)
-  const statusAtualizado = [
-    {n:'Concluído',v:concluidos,c:'#10b981'},
-    {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
-    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
-    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
-    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
-    {n:'Só teoria',v:baseAlunos.so_teoria,c:'#f59e0b'}
-  ];
-  donut('statusDonut', statusAtualizado, String(total), 'alunos', {w:420,h:260,lx:240});
 
   // ============================================================
   // ENGAJAMENTO - Atualizar com dados detalhados
