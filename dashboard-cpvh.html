@@ -769,13 +769,6 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   const engajDetalhado = kpis.engajamento_detalhado || {alto:0, alto_pct:'0', medio:0, medio_pct:'0', baixo:0, baixo_pct:'0', nenhum:0, nenhum_pct:'0'};
-  const engajaAtualizado = [
-    {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
-    {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
-    {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
-    {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
-  ];
-  donut('engajaDonut', engajaAtualizado, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
 
   // ============================================================
   // SEÇÃO NPS - Renderizar dados de satisfação
@@ -982,10 +975,16 @@ function updateDashboardKPIs(kpis) {
     {n:'Aprovados',v:aprovados},
     {n:'Analistas ECGNOW',v:analistas}
   ];
-  funil('rsFunil', funilData, {w:340,rowH:40});
+  const rsFunilElem = document.getElementById('rsFunil');
+  if(rsFunilElem) {
+    funil('rsFunil', funilData, {w:340,rowH:40});
+  }
 
   // Funil grande (Esteira de Talentos)
-  funil('funilGrande', funilData, {w:560,rowH:56});
+  const funilGrandeElem = document.getElementById('funilGrande');
+  if(funilGrandeElem) {
+    funil('funilGrande', funilData, {w:560,rowH:56});
+  }
 
   // ============================================================
   // RENDERIZAR GRÁFICOS DAS SEÇÕES
@@ -1012,6 +1011,7 @@ function updateDashboardKPIs(kpis) {
   }
 
   // Status do curso (Donut)
+  // Status do curso (Donut)
   const statusChart = [
     {n:'Concluído',v:concluidos,c:'#10b981'},
     {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
@@ -1021,7 +1021,10 @@ function updateDashboardKPIs(kpis) {
     {n:'Trancado',v:trancado,c:'#cbd5e1'},
     {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
   ];
-  donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+  const statusDonutElem = document.getElementById('statusDonut');
+  if(statusDonutElem) {
+    donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+  }
 
   // Card de Alunos em Risco (Abaixo dos 50%)
   const riscoCard = document.getElementById('riscoCard');
@@ -1098,7 +1101,10 @@ function updateDashboardKPIs(kpis) {
     {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
     {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
   ];
-  donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+  const engajDonutElem = document.getElementById('engajaDonut');
+  if(engajDonutElem) {
+    donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+  }
 
   // ============================================================
   // ATUALIZAR TAGS E TEXTOS DAS SEÇÕES
