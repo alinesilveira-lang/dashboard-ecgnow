@@ -129,7 +129,7 @@ svg text{font-family:'Nunito',sans-serif}
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
     <span class="period-chip">Base atualizada · Jun/2026</span>
     <nav class="nav">
-      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="javascript:void(0)" id="navResumo" class="active">Resumo</a>
       <a href="#geral">Visão Geral</a>
       <a href="#base">Base de Alunos</a>
       <a href="#engaja">Engajamento</a>
@@ -379,10 +379,11 @@ function funil(cid,steps,opts={}){
 /* ============================================================
    TROCA DE VISÕES — Capa ↔ Dashboard expandido
    ============================================================ */
-
-}
-
-
+function showResumo(){
+  document.getElementById('viewDetalhe').style.display='none';
+  document.getElementById('viewResumo').style.display='grid';
+  ;
+;
 
 /* ============================================================
    CARREGAMENTO DE KPIs — Via arquivo JSON no repositório

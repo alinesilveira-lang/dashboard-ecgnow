@@ -18,12 +18,15 @@ const scriptEnd = original.indexOf('</script>', scriptStart);
 let scriptFull = original.substring(scriptStart + 8, scriptEnd);
 
 // Remover funções que só funcionam em dashboard completo
-scriptFull = scriptFull.replace(/function showResumo\(\)[\s\S]*?fitResumo\(\);/m, '');
-scriptFull = scriptFull.replace(/function showDetalhe\(\)[\s\S]*?}\n/m, '');
-scriptFull = scriptFull.replace(/function fitResumo\(\)[\s\S]*?}\n/m, '');
-scriptFull = scriptFull.replace(/document\.querySelectorAll\('\.nav[\s\S]*?},\{passive:true\}\);?/m, '');
-scriptFull = scriptFull.replace(/window\.addEventListener\('resize',fitResumo\);?/m, '');
-scriptFull = scriptFull.replace(/fitResumo\(\);?/m, '');
+scriptFull = scriptFull.replace(/function showResumo\(\){[\s\S]*?fitResumo\(\);}(\n)?/m, '');
+scriptFull = scriptFull.replace(/function showDetalhe\(\){[\s\S]*?}\n/m, '');
+scriptFull = scriptFull.replace(/function fitResumo\(\){[\s\S]*?}\n/m, '');
+scriptFull = scriptFull.replace(/document\.querySelectorAll\('\.nav[\s\S]*?},\{passive:true\}\)(\n)?/m, '');
+scriptFull = scriptFull.replace(/window\.addEventListener\('resize',fitResumo\)(\n)?/m, '');
+scriptFull = scriptFull.replace(/fitResumo\(\)(\n)?/m, '');
+
+// Remover onclick do topbar
+topbar = topbar.replace(/ onclick="showResumo\(\)"/g, '');
 
 const pages = [
   { nome: 'visao-geral', id: 'geral', titulo: 'Visão Geral' },
