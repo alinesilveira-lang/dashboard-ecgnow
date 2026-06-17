@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,27 +124,25 @@ svg text{font-family:'Nunito',sans-serif}
 </head>
 <body>
 
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="#geral">Visão Geral</a>
+      <a href="#base">Base de Alunos</a>
+      <a href="#engaja">Engajamento</a>
+      <a href="#esteira">Esteira de Talentos</a>
+      <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
+      <a href="#leitura">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
 
 <div class="wrap">
-<section id="nps">
-  <div class="sec-head"><h2>Satisfação do Aluno (NPS)</h2><span class="tag">Net Promoter Score</span></div>
-  <p class="sec-sub">Medição de satisfação e disposição de recomendação dos alunos. O NPS consolida promotores, neutros e detratores em um índice único (-100 a 100).</p>
-  <div class="grid g-2">
-    <div class="card chart-card">
-      <h3>NPS Score & Segmentação</h3>
-      <div class="hint">NPS = Promotores% - Detratores%. Gráfico mostra distribuição de respondentes por categoria.</div>
-      <div id="npsDonut"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Detalhes da Pesquisa & Notas por Engajamento</h3>
-      <div class="hint">Total de respostas, taxa de resposta e nota média por nível de engajamento na plataforma.</div>
-      <div id="npsCard"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. DEMOGRAFIA -->
 
 </div>
 
@@ -1012,7 +1012,6 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {

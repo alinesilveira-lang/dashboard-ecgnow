@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,22 +124,25 @@ svg text{font-family:'Nunito',sans-serif}
 </head>
 <body>
 
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="#geral">Visão Geral</a>
+      <a href="#base">Base de Alunos</a>
+      <a href="#engaja">Engajamento</a>
+      <a href="#esteira">Esteira de Talentos</a>
+      <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
+      <a href="#leitura">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
 
 <div class="wrap">
-<section id="esteira">
-  <div class="sec-head"><h2>Esteira de Talentos</h2><span class="tag">Do curso à operação Holter</span></div>
-  <p class="sec-sub">O CPVH funciona como pipeline de contratação: alunos concluintes entram no processo seletivo e os aprovados viram analistas de Holter da ECGNow.</p>
-  <div class="grid g-2">
-    <div class="card chart-card">
-      <h3>Funil completo</h3>
-      <div class="hint">Conversão de ponta a ponta: 10,8% dos matriculados chegaram a Analista ECGNOW.</div>
-      <div id="funilGrande"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. FINANCEIRO -->
 
 </div>
 
@@ -1007,7 +1012,6 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,16 +124,25 @@ svg text{font-family:'Nunito',sans-serif}
 </head>
 <body>
 
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="#geral">Visão Geral</a>
+      <a href="#base">Base de Alunos</a>
+      <a href="#engaja">Engajamento</a>
+      <a href="#esteira">Esteira de Talentos</a>
+      <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
+      <a href="#leitura">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
 
 <div class="wrap">
-<section id="geral">
-  <div class="sec-head"><h2>Visão Geral</h2><span class="tag">Indicadores-chave do CPVH</span></div>
-  <p class="sec-sub">Fotografia consolidada da base de alunos, engajamento e saúde financeira do curso, a partir do cadastro oficial, da plataforma Hotmart e das cobranças ASAAS.</p>
-  <div class="grid g-4" id="kpisGeral"></div>
-</section>
-
-<!-- 2. BASE DE ALUNOS -->
 
 </div>
 
@@ -1001,7 +1012,6 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,32 +124,25 @@ svg text{font-family:'Nunito',sans-serif}
 </head>
 <body>
 
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="#geral">Visão Geral</a>
+      <a href="#base">Base de Alunos</a>
+      <a href="#engaja">Engajamento</a>
+      <a href="#esteira">Esteira de Talentos</a>
+      <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
+      <a href="#leitura">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
 
 <div class="wrap">
-<section id="engaja">
-  <div class="sec-head"><h2>Jornada & Engajamento</h2><span class="tag">Plataforma Hotmart + trilha do curso</span></div>
-  <p class="sec-sub">Como os alunos avançam na trilha teórica e quanto interagem com a plataforma. A trilha prática só registra concluintes (41 alunos, todos a 100%).</p>
-  <div class="grid g-3">
-    <div class="card chart-card">
-      <h3>Indicadores de Progresso e Engajamento</h3>
-      <div class="hint">Mapeamento consolidado de atividade, progressão teórica e desempenho por nível de engajamento.</div>
-      <div id="indicadoresCard"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Engajamento na plataforma</h3>
-      <div class="hint">296 contas Hotmart. Alto + Médio respondem por 76,7%; 22 contas nunca interagiram.</div>
-      <div id="engajaDonut"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Atividade recente</h3>
-      <div class="hint">Acessos à plataforma na janela recente e progresso médio geral.</div>
-      <div id="atividadeCard"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 4. ESTEIRA DE TALENTOS -->
 
 </div>
 
@@ -1017,7 +1012,6 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {

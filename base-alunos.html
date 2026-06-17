@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,39 +124,25 @@ svg text{font-family:'Nunito',sans-serif}
 </head>
 <body>
 
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="javascript:void(0)" id="navResumo" class="active" onclick="showResumo()">Resumo</a>
+      <a href="#geral">Visão Geral</a>
+      <a href="#base">Base de Alunos</a>
+      <a href="#engaja">Engajamento</a>
+      <a href="#esteira">Esteira de Talentos</a>
+      <a href="#financeiro">Financeiro</a>
+      <a href="#nps">Satisfação</a>
+      <a href="#demo">Demografia</a>
+      <a href="#leitura">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
 
 <div class="wrap">
-<section id="base">
-  <div class="sec-head"><h2>Base de Alunos</h2><span class="tag">232 matriculados desde ago/2023</span></div>
-  <p class="sec-sub">Composição da base por status do curso e vínculo com a ECGNow, e o ritmo de novas matrículas ao longo do tempo.</p>
-  <div class="grid g-2" style="margin-bottom:16px">
-    <div class="card chart-card">
-      <h3>Status do curso</h3>
-      <div class="hint">Concluintes e alunos ativos somam 75% da base; churn histórico (cancelamento formal + abandono) é de 16,4%.</div>
-      <div id="statusDonut"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Matrículas por mês · jun/25 – mai/26</h3>
-      <div class="hint">93 matrículas em 12 meses. Pico em janeiro/26 (18, recorde da série) seguido de desaceleração no 2º trimestre.</div>
-      <div id="matriculasChart"></div>
-    </div>
-  </div>
-  <div class="grid g-2">
-    <div class="card chart-card">
-      <h3>Alunos em Risco</h3>
-      <div class="hint">Alunos com menos de 50% de progresso na trilha teórica.</div>
-      <div id="riscoCard"></div>
-    </div>
-    <div class="card chart-card">
-      <h3>Vínculo com a ECGNow</h3>
-      <div class="hint">A maior parte da base é de alunos externos; 13 analistas ativos e 6 ex-analistas passaram pelo curso.</div>
-      <div id="vinculoChart"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 3. ENGAJAMENTO -->
 
 </div>
 
@@ -1024,7 +1012,6 @@ setTimeout(() => {
 }, 5000);
 
 
-// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {
