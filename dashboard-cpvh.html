@@ -1204,12 +1204,27 @@ function updateDashboardKPIs(kpis) {
 }
 
 // Carregar KPIs automaticamente
+console.log('🚀 Inicializando dashboard...');
+console.log('📍 document.readyState:', document.readyState);
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOMContentLoaded disparado');
+    loadKPIsFromJSON();
+  });
 } else {
   // Se já passou do DOMContentLoaded, chamar direto
+  console.log('📄 Já passou do DOMContentLoaded, carregando dados agora...');
   loadKPIsFromJSON();
 }
+
+// Failsafe: se dados não carregarem em 5 segundos, avisar usuário
+setTimeout(() => {
+  const elem = document.getElementById('viewResumo');
+  if (elem && !elem.querySelector('[data-loaded="true"]')) {
+    console.warn('⚠️ Dados não carregaram em 5s. Tente F5 ou abrir em modo incógnito.');
+  }
+}, 5000);
 </script>
 </body>
 </html>
