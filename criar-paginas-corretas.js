@@ -13,8 +13,8 @@ const original = fs.readFileSync(path.join(__dirname, 'dashboard-cpvh.html'), 'u
 const headMatch = original.match(/<head>[\s\S]*?<\/head>/);
 const head = headMatch ? headMatch[0] : '';
 
-const topbarMatch = original.match(/<div class="topbar">[\s\S]*?<\/div>\s*<\/div>/);
-const topbar = topbarMatch ? topbarMatch[0] : '';
+const topbarMatch = original.match(/<div class="topbar">[\s\S]*?<\/div>\s*<\/div>\s*<!-- CAPA/);
+const topbar = topbarMatch ? topbarMatch[0].replace(/<!-- CAPA/, '') : '';
 
 const scriptMatch = original.match(/<script>([\s\S]*?)<\/script>/);
 const script = scriptMatch ? scriptMatch[1] : '';
@@ -44,7 +44,7 @@ function createNav(currentPage) {
       `<a href="${p.nome}.html" class="${p.nome === currentPage ? 'active' : ''}">${p.titulo}</a>`
     )
   ];
-  return links.join('');
+  return links.join('\n      ');
 }
 
 // Gerar páginas
