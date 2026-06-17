@@ -630,22 +630,32 @@ fitResumo();
 const KPIS_URL = './kpis.json';
 
 function loadKPIsFromJSON() {
+  console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
   fetch(KPIS_URL + '?t=' + Date.now(), {
     method: 'GET',
     cache: 'no-cache'
   })
-  .then(res => res.json())
+  .then(res => {
+    console.log('📡 Resposta recebida, status:', res.status);
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    return res.json();
+  })
   .then(result => {
+    console.log('📊 JSON parseado:', result);
     if (result.success && result.data) {
       const kpis = result.data;
-      console.log('✅ KPIs carregados do JSON:', kpis);
+      console.log('✅ KPIs carregados com sucesso:', kpis);
       updateDashboardKPIs(kpis);
     } else {
-      console.error('❌ Erro ao carregar KPIs:', result.message);
+      console.error('❌ Resposta inválida:', result.message || 'success=false');
+      // Fallback: tentar recarregar após 2 segundos
+      setTimeout(loadKPIsFromJSON, 2000);
     }
   })
   .catch(err => {
-    console.error('❌ Erro ao carregar kpis.json:', err);
+    console.error('❌ Erro ao carregar kpis.json:', err.message);
+    console.warn('⚠️ Usando valores padrão. Tentando recarregar em 3s...');
+    setTimeout(loadKPIsFromJSON, 3000);
   });
 }
 
@@ -1161,7 +1171,12 @@ function updateDashboardKPIs(kpis) {
 }
 
 // Carregar KPIs automaticamente
-document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+} else {
+  // Se já passou do DOMContentLoaded, chamar direto
+  loadKPIsFromJSON();
+}
 </script>
 </body>
 </html>
