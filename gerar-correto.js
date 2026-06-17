@@ -16,6 +16,7 @@ topbar = topbar.replace(/ onclick="showResumo\(\)"/g, '');
 
 // Extrair apenas as funções essenciais do script
 const essentialFunctions = [
+  'const KPIS_URL',
   'const sum=',
   'const fmtN=',
   'const NS=',
