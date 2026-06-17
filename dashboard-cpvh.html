@@ -418,8 +418,9 @@ function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k 
 // Barras verticais simples
 function barChart(cid,labels,vals,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
+  if(!vals || vals.length === 0) return;
   const w=opts.w||560,h=opts.h||250,padL=opts.padL||44,padR=12,padT=22,padB=28;
-  const max=Math.max(...vals)*1.15||1;
+  const max=Math.max(...vals.map(v=>Number(v)||0))*1.15||1;
   const n=vals.length;
   const s=svgEl(w,h);
   const x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.16;
@@ -438,8 +439,9 @@ function barChart(cid,labels,vals,opts={}){
 // Donut com legenda lateral
 function donut(cid,slices,centerTop,centerBot,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
+  if(!slices || slices.length === 0) return;
   const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
-  const tot=sum(slices.map(s=>s.v));
+  const tot=sum(slices.map(s=>Number(s.v)||0));
   const s=svgEl(w,h);
   let a0=-Math.PI/2;
   slices.forEach(sl=>{
@@ -460,9 +462,10 @@ function donut(cid,slices,centerTop,centerBot,opts={}){
 // Barras horizontais
 function hBars(cid,items,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
+  if(!items || items.length === 0) return;
   const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
   const h=padT+items.length*rowH+8;
-  const max=Math.max(...items.map(i=>i.v));
+  const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
   const s=svgEl(w,h);
   items.forEach((it,i)=>{
     const y=padT+i*rowH;
@@ -475,9 +478,10 @@ function hBars(cid,items,opts={}){
 // Funil horizontal alinhado à esquerda: valor dentro da barra, nome e conversão fora
 function funil(cid,steps,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
+  if(!steps || steps.length === 0) return;
   const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
   const h=padT+steps.length*rowH+4;
-  const max=steps[0].v;
+  const max=Number(steps[0].v)||1;
   const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
   const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
   const s=svgEl(w,h);
@@ -684,10 +688,10 @@ function updateDashboardKPIs(kpis) {
   }
 
   // Recalcular KPIs na visão de resumo (chips)
-  const engajAltaMedio = kpis.engajamento_alto_medio.valor;
-  const engajAltaMedioP = parseFloat(kpis.engajamento_alto_medio.percentual);
-  const teoricoMedio = kpis.progresso_medio_teorico;
-  const ativos30 = kpis.ativos_30_dias.valor;
+  const engajAltaMedio = (kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.valor) || 0;
+  const engajAltaMedioP = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0);
+  const teoricoMedio = kpis.progresso_medio_teorico || 0;
+  const ativos30 = (kpis.ativos_30_dias && kpis.ativos_30_dias.valor) || 0;
 
   const chips = [
     { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
@@ -706,7 +710,7 @@ function updateDashboardKPIs(kpis) {
     {
       l: 'Ativos 30 dias',
       v: ativos30,
-      s: 'da base · ' + kpis.ativos_30_dias.percentual + '%',
+      s: 'da base · ' + (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '%',
       f: ativos30 >= 50 ? 'g' : 'y'
     },
     { l: 'Analistas formados', v: analistas, s: 'ativos na operação Holter', f: 'g' }
@@ -740,7 +744,7 @@ function updateDashboardKPIs(kpis) {
       { l: 'Teórico médio', v: teoricoMedio + '%', s: 'progresso da base', f: teoricoMedio >= 60 ? 'g' : 'y' },
       { l: 'Progresso Hotmart', v: progresso_hotmart + '%', s: 'média de evolução', f: progresso_hotmart >= 50 ? 'g' : 'y' },
       { l: 'Engajamento Alto+Médio', v: engajAltaMedioP.toFixed(1) + '%', s: engajAltaMedio + ' contas da plataforma', f: 'g' },
-      { l: 'Ativos em 30 dias', v: String(ativos30), s: kpis.ativos_30_dias.percentual + '% da base', f: 'y' },
+      { l: 'Ativos em 30 dias', v: String(ativos30), s: (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '% da base', f: 'y' },
       { l: 'NPS Score', v: nps, s: 'Net Promoter Score', f: nps > 0 ? 'g' : 'r' },
       { l: 'Inadimplência', v: String(inadimplencia_qtd), s: kpis.inadimplencia_valor, f: 'r' }
     ];
@@ -758,13 +762,13 @@ function updateDashboardKPIs(kpis) {
   // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
   // ============================================================
 
-  const baseAlunos = kpis.base_alunos;
+  const baseAlunos = kpis.base_alunos || {aluno_externo:0, cancelou:0, cancelou_pct:'0', abandono:0, abandono_pct:'0', bloqueado:0, bloqueado_pct:'0', so_teoria:0, so_teoria_pct:'0', abaixo_50pct:0, abaixo_50pct_pct:'0'};
 
   // ============================================================
   // ENGAJAMENTO - Atualizar com dados detalhados
   // ============================================================
 
-  const engajDetalhado = kpis.engajamento_detalhado;
+  const engajDetalhado = kpis.engajamento_detalhado || {alto:0, alto_pct:'0', medio:0, medio_pct:'0', baixo:0, baixo_pct:'0', nenhum:0, nenhum_pct:'0'};
   const engajaAtualizado = [
     {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
     {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
@@ -778,12 +782,12 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   (function(){
-    const nps_promotores = kpis.nps_promotores_pct;
-    const nps_neutros = kpis.nps_neutros_pct;
-    const nps_detratores = kpis.nps_detratores_pct;
-    const nps_respostas = kpis.nps_respostas;
-    const nps_nao_responderam = kpis.nps_nao_responderam;
-    const nps_score = kpis.nps_score;
+    const nps_promotores = kpis.nps_promotores_pct || 0;
+    const nps_neutros = kpis.nps_neutros_pct || 0;
+    const nps_detratores = kpis.nps_detratores_pct || 0;
+    const nps_respostas = kpis.nps_respostas || 0;
+    const nps_nao_responderam = kpis.nps_nao_responderam || 0;
+    const nps_score = kpis.nps_score || 0;
 
     const npsSlices = [
       {n:'Promotores',v:nps_promotores,c:'#10b981'},
@@ -796,9 +800,9 @@ function updateDashboardKPIs(kpis) {
 
     const npsCard = document.getElementById('npsCard');
     if(npsCard) {
-      const nota_alto = kpis.nota_media_engajamento_alto;
-      const nota_medio = kpis.nota_media_engajamento_medio;
-      const nota_baixo = kpis.nota_media_engajamento_baixo;
+      const nota_alto = kpis.nota_media_engajamento_alto || 0;
+      const nota_medio = kpis.nota_media_engajamento_medio || 0;
+      const nota_baixo = kpis.nota_media_engajamento_baixo || 0;
 
       npsCard.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
@@ -833,17 +837,17 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   (function(){
-    const idade_media = kpis.idade_media;
-    const idade_nao_info = kpis.idade_nao_informada;
-    const turno_manha = kpis.turno_manha;
-    const turno_tarde = kpis.turno_tarde;
-    const turno_noite = kpis.turno_noite;
+    const idade_media = kpis.idade_media || 0;
+    const idade_nao_info = kpis.idade_nao_informada || 0;
+    const turno_manha = kpis.turno_manha || 0;
+    const turno_tarde = kpis.turno_tarde || 0;
+    const turno_noite = kpis.turno_noite || 0;
     const turno_integral = kpis.turno_integral || 0;
-    const sp = kpis.sp;
-    const mg = kpis.mg;
-    const pr = kpis.pr;
-    const rj = kpis.rj;
-    const rs = kpis.rs;
+    const sp = kpis.sp || 0;
+    const mg = kpis.mg || 0;
+    const pr = kpis.pr || 0;
+    const rj = kpis.rj || 0;
+    const rs = kpis.rs || 0;
 
     // Idade
     const idadeCard = document.getElementById('idadeCard');
@@ -908,14 +912,14 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   (function(){
-    const asaas = kpis.asaas_qtd;
-    const boleto = kpis.boleto_qtd;
-    const pix = kpis.pix_qtd;
-    const trancado = kpis.trancado_qtd;
-    const teorico = kpis.teorico_qtd;
-    const pratico = kpis.pratico_qtd;
-    const inadimplencia_qtd = kpis.inadimplencia_qtd;
-    const concluidos = kpis.concluidos;
+    const asaas = kpis.asaas_qtd || 0;
+    const boleto = kpis.boleto_qtd || 0;
+    const pix = kpis.pix_qtd || 0;
+    const trancado = kpis.trancado_qtd || 0;
+    const teorico = kpis.teorico_qtd || 0;
+    const pratico = kpis.pratico_qtd || 0;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd || 0;
+    const concluidos = kpis.concluidos || 0;
 
     // Formas de pagamento
     const pagtoChart = document.getElementById('pagamentoChart');
@@ -1022,7 +1026,7 @@ function updateDashboardKPIs(kpis) {
   // Card de Alunos em Risco (Abaixo dos 50%)
   const riscoCard = document.getElementById('riscoCard');
   if(riscoCard) {
-    const abaixo50 = baseAlunos.abaixo_50pct;
+    const abaixo50 = baseAlunos.abaixo_50pct || 0;
     const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
     riscoCard.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
@@ -1038,15 +1042,15 @@ function updateDashboardKPIs(kpis) {
   const indicadoresCard = document.getElementById('indicadoresCard');
   if(indicadoresCard) {
     const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
-    const abaixo_50 = baseAlunos.abaixo_50pct;
-    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct;
+    const abaixo_50 = baseAlunos.abaixo_50pct || 0;
+    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct || '0';
 
     indicadoresCard.innerHTML = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${kpis.ativos_30_dias.percentual}% da base</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}% da base</div>
         </div>
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
@@ -1119,15 +1123,17 @@ function updateDashboardKPIs(kpis) {
   const leituraExecutiva = document.querySelector('#leitura .grid');
   if(leituraExecutiva) {
     // Calcular dados dinâmicos dos gráficos
-    const matrMatrTotal = kpis.matriculas_12_meses.vals.reduce((a,b)=>a+b,0);
-    const matrMatrMaxMes = Math.max(...kpis.matriculas_12_meses.vals);
-    const matrMatrMaxMesIdx = kpis.matriculas_12_meses.vals.indexOf(matrMatrMaxMes);
-    const mesMaxMatr = kpis.matriculas_12_meses.labels[matrMatrMaxMesIdx];
+    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
+    const matrMatrLabels = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) || [];
+    const matrMatrTotal = matrMatrVals.reduce((a,b)=>a+b,0);
+    const matrMatrMaxMes = (matrMatrVals.length > 0) ? Math.max(...matrMatrVals) : 0;
+    const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
+    const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
 
     const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
     const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
-    const pct_engajAltoMedio = parseFloat(kpis.engajamento_alto_medio.percentual).toFixed(1);
+    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
 
     const insights = `
       <div>
@@ -1138,7 +1144,7 @@ function updateDashboardKPIs(kpis) {
       <div>
         <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
         <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico demanda ação.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Cancelamentos e abandonos são oportunidades para reengajamento com réguas automáticas de e-mail/WhatsApp por marco da trilha.</p></div></div>
-        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${kpis.ativos_30_dias.percentual}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
+        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
       </div>
     `;
 
