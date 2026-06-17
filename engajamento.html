@@ -1,203 +1,999 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engajamento - Dashboard ECGNOW CPVH</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --navy: #0D2137;
-      --cyan: #0ea5e9;
-      --warn: #f59e0b;
-      --bad: #ef4444;
-      --good: #10b981;
-      --muted: #64748b;
-      --light-bg: #f1f7fc;
-      --bricolage: 'Bricolage Grotesque', serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engajamento - Dashboard ECGNOW CPVH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D2137; --navy2:#0a3d6e; --cyan:#0ea5e9; --cyan-soft:#e0f2fe;
+  --bg:#f4f8fb; --card:#ffffff; --line:#e2e8f0;
+  --txt:#0D2137; --muted:#5b7187;
+  --ok:#10b981; --ok-soft:#d1fae5; --warn:#f59e0b; --warn-soft:#fef3c7;
+  --bad:#ef4444; --bad-soft:#fee2e2;
+  --radius:18px; --shadow:0 4px 18px rgba(13,33,55,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5}
+h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
 
-    * {
-      font-family: 'Nunito', sans-serif;
-    }
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;box-shadow:0 2px 14px rgba(13,33,55,.25)}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.brand small{font-family:'Nunito';font-weight:700;font-size:11px;color:#9fd8f8;text-transform:uppercase;letter-spacing:1.5px;display:block}
+.period-chip{background:rgba(14,165,233,.18);border:1px solid rgba(14,165,233,.45);color:#bfe9ff;font-size:12px;font-weight:800;padding:5px 14px;border-radius:999px;white-space:nowrap}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{color:#cfe7f7;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;transition:.2s;display:inline-block}
+.nav a:hover,.nav a.active{background:rgba(14,165,233,.25);color:#fff}
 
-    body {
-      background: #f8fafc;
-      color: var(--navy);
-    }
+.wrap{max-width:1280px;margin:0 auto;padding:30px 28px 70px}
+section{margin-bottom:48px;scroll-margin-top:90px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+.sec-head h2{font-size:24px;font-weight:800;color:var(--navy)}
+.sec-head .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--cyan);background:var(--cyan-soft);padding:4px 12px;border-radius:999px}
+.sec-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;max-width:880px}
 
-    .navbar {
-      background: var(--navy);
-      border-bottom: 3px solid var(--cyan);
-      padding: 16px 0;
-    }
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px}
+.grid{display:grid;gap:16px}
+.g-2{grid-template-columns:1fr 1fr}
+.g-3{grid-template-columns:repeat(3,1fr)}
+.g-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.g-2,.g-3,.g-4{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.g-2,.g-3,.g-4{grid-template-columns:1fr}.wrap{padding:20px 14px 60px}}
 
-    .navbar-brand {
-      font-family: var(--bricolage);
-      font-weight: 800;
-      color: var(--cyan) !important;
-      font-size: 18px;
-    }
+.kpi{position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cyan),var(--navy2))}
+.kpi-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:6px}
+.kpi-value{font-size:26px;font-weight:800;color:var(--navy);margin:6px 0 2px;white-space:nowrap}
+.kpi-sub{color:var(--muted);font-weight:700;font-size:11.5px}
+.farol{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
+.farol.g{background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+.farol.y{background:var(--warn);box-shadow:0 0 0 4px var(--warn-soft)}
+.farol.r{background:var(--bad);box-shadow:0 0 0 4px var(--bad-soft)}
 
-    .nav-link {
-      color: #dbeafe !important;
-      margin: 0 8px;
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s;
-      font-size: 14px;
-    }
+.chart-card h3{font-size:15.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.chart-card .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+svg text{font-family:'Nunito',sans-serif}
 
-    .nav-link:hover,
-    .nav-link.active {
-      border-bottom-color: var(--cyan);
-      color: var(--cyan) !important;
-    }
+.insight{display:flex;gap:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;margin-bottom:12px;align-items:flex-start}
+.insight .ico{flex:none;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.insight b{color:var(--navy)}
+.insight p{font-size:13.5px;color:#3b536b;margin-top:2px}
+.ico.g{background:var(--ok-soft)}.ico.y{background:var(--warn-soft)}.ico.r{background:var(--bad-soft)}.ico.b{background:var(--cyan-soft)}
 
-    .container-fluid {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .page-title {
-      font-family: var(--bricolage);
-      font-size: 32px;
-      font-weight: 800;
-      margin-bottom: 24px;
-      color: var(--navy);
-    }
-
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 16px;
-    }
-
-    .card-header {
-      background: var(--light-bg);
-      border: none;
-      font-family: var(--bricolage);
-      font-weight: 800;
-      padding: 16px;
-    }
-
-    .card-body {
-      padding: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    svg {
-      width: 100%;
-      height: auto;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-    }
-
-    .spinner {
-      border: 3px solid var(--light-bg);
-      border-top: 3px solid var(--cyan);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
+#viewResumo{max-width:1280px;margin:0 auto;padding:16px 28px 20px;display:grid;grid-template-columns:370px minmax(0,1fr);gap:16px;overflow:auto}
+.rs-hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0c5a9e 100%);border-radius:22px;color:#fff;padding:26px 26px 22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 10px 30px rgba(13,33,55,.28);position:relative;overflow:hidden}
+.rs-hero::after{content:'';position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.35),transparent 70%)}
+.rs-chips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.rs-chip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
+.rs-chip .l{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px}
+.rs-chip .v{font-family:'Bricolage Grotesque';font-size:clamp(18px,2.6vh,23px);font-weight:800;color:var(--navy);margin-top:3px}
+.rs-right{display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px;min-width:0}
+.rs-mid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;min-height:0}
+.rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.rs-chart{flex:1;min-height:0;display:flex;align-items:center}
+.rs-chart svg{width:100%;max-height:100%}
+.rs-funil{flex:1;min-height:0;display:flex;align-items:center}
+.rs-funil svg{width:100%;max-height:100%}
+@media(max-width:1024px){#viewResumo{grid-template-columns:1fr}.rs-chips{grid-template-columns:repeat(2,1fr)}.rs-mid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index-dashboard.html">
-        ECGNow • CPVH • Viver de Holter
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="resumo.html">Resumo</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="visao-geral.html">Visão Geral</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="base-alunos.html">Base de Alunos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="engajamento.html">Engajamento</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="esteira-talentos.html">Esteira de Talentos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="financeiro.html">Financeiro</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="satisfacao.html">Satisfação</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="demografia.html">Demografia</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="leitura-executiva.html">Leitura Executiva</a>
-          </li>
-        </ul>
-      </div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="resumo.html" class="">Resumo</a><a href="visao-geral.html" class="">Visão Geral</a><a href="base-alunos.html" class="">Base de Alunos</a><a href="engajamento.html" class="active">Engajamento</a><a href="esteira-talentos.html" class="">Esteira de Talentos</a><a href="financeiro.html" class="">Financeiro</a><a href="satisfacao.html" class="">Satisfação</a><a href="demografia.html" class="">Demografia</a><a href="leitura-executiva.html" class="">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+<section id="engaja">
+  <div class="sec-head"><h2>Jornada & Engajamento</h2><span class="tag">Plataforma Hotmart + trilha do curso</span></div>
+  <p class="sec-sub">Como os alunos avançam na trilha teórica e quanto interagem com a plataforma. A trilha prática só registra concluintes (41 alunos, todos a 100%).</p>
+  <div class="grid g-3">
+    <div class="card chart-card">
+      <h3>Indicadores de Progresso e Engajamento</h3>
+      <div class="hint">Mapeamento consolidado de atividade, progressão teórica e desempenho por nível de engajamento.</div>
+      <div id="indicadoresCard"></div>
     </div>
-  </nav>
-
-  <!-- Conteúdo -->
-  <div class="container-fluid">
-    <h1 class="page-title">Engajamento</h1>
-
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Carregando dados...</p>
+    <div class="card chart-card">
+      <h3>Engajamento na plataforma</h3>
+      <div class="hint">296 contas Hotmart. Alto + Médio respondem por 76,7%; 22 contas nunca interagiram.</div>
+      <div id="engajaDonut"></div>
     </div>
-
-    <div class="grid" id="content">
-      <p style="text-align: center; color: var(--muted);">Esta seção está em desenvolvimento. Dados serão exibidos aqui em breve.</p>
+    <div class="card chart-card">
+      <h3>Atividade recente</h3>
+      <div class="hint">Acessos à plataforma na janela recente e progresso médio geral.</div>
+      <div id="atividadeCard"></div>
     </div>
   </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Placeholder para carregamento de dados
-    fetch('./kpis.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(d => {
-        console.log('Dados carregados:', d.data);
-        // Aqui será adicionada lógica específica da página
-      })
-      .catch(e => console.error('Erro ao carregar:', e));
+<!-- 4. ESTEIRA DE TALENTOS -->
 
-    // Marcar link ativo no menu
-    const links = document.querySelectorAll('.nav-link');
-    const current = document.location.pathname.split('/').pop() || 'resumo.html';
-    links.forEach(l => {
-      if (l.href.includes(current)) {
-        l.classList.add('active');
-      } else {
-        l.classList.remove('active');
+</div>
+
+<script>
+
+/* ============================================================
+   BASE DE DADOS — extraída da planilha Cadastro de Alunos CPVH
+   ============================================================ */
+const DADOS={
+  matr12:{labels:['Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev','Mar','Abr','Mai'],vals:[6,4,9,13,5,16,8,18,4,7,0,3]},
+  anos:{labels:['2023','2024','2025','2026 YTD'],vals:[25,75,88,32]},
+  status:[
+    {n:'Concluído',v:95,c:'#10b981'},
+    {n:'Ativo (estudando)',v:79,c:'#0ea5e9'},
+    {n:'Cancelou',v:22,c:'#ef4444'},
+    {n:'Abandono',v:16,c:'#f0879b'},
+    {n:'Bloqueado',v:10,c:'#94a3b8'},
+    {n:'Só teoria',v:10,c:'#f59e0b'}
+  ],
+  vinculo:[
+    {n:'Aluno externo',v:133,c:'#0a3d6e'},
+    {n:'Sem informação',v:80,c:'#cbd5e1'},
+    {n:'Analista ECGNOW',v:13,c:'#0ea5e9'},
+    {n:'Ex-analista',v:6,c:'#94c6e8'}
+  ],
+  teorico:{labels:['0–25%','25–50%','50–75%','75–99%','100%'],vals:[43,65,57,47,10]},
+  engaja:[
+    {n:'Alto',v:106,c:'#10b981'},
+    {n:'Médio',v:121,c:'#0ea5e9'},
+    {n:'Baixo',v:47,c:'#f59e0b'},
+    {n:'Nenhum',v:22,c:'#ef4444'}
+  ],
+  funil:[
+    {n:'Matriculados',v:232},
+    {n:'Concluíram o curso',v:95},
+    {n:'Processo seletivo',v:62},
+    {n:'Aprovados',v:35},
+    {n:'Analistas ECGNOW',v:25}
+  ],
+  ps:[
+    {n:'Analista ECGNOW',v:25,c:'#10b981'},
+    {n:'Aprovado',v:10,c:'#34d399'},
+    {n:'Sem perfil',v:7,c:'#f59e0b'},
+    {n:'Reprovado entrevista',v:7,c:'#ef4444'},
+    {n:'Não respondeu',v:5,c:'#cbd5e1'},
+    {n:'Sem interesse',v:4,c:'#94a3b8'},
+    {n:'Outros',v:4,c:'#e2e8f0'}
+  ]
+};
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const fmtN=v=>v.toLocaleString('pt-BR');
+
+/* ---------- Helpers SVG (sem dependências) ---------- */
+const NS='http://www.w3.org/2000/svg';
+function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
+
+// Barras verticais simples
+function barChart(cid,labels,vals,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!vals || vals.length === 0) return;
+  const w=opts.w||560,h=opts.h||250,padL=opts.padL||44,padR=12,padT=22,padB=28;
+  const max=Math.max(...vals.map(v=>Number(v)||0))*1.15||1;
+  const n=vals.length;
+  const s=svgEl(w,h);
+  const x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.16;
+  const bw=(w-padL-padR)/n*0.68;
+  const y=v=>padT+(h-padT-padB)*(1-v/max);
+  for(let g=0;g<=3;g++){const v=max*g/3;
+    s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
+    s.appendChild(el('text',{x:padL-7,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},opts.fmt?opts.fmt(v):Math.round(v)));}
+  vals.forEach((v,i)=>{
+    const hl=opts.highlight!=null&&i===opts.highlight;
+    s.appendChild(el('rect',{x:x(i),y:y(v),width:bw,height:Math.max(y(0)-y(v),1),fill:hl?'#0ea5e9':(opts.color||'#0a3d6e'),rx:5}));
+    s.appendChild(el('text',{x:x(i)+bw/2,y:y(v)-6,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},opts.fmt?opts.fmt(v):v));
+    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':10.5,'font-weight':700,fill:'#5b7187'},labels[i]));});
+  c.appendChild(s);
+}
+// Donut com legenda lateral
+function donut(cid,slices,centerTop,centerBot,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!slices || slices.length === 0) return;
+  const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
+  const tot=sum(slices.map(s=>Number(s.v)||0));
+  const s=svgEl(w,h);
+  let a0=-Math.PI/2;
+  slices.forEach(sl=>{
+    const a1=a0+sl.v/tot*2*Math.PI;
+    const large=(a1-a0)>Math.PI?1:0;
+    s.appendChild(el('path',{d:`M ${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A ${r} ${r} 0 ${large} 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} L ${cx+ir*Math.cos(a1)} ${cy+ir*Math.sin(a1)} A ${ir} ${ir} 0 ${large} 0 ${cx+ir*Math.cos(a0)} ${cy+ir*Math.sin(a0)} Z`,fill:sl.c}));
+    a0=a1;});
+  s.appendChild(el('text',{x:cx,y:cy-3,'text-anchor':'middle','font-size':19,'font-weight':800,fill:'#0D2137','font-family':'Bricolage Grotesque'},centerTop));
+  s.appendChild(el('text',{x:cx,y:cy+15,'text-anchor':'middle','font-size':10,fill:'#5b7187','font-weight':700},centerBot));
+  const lx=opts.lx||232, lh=Math.min(34,(h-30)/slices.length);
+  slices.forEach((sl,i)=>{
+    const ly=(h-slices.length*lh)/2+i*lh+10;
+    s.appendChild(el('rect',{x:lx,y:ly,width:12,height:12,rx:4,fill:sl.c}));
+    s.appendChild(el('text',{x:lx+18,y:ly+10,'font-size':11,'font-weight':800,fill:'#0D2137'},`${sl.v} · ${(sl.v/tot*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%`));
+    s.appendChild(el('text',{x:lx+18,y:ly+22,'font-size':9.5,fill:'#5b7187','font-weight':700},sl.n));});
+  c.appendChild(s);
+}
+// Barras horizontais
+function hBars(cid,items,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!items || items.length === 0) return;
+  const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
+  const h=padT+items.length*rowH+8;
+  const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
+  const s=svgEl(w,h);
+  items.forEach((it,i)=>{
+    const y=padT+i*rowH;
+    const bwid=(it.v/max)*(w-padL-padR);
+    s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
+    s.appendChild(el('rect',{x:padL,y:y+7,width:Math.max(bwid,2),height:rowH-14,rx:6,fill:it.c||'#0a3d6e'}));
+    s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
+  c.appendChild(s);
+}
+// Funil horizontal alinhado à esquerda: valor dentro da barra, nome e conversão fora
+function funil(cid,steps,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!steps || steps.length === 0) return;
+  const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
+  const h=padT+steps.length*rowH+4;
+  const max=Number(steps[0].v)||1;
+  const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
+  const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
+  const s=svgEl(w,h);
+  steps.forEach((st,i)=>{
+    const y=padT+i*rowH;
+    const bwid=Math.max((st.v/max)*maxBar,46);
+    s.appendChild(el('rect',{x:padL,y:y+8,width:bwid,height:rowH-16,rx:9,fill:cols[i]||'#0ea5e9'}));
+    s.appendChild(el('text',{x:padL+12,y:y+rowH/2+4,'font-size':13,'font-weight':800,fill:'#fff','font-family':'Bricolage Grotesque'},st.v));
+    const tx=padL+bwid+12;
+    if(i>0){
+      const taxa=(st.v/steps[i-1].v*100).toLocaleString('pt-BR',{maximumFractionDigits:0});
+      s.appendChild(el('text',{x:tx,y:y+rowH/2-2,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
+      s.appendChild(el('text',{x:tx,y:y+rowH/2+11,'font-size':9.5,'font-weight':800,fill:'#0ea5e9'},`▼ ${taxa}% da etapa anterior`));
+    }else{
+      s.appendChild(el('text',{x:tx,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
+    }
+  });
+  c.appendChild(s);
+}
+
+/* ============================================================
+   CAPA
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   1. VISÃO GERAL — KPIs
+   ============================================================ */
+(function(){
+  const kpis=[
+    {l:'Alunos matriculados',v:'232',s:'Histórico desde ago/2023',f:'g'},
+    {l:'Estudando agora',v:'79',s:'34% da base total',f:'g'},
+    {l:'Taxa de conclusão',v:'41%',s:'95 concluintes',f:'g'},
+    {l:'Churn histórico',v:'16,4%',s:'22 cancelamentos + 16 abandonos',f:'y'},
+    {l:'Engajamento Alto+Médio',v:'76,7%',s:'227 de 296 contas Hotmart',f:'g'},
+    {l:'Ativos em 30 dias',v:'65',s:'98 em 90 dias · progresso médio 44,6%',f:'y'},
+    {l:'Inadimplência',v:'R$ 15,4 mil',s:'25 alunos · ~32% da base ativa',f:'r'},
+    {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
+  ];
+  const g=document.getElementById('kpisGeral');
+  kpis.forEach(k=>{
+    const d=document.createElement('div');d.className='card kpi';
+    d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
+      <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
+    g.appendChild(d);});
+})();
+
+/* ============================================================
+   2. BASE DE ALUNOS
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   3. ENGAJAMENTO
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+(function(){
+  const c=document.getElementById('atividadeCard');
+  c.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 30 dias</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">65 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 22%</span></div></div>
+        <span class="pill y">Atenção</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 90 dias</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">98 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 33%</span></div></div>
+        <span class="pill y">Atenção</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Progresso médio Hotmart</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">44,6%</div></div>
+        <span class="pill y">Meio da trilha</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.5">Trilha prática: 41 alunos registrados, todos com 100% de conclusão (registro feito ao concluir).</div>
+    </div>`;
+})();
+
+/* ============================================================
+   4. ESTEIRA DE TALENTOS
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   5. FINANCEIRO
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+(function(){
+  const c=document.getElementById('inadCard');
+  c.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+      <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">R$ 15.361,68</div>
+        <div style="font-size:11.5px;font-weight:700;color:#b91c1c">25 alunos · ~32% da base ativa</div>
+      </div>
+      <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Boletos vencidos (importados)</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">R$ 3.338,24</div>
+        <div style="font-size:11.5px;font-weight:700;color:#92400e">13 títulos sem baixa</div>
+      </div>
+      <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
+        <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">Cartão 42 · Pix 8 · Boleto 1</div>
+      </div>
+    </div>`;
+})();
+
+/* ============================================================
+   TROCA DE VISÕES — Capa ↔ Dashboard expandido
+   ============================================================ */
+function fitResumo(){
+  const tb=document.querySelector('.topbar').offsetHeight;
+  const v=document.getElementById('viewResumo');
+  if(window.innerWidth>1024) v.style.height=(window.innerHeight-tb)+'px';
+  else v.style.height='auto';
+}
+function showResumo(){
+  document.getElementById('viewDetalhe').style.display='none';
+  document.getElementById('viewResumo').style.display='grid';
+  document.querySelectorAll('.nav a').forEach(l=>l.classList.remove('active'));
+  document.getElementById('navResumo').classList.add('active');
+  window.scrollTo(0,0);fitResumo();
+}
+function showDetalhe(){
+  document.getElementById('viewResumo').style.display='none';
+  document.getElementById('viewDetalhe').style.display='block';
+  document.getElementById('navResumo').classList.remove('active');
+}
+document.querySelectorAll('.nav a[href^="#"]').forEach(a=>a.addEventListener('click',showDetalhe));
+window.addEventListener('resize',fitResumo);
+const secs=document.querySelectorAll('section');
+const links=document.querySelectorAll('.nav a');
+window.addEventListener('scroll',()=>{
+  if(document.getElementById('viewDetalhe').style.display==='none')return;
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id;});
+  links.forEach(l=>{if(l.id!=='navResumo')l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
+},{passive:true});
+fitResumo();
+
+/* ============================================================
+   CARREGAMENTO DE KPIs — Via arquivo JSON no repositório
+   ============================================================ */
+const KPIS_URL = './kpis.json';
+
+function loadKPIsFromJSON() {
+  console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
+
+  // Tentar primeiro com fetch (moderno)
+  fetch(KPIS_URL + '?t=' + Date.now(), {
+    method: 'GET',
+    cache: 'no-cache'
+  })
+  .then(res => {
+    console.log('📡 Resposta recebida, status:', res.status);
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    return res.json();
+  })
+  .then(result => {
+    console.log('📊 JSON parseado:', result);
+    if (result.success && result.data) {
+      const kpis = result.data;
+      console.log('✅ KPIs carregados com sucesso via fetch:', kpis);
+      updateDashboardKPIs(kpis);
+    } else {
+      console.error('❌ Resposta inválida:', result.message || 'success=false');
+      throw new Error('Invalid response format');
+    }
+  })
+  .catch(err => {
+    console.error('❌ Fetch falhou:', err.message);
+    console.log('🔄 Tentando fallback com XMLHttpRequest...');
+    loadKPIsWithXHR();
+  });
+}
+
+function loadKPIsWithXHR() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', KPIS_URL + '?t=' + Date.now(), true);
+  xhr.onload = function() {
+    console.log('📡 XHR Resposta recebida, status:', xhr.status);
+    if (xhr.status === 200) {
+      try {
+        const result = JSON.parse(xhr.responseText);
+        console.log('📊 JSON parseado via XHR:', result);
+        if (result.success && result.data) {
+          console.log('✅ KPIs carregados com sucesso via XHR:', result.data);
+          updateDashboardKPIs(result.data);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (e) {
+        console.error('❌ Erro ao parsear JSON:', e.message);
       }
-    });
-  </script>
+    } else {
+      console.error('❌ XHR falhou com status:', xhr.status);
+    }
+  };
+  xhr.onerror = function() {
+    console.error('❌ XHR erro ao carregar:', xhr.statusText);
+  };
+  try {
+    xhr.send();
+  } catch (e) {
+    console.error('❌ XHR não pode enviar requisição:', e.message);
+  }
+}
+
+function updateDashboardKPIs(kpis) {
+  const total = kpis.total_alunos || 233;
+  const totalCadastrados = kpis.total_cadastrados || 233;
+  const ativoEstudando = kpis.ativo_estudando || 86;
+  const concluidos = kpis.concluidos || 95;
+  const taxaConclusao = kpis.taxa_conclusao || 57;
+  const analistas = kpis.analistas_ecgnow || 16;
+  const exAnalistas = kpis.ex_analistas_ecgnow || 7;
+  const analistasTotal = analistas + exAnalistas;
+
+  // ============================================================
+  // RESUMO (Capa)
+  // ============================================================
+
+  // Atualizar texto do verdict (93 matrículas, 25 alunos formados)
+  const rsVerdict = document.querySelector('.rs-verdict');
+  if (rsVerdict) {
+    rsVerdict.textContent = `${kpis.total_alunos} matrículas desde ago/2023 e ${analistasTotal} alunos formados contratados como analistas — o curso é a esteira de talentos da operação Holter.`;
+  }
+
+  // Atualizar seção de cima (hero)
+  const alunoBig = document.querySelector('.rs-big');
+  if (alunoBig) {
+    alunoBig.innerHTML = `${totalCadastrados} <small>desde ago/2023</small>`;
+  }
+
+  // Atualizar "Estudando agora"
+  const heroGrid = document.querySelectorAll('.rs-hero-grid > div');
+  if (heroGrid.length >= 1) {
+    heroGrid[0].innerHTML = `<div class="rs-hl">Estudando agora</div><div class="rs-hv">${ativoEstudando} <small>alunos</small></div>`;
+  }
+
+  // Atualizar "Concluíram"
+  if (heroGrid.length >= 2) {
+    const porcentagem = ((concluidos / total) * 100).toFixed(0);
+    heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
+  }
+
+  // Recalcular KPIs na visão de resumo (chips)
+  const engajAltaMedio = (kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.valor) || 0;
+  const engajAltaMedioP = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0);
+  const teoricoMedio = kpis.progresso_medio_teorico || 0;
+  const ativos30 = (kpis.ativos_30_dias && kpis.ativos_30_dias.valor) || 0;
+
+  const chips = [
+    { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
+    {
+      l: 'Engajamento A+M',
+      v: engajAltaMedioP.toFixed(1) + '%',
+      s: engajAltaMedio + ' de ' + total + ' alunos',
+      f: engajAltaMedioP >= 70 ? 'g' : 'y'
+    },
+    {
+      l: 'Teórico médio',
+      v: teoricoMedio + '%',
+      s: 'progresso da base',
+      f: teoricoMedio >= 60 ? 'g' : 'y'
+    },
+    {
+      l: 'Ativos 30 dias',
+      v: ativos30,
+      s: 'da base · ' + (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '%',
+      f: ativos30 >= 50 ? 'g' : 'y'
+    },
+    { l: 'Analistas formados', v: analistas, s: 'ativos na operação Holter', f: 'g' }
+  ];
+
+  const chipsContainer = document.querySelector('.rs-chips');
+  if (chipsContainer) {
+    chipsContainer.innerHTML = chips.map(chip => `
+      <div class="rs-chip">
+        <div class="l"><span>${chip.l}</span><span class="farol ${chip.f}"></span></div>
+        <div class="v">${chip.v}</div>
+        <div class="s">${chip.s}</div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  // VISÃO GERAL (KPIs na seção expandida)
+  // ============================================================
+
+  const kpisGeral = document.getElementById('kpisGeral');
+  if (kpisGeral) {
+    const taxa_aprovacao = kpis.taxa_aprovacao_pct || 74;
+    const progresso_hotmart = kpis.progresso_medio_hotmart || 44;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd || 24;
+    const nps = kpis.nps_score || 24;
+
+    const kpisData = [
+      { l: 'Alunos matriculados', v: String(total), s: 'Histórico desde ago/2023', f: 'g' },
+      { l: 'Taxa aprovação', v: taxa_aprovacao + '%', s: kpis.taxa_aprovacao_qtd + ' alunos aprovados', f: 'g' },
+      { l: 'Teórico médio', v: teoricoMedio + '%', s: 'progresso da base', f: teoricoMedio >= 60 ? 'g' : 'y' },
+      { l: 'Progresso Hotmart', v: progresso_hotmart + '%', s: 'média de evolução', f: progresso_hotmart >= 50 ? 'g' : 'y' },
+      { l: 'Engajamento Alto+Médio', v: engajAltaMedioP.toFixed(1) + '%', s: engajAltaMedio + ' contas da plataforma', f: 'g' },
+      { l: 'Ativos em 30 dias', v: String(ativos30), s: (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '% da base', f: 'y' },
+      { l: 'NPS Score', v: nps, s: 'Net Promoter Score', f: nps > 0 ? 'g' : 'r' },
+      { l: 'Inadimplência', v: String(inadimplencia_qtd), s: kpis.inadimplencia_valor, f: 'r' }
+    ];
+
+    kpisGeral.innerHTML = kpisData.map(k => `
+      <div class="card kpi">
+        <div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
+        <div class="kpi-value">${k.v}</div>
+        <div class="kpi-sub">${k.s}</div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
+  // ============================================================
+
+  const baseAlunos = kpis.base_alunos || {aluno_externo:0, cancelou:0, cancelou_pct:'0', abandono:0, abandono_pct:'0', bloqueado:0, bloqueado_pct:'0', so_teoria:0, so_teoria_pct:'0', abaixo_50pct:0, abaixo_50pct_pct:'0'};
+
+  // ============================================================
+  // ENGAJAMENTO - Atualizar com dados detalhados
+  // ============================================================
+
+  const engajDetalhado = kpis.engajamento_detalhado || {alto:0, alto_pct:'0', medio:0, medio_pct:'0', baixo:0, baixo_pct:'0', nenhum:0, nenhum_pct:'0'};
+
+  // ============================================================
+  // SEÇÃO NPS - Renderizar dados de satisfação
+  // ============================================================
+
+  (function(){
+    const nps_promotores = kpis.nps_promotores_pct || 0;
+    const nps_neutros = kpis.nps_neutros_pct || 0;
+    const nps_detratores = kpis.nps_detratores_pct || 0;
+    const nps_respostas = kpis.nps_respostas || 0;
+    const nps_nao_responderam = kpis.nps_nao_responderam || 0;
+    const nps_score = kpis.nps_score || 0;
+
+    const npsSlices = [
+      {n:'Promotores',v:nps_promotores,c:'#10b981'},
+      {n:'Neutros',v:nps_neutros,c:'#0ea5e9'},
+      {n:'Detratores',v:nps_detratores,c:'#ef4444'}
+    ];
+
+    const c = document.getElementById('npsDonut');
+    if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
+
+    const npsCard = document.getElementById('npsCard');
+    if(npsCard) {
+      const nota_alto = kpis.nota_media_engajamento_alto || 0;
+      const nota_medio = kpis.nota_media_engajamento_medio || 0;
+      const nota_baixo = kpis.nota_media_engajamento_baixo || 0;
+
+      npsCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Pesquisa de Satisfação</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_respostas}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Respostas</div></div>
+              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam (${kpis.nps_nao_responderam_pct}%)</div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Nota média por engajamento</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#d1fae5;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#047857">Alto</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nota_alto}</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#bfdbfe;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#0369a1">Médio</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nota_medio}</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#fed7aa;border-radius:10px;padding:11px 14px">
+              <div><div style="font-weight:700;color:#b45309">Baixo</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nota_baixo}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+  })();
+
+  // ============================================================
+  // SEÇÃO DEMOGRAFIA - Renderizar dados de perfil
+  // ============================================================
+
+  (function(){
+    const idade_media = kpis.idade_media || 0;
+    const idade_nao_info = kpis.idade_nao_informada || 0;
+    const turno_manha = kpis.turno_manha || 0;
+    const turno_tarde = kpis.turno_tarde || 0;
+    const turno_noite = kpis.turno_noite || 0;
+    const turno_integral = kpis.turno_integral || 0;
+    const sp = kpis.sp || 0;
+    const mg = kpis.mg || 0;
+    const pr = kpis.pr || 0;
+    const rj = kpis.rj || 0;
+    const rs = kpis.rs || 0;
+
+    // Idade
+    const idadeCard = document.getElementById('idadeCard');
+    if(idadeCard) {
+      idadeCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Idade média informada</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:var(--navy);margin-top:6px">${idade_media} <span style="font-size:14px;color:var(--muted);font-family:'Nunito';font-weight:700">anos</span></div>
+          </div>
+          <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Sem informação</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">${idade_nao_info}</div>
+            <div style="font-size:11.5px;font-weight:700;color:#92400e">~${((idade_nao_info/total)*100).toFixed(0)}% da base</div>
+          </div>
+        </div>`;
+    }
+
+    // Distribuição por faixa etária
+    const faixaEtariaChart = document.getElementById('faixaEtariaChart');
+    if(faixaEtariaChart) {
+      const alunos_menos_25 = kpis.alunos_menos_25 || 0;
+      const alunos_25_35 = kpis.alunos_25_35 || 0;
+      const alunos_mais_35 = kpis.alunos_mais_35 || 0;
+
+      const faixaEtaria = [
+        {n:'Menos de 25 anos',v:alunos_menos_25,c:'#10b981'},
+        {n:'Entre 25 e 35 anos',v:alunos_25_35,c:'#0ea5e9'},
+        {n:'Mais de 35 anos',v:alunos_mais_35,c:'#8b5cf6'}
+      ];
+      hBars('faixaEtariaChart', faixaEtaria, {w:400});
+    }
+
+    // Turnos
+    const turnoChart = document.getElementById('turnoChart');
+    if(turnoChart) {
+      const turnos = [
+        {n:'Manhã',v:turno_manha,c:'#f59e0b'},
+        {n:'Tarde',v:turno_tarde,c:'#0ea5e9'},
+        {n:'Noite',v:turno_noite,c:'#0a3d6e'},
+        {n:'Integral',v:turno_integral,c:'#8b5cf6'}
+      ];
+      hBars('turnoChart', turnos, {w:400});
+    }
+
+    // Estados
+    const estadosChart = document.getElementById('estadosChart');
+    if(estadosChart) {
+      const estados = [
+        {n:'São Paulo (SP)',v:sp,c:'#0a3d6e'},
+        {n:'Minas Gerais (MG)',v:mg,c:'#0d5a94'},
+        {n:'Paraná (PR)',v:pr,c:'#0ea5e9'},
+        {n:'Rio de Janeiro (RJ)',v:rj,c:'#38bdf8'},
+        {n:'Rio Grande do Sul (RS)',v:rs,c:'#7dd3fc'}
+      ];
+      hBars('estadosChart', estados, {w:400});
+    }
+  })();
+
+  // ============================================================
+  // SEÇÃO FINANCEIRO - Adicionar gráficos de pagamento
+  // ============================================================
+
+  (function(){
+    const asaas = kpis.asaas_qtd || 0;
+    const boleto = kpis.boleto_qtd || 0;
+    const pix = kpis.pix_qtd || 0;
+    const trancado = kpis.trancado_qtd || 0;
+    const teorico = kpis.teorico_qtd || 0;
+    const pratico = kpis.pratico_qtd || 0;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd || 0;
+    const concluidos = kpis.concluidos || 0;
+
+    // Formas de pagamento
+    const pagtoChart = document.getElementById('pagamentoChart');
+    if(pagtoChart) {
+      const pagto = [
+        {n:'ASAAS',v:asaas,c:'#0a3d6e'},
+        {n:'Boleto',v:boleto,c:'#0d5a94'},
+        {n:'Pix',v:pix,c:'#0ea5e9'}
+      ];
+      hBars('pagamentoChart', pagto, {w:400});
+    }
+
+    // Status de conclusão
+    const statusConclusao = document.getElementById('statusConclusaoChart');
+    if(statusConclusao) {
+      const conclusao = [
+        {n:'Só Teórico',v:teorico,c:'#f59e0b'},
+        {n:'Só Prático',v:pratico,c:'#0ea5e9'},
+        {n:'Teórico + Prático',v:concluidos,c:'#10b981'}
+      ];
+      hBars('statusConclusaoChart', conclusao, {w:400});
+    }
+
+    // Atualizar card de inadimplência
+    const inadCard = document.getElementById('inadCard');
+    if(inadCard) {
+      inadCard.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${kpis.inadimplencia_valor}</div>
+            <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${inadimplencia_qtd} alunos</div>
+          </div>
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix}</div>
+          </div>
+        </div>`;
+    }
+  })();
+
+  // ============================================================
+  // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 12 meses)
+  // ============================================================
+
+  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
+    barChart('rsChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {w:560,h:215,color:'#0a3d6e'});
+  }
+
+  // ============================================================
+  // ATUALIZAR FUNIL DA ESTEIRA
+  // ============================================================
+
+  const aprovados = kpis.taxa_aprovacao_qtd || 73;
+
+  // Funil pequeno (Capa)
+  const funilData = [
+    {n:'Matriculados',v:totalCadastrados},
+    {n:'Concluíram o curso',v:concluidos},
+    {n:'Aprovados',v:aprovados},
+    {n:'Analistas ECGNOW',v:analistas}
+  ];
+  const rsFunilElem = document.getElementById('rsFunil');
+  if(rsFunilElem) {
+    funil('rsFunil', funilData, {w:340,rowH:40});
+  }
+
+  // Funil grande (Esteira de Talentos)
+  const funilGrandeElem = document.getElementById('funilGrande');
+  if(funilGrandeElem) {
+    funil('funilGrande', funilData, {w:560,rowH:56});
+  }
+
+  // ============================================================
+  // RENDERIZAR GRÁFICOS DAS SEÇÕES
+  // ============================================================
+
+  // Declarar variáveis necessárias
+  const trancado = kpis.trancado_qtd || 0;
+  const alunoExterno = kpis.aluno_externo || 0;
+
+  // Gráfico de Matrículas por mês
+  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
+    barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
+  }
+
+  // Vínculo com a ECGNow (gráfico horizontal)
+  const vinculoChart = document.getElementById('vinculoChart');
+  if(vinculoChart) {
+    const vinculo = [
+      {n:'Aluno externo',v:alunoExterno,c:'#0a3d6e'},
+      {n:'Analista ECGNOW',v:analistas,c:'#0ea5e9'},
+      {n:'Ex-analista',v:exAnalistas,c:'#94c6e8'}
+    ];
+    hBars('vinculoChart', vinculo, {padL:170});
+  }
+
+  // Status do curso (Donut)
+  // Status do curso (Donut)
+  const statusChart = [
+    {n:'Concluído',v:concluidos,c:'#10b981'},
+    {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
+    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
+    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
+    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
+    {n:'Trancado',v:trancado,c:'#cbd5e1'},
+    {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
+  ];
+  const statusDonutElem = document.getElementById('statusDonut');
+  if(statusDonutElem) {
+    donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+  }
+
+  // Card de Alunos em Risco (Abaixo dos 50%)
+  const riscoCard = document.getElementById('riscoCard');
+  if(riscoCard) {
+    const abaixo50 = baseAlunos.abaixo_50pct || 0;
+    const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
+    riscoCard.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+        <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
+          <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Alunos em Risco</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:#92400e;margin-top:6px">${abaixo50}</div>
+          <div style="font-size:11.5px;font-weight:700;color:#92400e">${pctRisco}% da base · Progresso < 50%</div>
+        </div>
+      </div>`;
+  }
+
+  // Card de Indicadores (Progresso e Engajamento)
+  const indicadoresCard = document.getElementById('indicadoresCard');
+  if(indicadoresCard) {
+    const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
+    const abaixo_50 = baseAlunos.abaixo_50pct || 0;
+    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct || '0';
+
+    indicadoresCard.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}% da base</div>
+        </div>
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${teoricoMedio}%</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progressão geral</div>
+        </div>
+        <div style="background:#fef3c7;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
+          <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
+        </div>
+        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${progresso_hotmart}%</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progresso médio</div>
+        </div>
+        <div style="background:#d1fae5;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajDetalhado.alto}</div>
+          <div style="font-size:9.5px;color:#047857;font-weight:700">${engajDetalhado.alto_pct}%</div>
+        </div>
+        <div style="background:#bfdbfe;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#0369a1">Engaj. Médio</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#0369a1;margin-top:4px">${engajDetalhado.medio}</div>
+          <div style="font-size:9.5px;color:#0369a1;font-weight:700">${engajDetalhado.medio_pct}%</div>
+        </div>
+        <div style="background:#fed7aa;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b45309">Engaj. Baixo</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b45309;margin-top:4px">${engajDetalhado.baixo}</div>
+          <div style="font-size:9.5px;color:#b45309;font-weight:700">${engajDetalhado.baixo_pct}%</div>
+        </div>
+        <div style="background:#fee2e2;border-radius:10px;padding:12px 14px">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b91c1c">Engaj. Nenhum</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b91c1c;margin-top:4px">${engajDetalhado.nenhum}</div>
+          <div style="font-size:9.5px;color:#b91c1c;font-weight:700">${engajDetalhado.nenhum_pct}%</div>
+        </div>
+      </div>`;
+  }
+
+  // Engajamento detalhado (Donut)
+  const engajaTotal = engajDetalhado.alto + engajDetalhado.medio + engajDetalhado.baixo + engajDetalhado.nenhum;
+  const engajaChart = [
+    {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
+    {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
+    {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
+    {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
+  ];
+  const engajDonutElem = document.getElementById('engajaDonut');
+  if(engajDonutElem) {
+    donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+  }
+
+  // ============================================================
+  // ATUALIZAR TAGS E TEXTOS DAS SEÇÕES
+  // ============================================================
+
+  // Tag "Base de Alunos"
+  const baseTag = document.querySelector('#base .sec-head .tag');
+  if(baseTag) {
+    baseTag.textContent = `${totalCadastrados} matriculados desde ago/2023`;
+  }
+
+  // Tag "Engajamento"
+  const engajaTag = document.querySelector('#engaja .sec-head .tag');
+  if(engajaTag) {
+    engajaTag.textContent = `Plataforma Hotmart + trilha do curso`;
+  }
+
+  // ============================================================
+  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos)
+  // ============================================================
+
+  const leituraExecutiva = document.querySelector('#leitura .grid');
+  if(leituraExecutiva) {
+    // Calcular dados dinâmicos dos gráficos
+    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
+    const matrMatrLabels = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) || [];
+    const matrMatrTotal = matrMatrVals.reduce((a,b)=>a+b,0);
+    const matrMatrMaxMes = (matrMatrVals.length > 0) ? Math.max(...matrMatrVals) : 0;
+    const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
+    const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
+
+    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
+    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
+    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
+    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
+
+    const insights = `
+      <div>
+        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão no seletivo) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
+        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência ASAAS crescente.</b><p>Cobranças crescem — total de ${matrMatrTotal} matrículas em 12 meses com pico em ${mesMaxMatr} (${matrMatrMaxMes} inscrições). Mantido o ritmo, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
+        <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos com forte potencial.</b><p>${total} alunos cadastrados com ${ativoEstudando} estudando agora. Engajamento Alto+Médio de ${pct_engajAltoMedio}% indica base comprometida. Taxa de conclusão de ${taxaConclusao}% mostra desempenho positivo.</p></div></div>
+      </div>
+      <div>
+        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
+        <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico demanda ação.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Cancelamentos e abandonos são oportunidades para reengajamento com réguas automáticas de e-mail/WhatsApp por marco da trilha.</p></div></div>
+        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
+      </div>
+    `;
+
+    leituraExecutiva.innerHTML = insights;
+  }
+
+  console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
+}
+
+// Carregar KPIs automaticamente
+console.log('🚀 Inicializando dashboard...');
+console.log('📍 document.readyState:', document.readyState);
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOMContentLoaded disparado');
+    loadKPIsFromJSON();
+  });
+} else {
+  // Se já passou do DOMContentLoaded, chamar direto
+  console.log('📄 Já passou do DOMContentLoaded, carregando dados agora...');
+  loadKPIsFromJSON();
+}
+
+// Failsafe: se dados não carregarem em 5 segundos, avisar usuário
+setTimeout(() => {
+  const elem = document.getElementById('viewResumo');
+  if (elem && !elem.querySelector('[data-loaded="true"]')) {
+    console.warn('⚠️ Dados não carregaram em 5s. Tente F5 ou abrir em modo incógnito.');
+  }
+}, 5000);
+
+
+// Carregar dados ao inicializar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    loadKPIsFromJSON();
+  });
+} else {
+  loadKPIsFromJSON();
+}
+</script>
 </body>
 </html>
