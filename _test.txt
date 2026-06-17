@@ -1,0 +1,400 @@
+</section>
+
+<!-- 2. BASE DE ALUNOS -->
+<section id="base">
+  <div class="sec-head"><h2>Base de Alunos</h2><span class="tag">232 matriculados desde ago/2023</span></div>
+  <p class="sec-sub">Composição da base por status do curso e vínculo com a ECGNow, e o ritmo de novas matrículas ao longo do tempo.</p>
+  <div class="grid g-2" style="margin-bottom:16px">
+    <div class="card chart-card">
+      <h3>Status do curso</h3>
+      <div class="hint">Concluintes e alunos ativos somam 75% da base; churn histórico (cancelamento formal + abandono) é de 16,4%.</div>
+      <div id="statusDonut"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Matrículas por mês · jun/25 – mai/26</h3>
+      <div class="hint">93 matrículas em 12 meses. Pico em janeiro/26 (18, recorde da série) seguido de desaceleração no 2º trimestre.</div>
+      <div id="matriculasChart"></div>
+    </div>
+  </div>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>Alunos em Risco</h3>
+      <div class="hint">Alunos com menos de 50% de progresso na trilha teórica.</div>
+      <div id="riscoCard"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Vínculo com a ECGNow</h3>
+      <div class="hint">A maior parte da base é de alunos externos; 13 analistas ativos e 6 ex-analistas passaram pelo curso.</div>
+      <div id="vinculoChart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ENGAJAMENTO -->
+<section id="engaja">
+  <div class="sec-head"><h2>Jornada & Engajamento</h2><span class="tag">Plataforma Hotmart + trilha do curso</span></div>
+  <p class="sec-sub">Como os alunos avançam na trilha teórica e quanto interagem com a plataforma. A trilha prática só registra concluintes (41 alunos, todos a 100%).</p>
+  <div class="grid g-3">
+    <div class="card chart-card">
+      <h3>Indicadores de Progresso e Engajamento</h3>
+      <div class="hint">Mapeamento consolidado de atividade, progressão teórica e desempenho por nível de engajamento.</div>
+      <div id="indicadoresCard"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Engajamento na plataforma</h3>
+      <div class="hint">296 contas Hotmart. Alto + Médio respondem por 76,7%; 22 contas nunca interagiram.</div>
+      <div id="engajaDonut"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Atividade recente</h3>
+      <div class="hint">Acessos à plataforma na janela recente e progresso médio geral.</div>
+      <div id="atividadeCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ESTEIRA DE TALENTOS -->
+<section id="esteira">
+  <div class="sec-head"><h2>Esteira de Talentos</h2><span class="tag">Do curso à operação Holter</span></div>
+  <p class="sec-sub">O CPVH funciona como pipeline de contratação: alunos concluintes entram no processo seletivo e os aprovados viram analistas de Holter da ECGNow.</p>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>Funil completo</h3>
+      <div class="hint">Conversão de ponta a ponta: 10,8% dos matriculados chegaram a Analista ECGNOW.</div>
+      <div id="funilGrande"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. FINANCEIRO -->
+<section id="financeiro">
+  <div class="sec-head"><h2>Financeiro do Curso</h2><span class="tag">Cobranças ASAAS 2026 + inadimplência</span></div>
+  <p class="sec-sub">Formas de pagamento e o quadro de inadimplência apurado na base de alunos.</p>
+  <div class="grid g-3">
+    <div class="card chart-card">
+      <h3>Inadimplência & Formas de Pagamento</h3>
+      <div class="hint">Apuração da aba Performance + boletos vencidos importados. Distribuição de cobranças por método.</div>
+      <div id="inadCard"></div>
+    </div>
+  </div>
+  <div class="grid g-2" style="margin-top:16px">
+    <div class="card chart-card">
+      <h3>Cobranças por forma de pagamento</h3>
+      <div class="hint">Distribuição entre ASAAS, Boleto, Pix e Trancado.</div>
+      <div id="pagamentoChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Status de conclusão (Teórico vs Prático)</h3>
+      <div class="hint">Alunos que completaram teórico, prático ou ambos.</div>
+      <div id="statusConclusaoChart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. SATISFAÇÃO (NPS) -->
+<section id="nps">
+  <div class="sec-head"><h2>Satisfação do Aluno (NPS)</h2><span class="tag">Net Promoter Score</span></div>
+  <p class="sec-sub">Medição de satisfação e disposição de recomendação dos alunos. O NPS consolida promotores, neutros e detratores em um índice único (-100 a 100).</p>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>NPS Score & Segmentação</h3>
+      <div class="hint">NPS = Promotores% - Detratores%. Gráfico mostra distribuição de respondentes por categoria.</div>
+      <div id="npsDonut"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Detalhes da Pesquisa & Notas por Engajamento</h3>
+      <div class="hint">Total de respostas, taxa de resposta e nota média por nível de engajamento na plataforma.</div>
+      <div id="npsCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. DEMOGRAFIA -->
+<section id="demo">
+  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
+  <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>Idade média dos alunos</h3>
+      <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
+      <div id="idadeCard"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Distribuição por faixa etária</h3>
+      <div class="hint">Alunos agrupados por idade: menores de 25, entre 25-35, maiores de 35 anos.</div>
+      <div id="faixaEtariaChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Preferência de turnos</h3>
+      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite, integral.</div>
+      <div id="turnoChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Estados (UF) de origem</h3>
+      <div class="hint">SP concentra a base (78 alunos); demais estados: MG, PR, RJ, RS com 2-3 cada.</div>
+      <div id="estadosChart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. LEITURA EXECUTIVA -->
+<section id="leitura">
+  <div class="sec-head"><h2>Leitura Executiva</h2><span class="tag">O que os números dizem</span></div>
+  <div class="grid g-2">
+    <div>
+      <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>25 alunos formados viraram analistas ECGNOW (40% de conversão no seletivo) e 13 estão ativos hoje na operação Holter. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
+      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência financeira em construção.</b><p>As cobranças ASAAS cresceram de R$ 250 (jan) para R$ 3,8 mil (mai) — efeito do parcelamento no cartão das vendas recentes. Mantido o ritmo de vendas, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
+      <div class="insight"><div class="ico g">🎓</div><div><b>Janeiro provou o potencial comercial.</b><p>18 matrículas em um único mês (recorde da série histórica), puxando 2026 a 32 matrículas até maio. A base de 296 contas na Hotmart também dá espaço para campanhas de reativação.</p></div></div>
+    </div>
+    <div>
+      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>R$ 15,4 mil distribuídos em 25 alunos (~32% da base ativa), além de R$ 3,3 mil em boletos vencidos importados. Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
+      <div class="insight"><div class="ico y">📉</div><div><b>O 2º trimestre de vendas desacelerou.</b><p>Após o pico de janeiro (18), as matrículas caíram para 4, 7, 0 e 3 entre fevereiro e maio. Vale cruzar com o investimento em Ads — o forecast da empresa projeta retomada de mídia justamente a partir do 2º semestre.</p></div></div>
+      <div class="insight"><div class="ico r">🕳️</div><div><b>Metade da base está parada no meio da trilha.</b><p>48,6% dos alunos têm menos de 50% do teórico concluído e apenas 65 contas acessaram a plataforma nos últimos 30 dias. Réguas de engajamento (e-mail/WhatsApp por marco da trilha) atacariam diretamente o risco de abandono.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  Dashboard Educação · CPVH — Curso Profissão Viver de Holter · ECGNow Medicina Diagnóstica Ltda · Elaborado pela Controladoria — Jun/2026<br>
+  Fontes: Cadastro de Alunos CPVH (abas Cadastro, Performance, Processo Seletivo, Dados Hotmart, ASAAS_Import, BOLETOS_Import).<br>
+  Notas: engajamento e atividade recente medidos nas 296 contas Hotmart; taxa de conclusão sobre os 232 matriculados; inadimplência conforme apuração da aba Performance.
+</div>
+</div>
+</div><!-- /viewDetalhe -->
+
+<script>
+/* ============================================================
+   BASE DE DADOS — extraída da planilha Cadastro de Alunos CPVH
+   ============================================================ */
+const DADOS={
+  matr12:{labels:['Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev','Mar','Abr','Mai'],vals:[6,4,9,13,5,16,8,18,4,7,0,3]},
+  anos:{labels:['2023','2024','2025','2026 YTD'],vals:[25,75,88,32]},
+  status:[
+    {n:'Concluído',v:95,c:'#10b981'},
+    {n:'Ativo (estudando)',v:79,c:'#0ea5e9'},
+    {n:'Cancelou',v:22,c:'#ef4444'},
+    {n:'Abandono',v:16,c:'#f0879b'},
+    {n:'Bloqueado',v:10,c:'#94a3b8'},
+    {n:'Só teoria',v:10,c:'#f59e0b'}
+  ],
+  vinculo:[
+    {n:'Aluno externo',v:133,c:'#0a3d6e'},
+    {n:'Sem informação',v:80,c:'#cbd5e1'},
+    {n:'Analista ECGNOW',v:13,c:'#0ea5e9'},
+    {n:'Ex-analista',v:6,c:'#94c6e8'}
+  ],
+  teorico:{labels:['0–25%','25–50%','50–75%','75–99%','100%'],vals:[43,65,57,47,10]},
+  engaja:[
+    {n:'Alto',v:106,c:'#10b981'},
+    {n:'Médio',v:121,c:'#0ea5e9'},
+    {n:'Baixo',v:47,c:'#f59e0b'},
+    {n:'Nenhum',v:22,c:'#ef4444'}
+  ],
+  funil:[
+    {n:'Matriculados',v:232},
+    {n:'Concluíram o curso',v:95},
+    {n:'Processo seletivo',v:62},
+    {n:'Aprovados',v:35},
+    {n:'Analistas ECGNOW',v:25}
+  ],
+  ps:[
+    {n:'Analista ECGNOW',v:25,c:'#10b981'},
+    {n:'Aprovado',v:10,c:'#34d399'},
+    {n:'Sem perfil',v:7,c:'#f59e0b'},
+    {n:'Reprovado entrevista',v:7,c:'#ef4444'},
+    {n:'Não respondeu',v:5,c:'#cbd5e1'},
+    {n:'Sem interesse',v:4,c:'#94a3b8'},
+    {n:'Outros',v:4,c:'#e2e8f0'}
+  ]
+};
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const fmtN=v=>v.toLocaleString('pt-BR');
+
+/* ---------- Helpers SVG (sem dependências) ---------- */
+const NS='http://www.w3.org/2000/svg';
+function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
+
+// Barras verticais simples
+function barChart(cid,labels,vals,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!vals || vals.length === 0) return;
+  const w=opts.w||560,h=opts.h||250,padL=opts.padL||44,padR=12,padT=22,padB=28;
+  const max=Math.max(...vals.map(v=>Number(v)||0))*1.15||1;
+  const n=vals.length;
+  const s=svgEl(w,h);
+  const x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.16;
+  const bw=(w-padL-padR)/n*0.68;
+  const y=v=>padT+(h-padT-padB)*(1-v/max);
+  for(let g=0;g<=3;g++){const v=max*g/3;
+    s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
+    s.appendChild(el('text',{x:padL-7,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},opts.fmt?opts.fmt(v):Math.round(v)));}
+  vals.forEach((v,i)=>{
+    const hl=opts.highlight!=null&&i===opts.highlight;
+    s.appendChild(el('rect',{x:x(i),y:y(v),width:bw,height:Math.max(y(0)-y(v),1),fill:hl?'#0ea5e9':(opts.color||'#0a3d6e'),rx:5}));
+    s.appendChild(el('text',{x:x(i)+bw/2,y:y(v)-6,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},opts.fmt?opts.fmt(v):v));
+    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':10.5,'font-weight':700,fill:'#5b7187'},labels[i]));});
+  c.appendChild(s);
+}
+// Donut com legenda lateral
+function donut(cid,slices,centerTop,centerBot,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!slices || slices.length === 0) return;
+  const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
+  const tot=sum(slices.map(s=>Number(s.v)||0));
+  const s=svgEl(w,h);
+  let a0=-Math.PI/2;
+  slices.forEach(sl=>{
+    const a1=a0+sl.v/tot*2*Math.PI;
+    const large=(a1-a0)>Math.PI?1:0;
+    s.appendChild(el('path',{d:`M ${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A ${r} ${r} 0 ${large} 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} L ${cx+ir*Math.cos(a1)} ${cy+ir*Math.sin(a1)} A ${ir} ${ir} 0 ${large} 0 ${cx+ir*Math.cos(a0)} ${cy+ir*Math.sin(a0)} Z`,fill:sl.c}));
+    a0=a1;});
+  s.appendChild(el('text',{x:cx,y:cy-3,'text-anchor':'middle','font-size':19,'font-weight':800,fill:'#0D2137','font-family':'Bricolage Grotesque'},centerTop));
+  s.appendChild(el('text',{x:cx,y:cy+15,'text-anchor':'middle','font-size':10,fill:'#5b7187','font-weight':700},centerBot));
+  const lx=opts.lx||232, lh=Math.min(34,(h-30)/slices.length);
+  slices.forEach((sl,i)=>{
+    const ly=(h-slices.length*lh)/2+i*lh+10;
+    s.appendChild(el('rect',{x:lx,y:ly,width:12,height:12,rx:4,fill:sl.c}));
+    s.appendChild(el('text',{x:lx+18,y:ly+10,'font-size':11,'font-weight':800,fill:'#0D2137'},`${sl.v} · ${(sl.v/tot*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%`));
+    s.appendChild(el('text',{x:lx+18,y:ly+22,'font-size':9.5,fill:'#5b7187','font-weight':700},sl.n));});
+  c.appendChild(s);
+}
+// Barras horizontais
+function hBars(cid,items,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!items || items.length === 0) return;
+  const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
+  const h=padT+items.length*rowH+8;
+  const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
+  const s=svgEl(w,h);
+  items.forEach((it,i)=>{
+    const y=padT+i*rowH;
+    const bwid=(it.v/max)*(w-padL-padR);
+    s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
+    s.appendChild(el('rect',{x:padL,y:y+7,width:Math.max(bwid,2),height:rowH-14,rx:6,fill:it.c||'#0a3d6e'}));
+    s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
+  c.appendChild(s);
+}
+// Funil horizontal alinhado à esquerda: valor dentro da barra, nome e conversão fora
+function funil(cid,steps,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!steps || steps.length === 0) return;
+  const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
+  const h=padT+steps.length*rowH+4;
+  const max=Number(steps[0].v)||1;
+  const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
+  const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
+  const s=svgEl(w,h);
+  steps.forEach((st,i)=>{
+    const y=padT+i*rowH;
+    const bwid=Math.max((st.v/max)*maxBar,46);
+    s.appendChild(el('rect',{x:padL,y:y+8,width:bwid,height:rowH-16,rx:9,fill:cols[i]||'#0ea5e9'}));
+    s.appendChild(el('text',{x:padL+12,y:y+rowH/2+4,'font-size':13,'font-weight':800,fill:'#fff','font-family':'Bricolage Grotesque'},st.v));
+    const tx=padL+bwid+12;
+    if(i>0){
+      const taxa=(st.v/steps[i-1].v*100).toLocaleString('pt-BR',{maximumFractionDigits:0});
+      s.appendChild(el('text',{x:tx,y:y+rowH/2-2,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
+      s.appendChild(el('text',{x:tx,y:y+rowH/2+11,'font-size':9.5,'font-weight':800,fill:'#0ea5e9'},`▼ ${taxa}% da etapa anterior`));
+    }else{
+      s.appendChild(el('text',{x:tx,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
+    }
+  });
+  c.appendChild(s);
+}
+
+/* ============================================================
+   CAPA
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   1. VISÃO GERAL — KPIs
+   ============================================================ */
+(function(){
+  const kpis=[
+    {l:'Alunos matriculados',v:'232',s:'Histórico desde ago/2023',f:'g'},
+    {l:'Estudando agora',v:'79',s:'34% da base total',f:'g'},
+    {l:'Taxa de conclusão',v:'41%',s:'95 concluintes',f:'g'},
+    {l:'Churn histórico',v:'16,4%',s:'22 cancelamentos + 16 abandonos',f:'y'},
+    {l:'Engajamento Alto+Médio',v:'76,7%',s:'227 de 296 contas Hotmart',f:'g'},
+    {l:'Ativos em 30 dias',v:'65',s:'98 em 90 dias · progresso médio 44,6%',f:'y'},
+    {l:'Inadimplência',v:'R$ 15,4 mil',s:'25 alunos · ~32% da base ativa',f:'r'},
+    {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
+  ];
+  const g=document.getElementById('kpisGeral');
+  kpis.forEach(k=>{
+    const d=document.createElement('div');d.className='card kpi';
+    d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
+      <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
+    g.appendChild(d);});
+})();
+
+/* ============================================================
+   2. BASE DE ALUNOS
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   3. ENGAJAMENTO
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+(function(){
+  const c=document.getElementById('atividadeCard');
+  c.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 30 dias</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">65 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 22%</span></div></div>
+        <span class="pill y">Atenção</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 90 dias</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">98 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 33%</span></div></div>
+        <span class="pill y">Atenção</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
+        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Progresso médio Hotmart</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">44,6%</div></div>
+        <span class="pill y">Meio da trilha</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.5">Trilha prática: 41 alunos registrados, todos com 100% de conclusão (registro feito ao concluir).</div>
+    </div>`;
+})();
+
+/* ============================================================
+   4. ESTEIRA DE TALENTOS
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+
+/* ============================================================
+   5. FINANCEIRO
+   ============================================================ */
+// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
+(function(){
+  const c=document.getElementById('inadCard');
+  c.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+      <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">R$ 15.361,68</div>
+        <div style="font-size:11.5px;font-weight:700;color:#b91c1c">25 alunos · ~32% da base ativa</div>
+      </div>
+      <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Boletos vencidos (importados)</div>
+        <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">R$ 3.338,24</div>
+        <div style="font-size:11.5px;font-weight:700;color:#92400e">13 títulos sem baixa</div>
+      </div>
+      <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
+        <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">Cartão 42 · Pix 8 · Boleto 1</div>
+      </div>
+    </div>`;
+})();
+
+/* ============================================================
+   TROCA DE VISÕES — Capa ↔ Dashboard expandido
+   ============================================================ */
+function fitResumo(){
+  const tb=document.querySelector('.topbar').offsetHeight;
+  const v=document.getElementById('viewResumo');
+  if(window.innerWidth>1024) v.style.height=(window.innerHeight-tb)+'px';

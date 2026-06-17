@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-
 /* ============================================================
    DASHBOARD EDUCAÇÃO ECGNOW · CPVH (Curso Profissão Viver de Holter)
    Design System oficial: Bricolage Grotesque + Nunito · navy/cyan
@@ -119,7 +118,6 @@ svg text{font-family:'Nunito',sans-serif}
 .rs-dest p{font-size:11.8px;color:#3b536b;line-height:1.45}
 @media(max-width:1024px){#viewResumo{grid-template-columns:1fr;overflow:auto;height:auto !important}.rs-chips{grid-template-columns:repeat(2,1fr)}.rs-mid,.rs-destaques{grid-template-columns:1fr}}
 @media(max-height:760px) and (min-width:1024px){.rs-hero{padding:18px 22px 16px;gap:10px}.rs-destaques{padding:12px 16px}.rs-chip{padding:9px 12px}}
-
 </style>
 </head>
 <body>
@@ -129,6 +127,34 @@ svg text{font-family:'Nunito',sans-serif}
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
 
 <div class="wrap">
+<section id="demo">
+  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
+  <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
+  <div class="grid g-2">
+    <div class="card chart-card">
+      <h3>Idade média dos alunos</h3>
+      <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
+      <div id="idadeCard"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Distribuição por faixa etária</h3>
+      <div class="hint">Alunos agrupados por idade: menores de 25, entre 25-35, maiores de 35 anos.</div>
+      <div id="faixaEtariaChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Preferência de turnos</h3>
+      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite, integral.</div>
+      <div id="turnoChart"></div>
+    </div>
+    <div class="card chart-card">
+      <h3>Estados (UF) de origem</h3>
+      <div class="hint">SP concentra a base (78 alunos); demais estados: MG, PR, RJ, RS com 2-3 cada.</div>
+      <div id="estadosChart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. LEITURA EXECUTIVA -->
 
 </div>
 
@@ -998,6 +1024,7 @@ setTimeout(() => {
 }, 5000);
 
 
+// Carregar dados ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
 } else {
