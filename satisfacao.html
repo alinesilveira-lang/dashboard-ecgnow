@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!DOCTYPE html>
-<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -127,71 +125,12 @@ svg text{font-family:'Nunito',sans-serif}
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
-    <span class="period-chip">Base atualizada · Jun/2026</span>
-    <nav class="nav">
-      <a href="javascript:void(0)" id="navResumo" class="active">Resumo</a>
-      <a href="#geral">Visão Geral</a>
-      <a href="#base">Base de Alunos</a>
-      <a href="#engaja">Engajamento</a>
-      <a href="#esteira">Esteira de Talentos</a>
-      <a href="#financeiro">Financeiro</a>
-      <a href="#nps">Satisfação</a>
-      <a href="#demo">Demografia</a>
-      <a href="#leitura">Leitura Executiva</a>
-    </nav>
-  </div>
-</div>
 
 <div class="wrap">
 
 </div>
 
 <script>
-
-/* ============================================================
-   BASE DE DADOS — extraída da planilha Cadastro de Alunos CPVH
-   ============================================================ */
-const DADOS={
-  matr12:{labels:['Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev','Mar','Abr','Mai'],vals:[6,4,9,13,5,16,8,18,4,7,0,3]},
-  anos:{labels:['2023','2024','2025','2026 YTD'],vals:[25,75,88,32]},
-  status:[
-    {n:'Concluído',v:95,c:'#10b981'},
-    {n:'Ativo (estudando)',v:79,c:'#0ea5e9'},
-    {n:'Cancelou',v:22,c:'#ef4444'},
-    {n:'Abandono',v:16,c:'#f0879b'},
-    {n:'Bloqueado',v:10,c:'#94a3b8'},
-    {n:'Só teoria',v:10,c:'#f59e0b'}
-  ],
-  vinculo:[
-    {n:'Aluno externo',v:133,c:'#0a3d6e'},
-    {n:'Sem informação',v:80,c:'#cbd5e1'},
-    {n:'Analista ECGNOW',v:13,c:'#0ea5e9'},
-    {n:'Ex-analista',v:6,c:'#94c6e8'}
-  ],
-  teorico:{labels:['0–25%','25–50%','50–75%','75–99%','100%'],vals:[43,65,57,47,10]},
-  engaja:[
-    {n:'Alto',v:106,c:'#10b981'},
-    {n:'Médio',v:121,c:'#0ea5e9'},
-    {n:'Baixo',v:47,c:'#f59e0b'},
-    {n:'Nenhum',v:22,c:'#ef4444'}
-  ],
-  funil:[
-    {n:'Matriculados',v:232},
-    {n:'Concluíram o curso',v:95},
-    {n:'Processo seletivo',v:62},
-    {n:'Aprovados',v:35},
-    {n:'Analistas ECGNOW',v:25}
-  ],
-  ps:[
-    {n:'Analista ECGNOW',v:25,c:'#10b981'},
-    {n:'Aprovado',v:10,c:'#34d399'},
-    {n:'Sem perfil',v:7,c:'#f59e0b'},
-    {n:'Reprovado entrevista',v:7,c:'#ef4444'},
-    {n:'Não respondeu',v:5,c:'#cbd5e1'},
-    {n:'Sem interesse',v:4,c:'#94a3b8'},
-    {n:'Outros',v:4,c:'#e2e8f0'}
-  ]
-};
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const fmtN=v=>v.toLocaleString('pt-BR');
 
@@ -199,8 +138,6 @@ const fmtN=v=>v.toLocaleString('pt-BR');
 const NS='http://www.w3.org/2000/svg';
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
 function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
-
-// Barras verticais simples
 function barChart(cid,labels,vals,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
   if(!vals || vals.length === 0) return;
@@ -221,7 +158,6 @@ function barChart(cid,labels,vals,opts={}){
     s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':10.5,'font-weight':700,fill:'#5b7187'},labels[i]));});
   c.appendChild(s);
 }
-// Donut com legenda lateral
 function donut(cid,slices,centerTop,centerBot,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
   if(!slices || slices.length === 0) return;
@@ -244,7 +180,6 @@ function donut(cid,slices,centerTop,centerBot,opts={}){
     s.appendChild(el('text',{x:lx+18,y:ly+22,'font-size':9.5,fill:'#5b7187','font-weight':700},sl.n));});
   c.appendChild(s);
 }
-// Barras horizontais
 function hBars(cid,items,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
   if(!items || items.length === 0) return;
@@ -260,7 +195,6 @@ function hBars(cid,items,opts={}){
     s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
   c.appendChild(s);
 }
-// Funil horizontal alinhado à esquerda: valor dentro da barra, nome e conversão fora
 function funil(cid,steps,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
   if(!steps || steps.length === 0) return;
@@ -286,110 +220,6 @@ function funil(cid,steps,opts={}){
   });
   c.appendChild(s);
 }
-
-/* ============================================================
-   CAPA
-   ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-
-/* ============================================================
-   1. VISÃO GERAL — KPIs
-   ============================================================ */
-(function(){
-  const kpis=[
-    {l:'Alunos matriculados',v:'232',s:'Histórico desde ago/2023',f:'g'},
-    {l:'Estudando agora',v:'79',s:'34% da base total',f:'g'},
-    {l:'Taxa de conclusão',v:'41%',s:'95 concluintes',f:'g'},
-    {l:'Churn histórico',v:'16,4%',s:'22 cancelamentos + 16 abandonos',f:'y'},
-    {l:'Engajamento Alto+Médio',v:'76,7%',s:'227 de 296 contas Hotmart',f:'g'},
-    {l:'Ativos em 30 dias',v:'65',s:'98 em 90 dias · progresso médio 44,6%',f:'y'},
-    {l:'Inadimplência',v:'R$ 15,4 mil',s:'25 alunos · ~32% da base ativa',f:'r'},
-    {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
-  ];
-  const g=document.getElementById('kpisGeral');
-  kpis.forEach(k=>{
-    const d=document.createElement('div');d.className='card kpi';
-    d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
-      <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
-    g.appendChild(d);});
-})();
-
-/* ============================================================
-   2. BASE DE ALUNOS
-   ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-
-/* ============================================================
-   3. ENGAJAMENTO
-   ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-(function(){
-  const c=document.getElementById('atividadeCard');
-  c.innerHTML=`
-    <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
-      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
-        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 30 dias</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">65 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 22%</span></div></div>
-        <span class="pill y">Atenção</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
-        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Acessaram em 90 dias</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">98 <span style="font-size:12px;color:var(--muted);font-family:'Nunito';font-weight:700">contas · 33%</span></div></div>
-        <span class="pill y">Atenção</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
-        <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Progresso médio Hotmart</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:24px;font-weight:800;color:var(--navy)">44,6%</div></div>
-        <span class="pill y">Meio da trilha</span>
-      </div>
-      <div style="font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.5">Trilha prática: 41 alunos registrados, todos com 100% de conclusão (registro feito ao concluir).</div>
-    </div>`;
-})();
-
-/* ============================================================
-   4. ESTEIRA DE TALENTOS
-   ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-
-/* ============================================================
-   5. FINANCEIRO
-   ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-(function(){
-  const c=document.getElementById('inadCard');
-  c.innerHTML=`
-    <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-      <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">R$ 15.361,68</div>
-        <div style="font-size:11.5px;font-weight:700;color:#b91c1c">25 alunos · ~32% da base ativa</div>
-      </div>
-      <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Boletos vencidos (importados)</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">R$ 3.338,24</div>
-        <div style="font-size:11.5px;font-weight:700;color:#92400e">13 títulos sem baixa</div>
-      </div>
-      <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
-        <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">Cartão 42 · Pix 8 · Boleto 1</div>
-      </div>
-    </div>`;
-})();
-
-/* ============================================================
-   TROCA DE VISÕES — Capa ↔ Dashboard expandido
-   ============================================================ */
-function showResumo(){
-  document.getElementById('viewDetalhe').style.display='none';
-  document.getElementById('viewResumo').style.display='grid';
-  ;
-;
-
-/* ============================================================
-   CARREGAMENTO DE KPIs — Via arquivo JSON no repositório
-   ============================================================ */
-const KPIS_URL = './kpis.json';
-
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
 
@@ -420,7 +250,6 @@ function loadKPIsFromJSON() {
     loadKPIsWithXHR();
   });
 }
-
 function loadKPIsWithXHR() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', KPIS_URL + '?t=' + Date.now(), true);
@@ -452,7 +281,6 @@ function loadKPIsWithXHR() {
     console.error('❌ XHR não pode enviar requisição:', e.message);
   }
 }
-
 function updateDashboardKPIs(kpis) {
   const total = kpis.total_alunos || 233;
   const totalCadastrados = kpis.total_cadastrados || 233;
@@ -963,29 +791,6 @@ function updateDashboardKPIs(kpis) {
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
-
-// Carregar KPIs automaticamente
-console.log('🚀 Inicializando dashboard...');
-console.log('📍 document.readyState:', document.readyState);
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('📄 DOMContentLoaded disparado');
-    loadKPIsFromJSON();
-  });
-} else {
-  // Se já passou do DOMContentLoaded, chamar direto
-  console.log('📄 Já passou do DOMContentLoaded, carregando dados agora...');
-  loadKPIsFromJSON();
-}
-
-// Failsafe: se dados não carregarem em 5 segundos, avisar usuário
-setTimeout(() => {
-  const elem = document.getElementById('viewResumo');
-  if (elem && !elem.querySelector('[data-loaded="true"]')) {
-    console.warn('⚠️ Dados não carregaram em 5s. Tente F5 ou abrir em modo incógnito.');
-  }
-}, 5000);
 
 
 // Carregar dados
