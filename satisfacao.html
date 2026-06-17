@@ -795,6 +795,22 @@ function updateDashboardKPIs(kpis) {
 }
 
 
+// Proteger updates para elementos que podem não existir
+const safeUpdate = (id, content) => {
+  const elem = document.getElementById(id);
+  if (elem) elem.innerHTML = content;
+};
+
+const originalUpdate = updateDashboardKPIs;
+updateDashboardKPIs = function(kpis) {
+  try {
+    originalUpdate.call(this, kpis);
+  } catch (e) {
+    console.log('Alguns elementos não existem nesta página - ignorando:', e.message);
+  }
+};
+
+
 // Carregar dados
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);

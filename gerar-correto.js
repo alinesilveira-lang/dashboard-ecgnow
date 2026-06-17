@@ -63,6 +63,25 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
+// Adicionar proteção para elementos que podem não existir
+script += `
+
+// Proteger updates para elementos que podem não existir
+const safeUpdate = (id, content) => {
+  const elem = document.getElementById(id);
+  if (elem) elem.innerHTML = content;
+};
+
+const originalUpdate = updateDashboardKPIs;
+updateDashboardKPIs = function(kpis) {
+  try {
+    originalUpdate.call(this, kpis);
+  } catch (e) {
+    console.log('Alguns elementos não existem nesta página - ignorando:', e.message);
+  }
+};
+`;
+
 const pages = [
   { nome: 'visao-geral', id: 'geral', titulo: 'Visão Geral' },
   { nome: 'base-alunos', id: 'base', titulo: 'Base de Alunos' },
