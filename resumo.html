@@ -693,7 +693,9 @@ function loadKPIsWithXHR() {
 }
 
 function updateDashboardKPIs(kpis) {
-  const total = kpis.total_alunos || 233;
+  console.log('🔄 updateDashboardKPIs iniciada com:', kpis);
+  try {
+    const total = kpis.total_alunos || 233;
   const totalCadastrados = kpis.total_cadastrados || 233;
   const ativoEstudando = kpis.ativo_estudando || 86;
   const concluidos = kpis.concluidos || 95;
@@ -1200,7 +1202,15 @@ function updateDashboardKPIs(kpis) {
     leituraExecutiva.innerHTML = insights;
   }
 
-  console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
+    console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
+    // Marcar que dados foram carregados
+    const viewResumo = document.getElementById('viewResumo');
+    if (viewResumo) {
+      viewResumo.setAttribute('data-loaded', 'true');
+    }
+  } catch (error) {
+    console.error('❌ ERRO em updateDashboardKPIs:', error.message, error.stack);
+  }
 }
 
 // Carregar KPIs automaticamente
