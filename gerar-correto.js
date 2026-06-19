@@ -107,7 +107,7 @@ function extractSection(html, sectionId) {
 }
 
 pages.forEach(page => {
-  const section = extractSection(original, page.sectionId);
+  const section = extractSection(original, page.id);
 
   const navLinks = [
     '<a href="resumo.html">Resumo</a>',
