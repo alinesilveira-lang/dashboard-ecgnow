@@ -1231,7 +1231,7 @@ if (document.readyState === 'loading') {
 // Failsafe: se dados não carregarem em 5 segundos, avisar usuário
 setTimeout(() => {
   const elem = document.getElementById('viewResumo');
-  if (elem && !elem.querySelector('[data-loaded="true"]')) {
+  if (elem && elem.getAttribute('data-loaded') !== 'true') {
     console.warn('⚠️ Dados não carregaram em 5s. Tente F5 ou abrir em modo incógnito.');
   }
 }, 5000);
