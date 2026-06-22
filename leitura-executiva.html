@@ -425,7 +425,7 @@ window.addEventListener('scroll',()=>{
   secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id;});
   links.forEach(l=>{if(l.id!=='navResumo')l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
 },{passive:true});
-fitResumo();
+if(document.getElementById("viewResumo")) fitResumo();
 
 /* ============================================================
    CARREGAMENTO DE KPIs — Via arquivo JSON no repositório
@@ -1123,7 +1123,6 @@ function funil(cid,steps,opts={}){
   });
   c.appendChild(s);
 }
-const KPIS_URL = './kpis.json';
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
 
