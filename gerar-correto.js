@@ -76,18 +76,32 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-// Remover declarações duplicadas por linha exata
-const scriptLines = script.split('\n');
-const seenLines = new Set();
-const dedupedLines = scriptLines.filter(line => {
+// Remover declarações duplicadas - AGRESSIVO
+let scriptLines = script.split('\n');
+let dedupedLines = [];
+let seenDeclarations = {};
+
+for (let line of scriptLines) {
   const trimmed = line.trim();
-  // Remover linhas idênticas (especialmente declarações duplicadas como "const sum=...")
-  if (trimmed && seenLines.has(trimmed)) {
-    return false;
+
+  // Extrair nome da declaração
+  let declName = null;
+  if (trimmed.startsWith('const ')) {
+    const match = trimmed.match(/^const\s+(\w+)/);
+    if (match) declName = match[1];
+  } else if (trimmed.startsWith('function ')) {
+    const match = trimmed.match(/^function\s+(\w+)/);
+    if (match) declName = match[1];
   }
-  seenLines.add(trimmed);
-  return true;
-});
+
+  // Se é uma declaração de função/var essencial e já vimos, pular
+  if (declName && ['sum', 'fmtN', 'NS', 'svgEl', 'el', 'barChart', 'donut', 'hBars', 'funil', 'loadKPIsFromJSON', 'loadKPIsWithXHR', 'updateDashboardKPIs', 'KPIS_URL'].includes(declName)) {
+    if (seenDeclarations[declName]) continue;
+    seenDeclarations[declName] = true;
+  }
+
+  dedupedLines.push(line);
+}
 script = dedupedLines.join('\n');
 
 // Adicionar proteção para elementos que podem não existir
@@ -126,8 +140,26 @@ function extractSection(html, sectionId) {
   return match ? match[0] + '</section>' : '';
 }
 
-pages.forEach(page => {
+pages.forEach((page, pageIdx) => {
   const section = extractSection(original, page.id);
+
+  // Para cada página, remover suas duplicatas de declarações essenciais
+  let pageScript = script;
+  if (pageIdx > 0) { // Não mexer na primeira página
+    const lines = pageScript.split('\n');
+    const seenEssential = {};
+    pageScript = lines.filter(line => {
+      const trimmed = line.trim();
+      for (let decl of ['const sum=', 'const fmtN=', 'const NS=', 'function svgEl', 'function el(', 'function barChart', 'function donut', 'function hBars', 'function funil']) {
+        if (trimmed.startsWith(decl)) {
+          if (seenEssential[decl]) return false;
+          seenEssential[decl] = true;
+          break;
+        }
+      }
+      return true;
+    }).join('\n');
+  }
 
   const navLinks = [
     '<a href="resumo.html">Resumo</a>',
@@ -153,7 +185,7 @@ ${section}
 </div>
 
 <script>
-${script}
+${pageScript}
 
 // Carregar dados
 if (document.readyState === 'loading') {
