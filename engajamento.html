@@ -145,18 +145,20 @@ svg text{font-family:'Nunito',sans-serif}
 <div class="wrap">
 <section id="engaja">
   <div class="sec-head"><h2>Jornada & Engajamento</h2><span class="tag">Plataforma Hotmart + trilha do curso</span></div>
-  <div class="grid g-3">
+  <div class="grid g-2">
     <div class="card chart-card">
       <h3>Indicadores de Progresso</h3>
       <div id="indicadoresCard"></div>
     </div>
-    <div class="card chart-card">
+    <div class="card chart-card" style="grid-row:span 2">
       <h3>Engajamento</h3>
-      <div id="engajaDonut"></div>
+      <div id="engajaDonut" style="min-height:350px"></div>
     </div>
+  </div>
+  <div class="grid g-1">
     <div class="card chart-card">
       <h3>Atividade Recente</h3>
-      <div id="atividadeCard"></div>
+      <div id="atividadeChart"></div>
     </div>
   </div>
 </section>
@@ -776,7 +778,16 @@ function updateDashboardKPIs(kpis) {
   ];
   const engajDonutElem = document.getElementById('engajaDonut');
   if(engajDonutElem) {
-    donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:380,h:250,cx:100,r:78,lx:212});
+    donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:450,h:350,cx:120,r:90,lx:240});
+  }
+
+  // Atividade Recente (gráfico de barras)
+  const atividadeElem = document.getElementById('atividadeChart');
+  if(atividadeElem) {
+    const ativos7d = kpis.ativos_7_dias || 8;
+    const ativos30d = kpis.ativos_30_dias ? kpis.ativos_30_dias.valor : 14;
+    const ativos90d = kpis.ativos_90_dias || 25;
+    barChart('atividadeChart', ['7 dias', '30 dias', '90 dias'], [ativos7d, ativos30d, ativos90d], {color:'#0ea5e9', fmt:v=>Math.round(v)});
   }
 
   // ============================================================
