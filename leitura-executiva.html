@@ -1032,10 +1032,6 @@ setTimeout(() => {
 </div>
 
 <script>
-const fmtN=v=>v.toLocaleString('pt-BR');
-const NS='http://www.w3.org/2000/svg';
-function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
-function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
 function barChart(cid,labels,vals,opts={}){
   const c=document.getElementById(cid);
   if(!c || !vals || vals.length === 0) return;
