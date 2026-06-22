@@ -144,27 +144,22 @@ svg text{font-family:'Nunito',sans-serif}
 
 <div class="wrap">
 <section id="demo">
-  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
-  <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
+  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização</span></div>
   <div class="grid g-2">
     <div class="card chart-card">
-      <h3>Idade média dos alunos</h3>
-      <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
+      <h3>Idade</h3>
       <div id="idadeCard"></div>
     </div>
     <div class="card chart-card">
-      <h3>Distribuição por faixa etária</h3>
-      <div class="hint">Alunos agrupados por idade: menores de 25, entre 25-35, maiores de 35 anos.</div>
+      <h3>Faixa Etária</h3>
       <div id="faixaEtariaChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Preferência de turnos</h3>
-      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite, integral.</div>
+      <h3>Turnos</h3>
       <div id="turnoChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Estados (UF) de origem</h3>
-      <div class="hint">SP concentra a base (78 alunos); demais estados: MG, PR, RJ, RS com 2-3 cada.</div>
+      <h3>Estados</h3>
       <div id="estadosChart"></div>
     </div>
   </div>
@@ -801,35 +796,25 @@ function updateDashboardKPIs(kpis) {
   }
 
   // ============================================================
-  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos)
+  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
   // ============================================================
 
-  const leituraExecutiva = document.querySelector('#leitura .grid');
+  const leituraExecutiva = document.getElementById('leituraGrid');
   if(leituraExecutiva) {
     // Calcular dados dinâmicos dos gráficos
     const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
-    const matrMatrLabels = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) || [];
-    const matrMatrTotal = matrMatrVals.reduce((a,b)=>a+b,0);
-    const matrMatrMaxMes = (matrMatrVals.length > 0) ? Math.max(...matrMatrVals) : 0;
-    const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
-    const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
-
     const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
     const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
     const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
 
     const insights = `
-      <div>
-        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão no seletivo) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
-        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência ASAAS crescente.</b><p>Cobranças crescem — total de ${matrMatrTotal} matrículas em 12 meses com pico em ${mesMaxMatr} (${matrMatrMaxMes} inscrições). Mantido o ritmo, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
-        <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos com forte potencial.</b><p>${total} alunos cadastrados com ${ativoEstudando} estudando agora. Engajamento Alto+Médio de ${pct_engajAltoMedio}% indica base comprometida. Taxa de conclusão de ${taxaConclusao}% mostra desempenho positivo.</p></div></div>
-      </div>
-      <div>
-        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
-        <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico demanda ação.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Cancelamentos e abandonos são oportunidades para reengajamento com réguas automáticas de e-mail/WhatsApp por marco da trilha.</p></div></div>
-        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
-      </div>
+      <div class="insight"><div class="ico g">🧲</div><div><b>Esteira de talentos</b><p>${analistasTotal} formados analistas ECGNOW (${kpis.taxa_aprovacao_pct}% conversão)</p></div></div>
+      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência</b><p>${matrMatrVals.reduce((a,b)=>a+b,0)} matrículas em 12 meses</p></div></div>
+      <div class="insight"><div class="ico g">🎓</div><div><b>Base ativa</b><p>${ativoEstudando} estudando agora (${taxaConclusao}% conclusão)</p></div></div>
+      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência</b><p>${kpis.inadimplencia_valor} em ${kpis.inadimplencia_qtd} alunos</p></div></div>
+      <div class="insight"><div class="ico y">📉</div><div><b>Churn</b><p>${churnQtd} alunos (${churnRate}%)</p></div></div>
+      <div class="insight"><div class="ico r">🕳️</div><div><b>Em risco</b><p>${baseAlunos.abaixo_50pct} abaixo de 50% de progresso</p></div></div>
     `;
 
     leituraExecutiva.innerHTML = insights;
