@@ -196,35 +196,29 @@ svg text{font-family:'Nunito',sans-serif}
 <!-- 1. VISÃO GERAL -->
 <section id="geral">
   <div class="sec-head"><h2>Visão Geral</h2><span class="tag">Indicadores-chave do CPVH</span></div>
-  <p class="sec-sub">Fotografia consolidada da base de alunos, engajamento e saúde financeira do curso, a partir do cadastro oficial, da plataforma Hotmart e das cobranças ASAAS.</p>
   <div class="grid g-4" id="kpisGeral"></div>
 </section>
 
 <!-- 2. BASE DE ALUNOS -->
 <section id="base">
   <div class="sec-head"><h2>Base de Alunos</h2><span class="tag">232 matriculados desde ago/2023</span></div>
-  <p class="sec-sub">Composição da base por status do curso e vínculo com a ECGNow, e o ritmo de novas matrículas ao longo do tempo.</p>
   <div class="grid g-2" style="margin-bottom:16px">
     <div class="card chart-card">
       <h3>Status do curso</h3>
-      <div class="hint">Concluintes e alunos ativos somam 75% da base; churn histórico (cancelamento formal + abandono) é de 16,4%.</div>
       <div id="statusDonut"></div>
     </div>
     <div class="card chart-card">
-      <h3>Matrículas por mês · jun/25 – mai/26</h3>
-      <div class="hint">93 matrículas em 12 meses. Pico em janeiro/26 (18, recorde da série) seguido de desaceleração no 2º trimestre.</div>
+      <h3>Matrículas por mês</h3>
       <div id="matriculasChart"></div>
     </div>
   </div>
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Alunos em Risco</h3>
-      <div class="hint">Alunos com menos de 50% de progresso na trilha teórica.</div>
       <div id="riscoCard"></div>
     </div>
     <div class="card chart-card">
       <h3>Vínculo com a ECGNow</h3>
-      <div class="hint">A maior parte da base é de alunos externos; 13 analistas ativos e 6 ex-analistas passaram pelo curso.</div>
       <div id="vinculoChart"></div>
     </div>
   </div>
@@ -233,21 +227,17 @@ svg text{font-family:'Nunito',sans-serif}
 <!-- 3. ENGAJAMENTO -->
 <section id="engaja">
   <div class="sec-head"><h2>Jornada & Engajamento</h2><span class="tag">Plataforma Hotmart + trilha do curso</span></div>
-  <p class="sec-sub">Como os alunos avançam na trilha teórica e quanto interagem com a plataforma. A trilha prática só registra concluintes (41 alunos, todos a 100%).</p>
   <div class="grid g-3">
     <div class="card chart-card">
-      <h3>Indicadores de Progresso e Engajamento</h3>
-      <div class="hint">Mapeamento consolidado de atividade, progressão teórica e desempenho por nível de engajamento.</div>
+      <h3>Indicadores de Progresso</h3>
       <div id="indicadoresCard"></div>
     </div>
     <div class="card chart-card">
-      <h3>Engajamento na plataforma</h3>
-      <div class="hint">296 contas Hotmart. Alto + Médio respondem por 76,7%; 22 contas nunca interagiram.</div>
+      <h3>Engajamento</h3>
       <div id="engajaDonut"></div>
     </div>
     <div class="card chart-card">
-      <h3>Atividade recente</h3>
-      <div class="hint">Acessos à plataforma na janela recente e progresso médio geral.</div>
+      <h3>Atividade Recente</h3>
       <div id="atividadeCard"></div>
     </div>
   </div>
@@ -256,11 +246,9 @@ svg text{font-family:'Nunito',sans-serif}
 <!-- 4. ESTEIRA DE TALENTOS -->
 <section id="esteira">
   <div class="sec-head"><h2>Esteira de Talentos</h2><span class="tag">Do curso à operação Holter</span></div>
-  <p class="sec-sub">O CPVH funciona como pipeline de contratação: alunos concluintes entram no processo seletivo e os aprovados viram analistas de Holter da ECGNow.</p>
   <div class="grid g-2">
     <div class="card chart-card">
-      <h3>Funil completo</h3>
-      <div class="hint">Conversão de ponta a ponta: 10,8% dos matriculados chegaram a Analista ECGNOW.</div>
+      <h3>Funil de Conversão</h3>
       <div id="funilGrande"></div>
     </div>
   </div>
@@ -269,23 +257,19 @@ svg text{font-family:'Nunito',sans-serif}
 <!-- 5. FINANCEIRO -->
 <section id="financeiro">
   <div class="sec-head"><h2>Financeiro do Curso</h2><span class="tag">Cobranças ASAAS 2026 + inadimplência</span></div>
-  <p class="sec-sub">Formas de pagamento e o quadro de inadimplência apurado na base de alunos.</p>
   <div class="grid g-3">
     <div class="card chart-card">
-      <h3>Inadimplência & Formas de Pagamento</h3>
-      <div class="hint">Apuração da aba Performance + boletos vencidos importados. Distribuição de cobranças por método.</div>
+      <h3>Inadimplência</h3>
       <div id="inadCard"></div>
     </div>
   </div>
   <div class="grid g-2" style="margin-top:16px">
     <div class="card chart-card">
-      <h3>Cobranças por forma de pagamento</h3>
-      <div class="hint">Distribuição entre ASAAS, Boleto, Pix e Trancado.</div>
+      <h3>Formas de Pagamento</h3>
       <div id="pagamentoChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Status de conclusão (Teórico vs Prático)</h3>
-      <div class="hint">Alunos que completaram teórico, prático ou ambos.</div>
+      <h3>Status de Conclusão</h3>
       <div id="statusConclusaoChart"></div>
     </div>
   </div>
@@ -293,17 +277,14 @@ svg text{font-family:'Nunito',sans-serif}
 
 <!-- 6. SATISFAÇÃO (NPS) -->
 <section id="nps">
-  <div class="sec-head"><h2>Satisfação do Aluno (NPS)</h2><span class="tag">Net Promoter Score</span></div>
-  <p class="sec-sub">Medição de satisfação e disposição de recomendação dos alunos. O NPS consolida promotores, neutros e detratores em um índice único (-100 a 100).</p>
+  <div class="sec-head"><h2>Satisfação do Aluno</h2><span class="tag">Net Promoter Score</span></div>
   <div class="grid g-2">
     <div class="card chart-card">
-      <h3>NPS Score & Segmentação</h3>
-      <div class="hint">NPS = Promotores% - Detratores%. Gráfico mostra distribuição de respondentes por categoria.</div>
+      <h3>NPS Score</h3>
       <div id="npsDonut"></div>
     </div>
     <div class="card chart-card">
-      <h3>Detalhes da Pesquisa & Notas por Engajamento</h3>
-      <div class="hint">Total de respostas, taxa de resposta e nota média por nível de engajamento na plataforma.</div>
+      <h3>Pesquisa de Satisfação</h3>
       <div id="npsCard"></div>
     </div>
   </div>
@@ -311,27 +292,22 @@ svg text{font-family:'Nunito',sans-serif}
 
 <!-- 7. DEMOGRAFIA -->
 <section id="demo">
-  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização dos alunos</span></div>
-  <p class="sec-sub">Caracterização socioeconômica da base: distribuição por faixa etária, horários de estudo e estados onde os alunos residem.</p>
+  <div class="sec-head"><h2>Perfil Demográfico</h2><span class="tag">Idade, turnos e localização</span></div>
   <div class="grid g-2">
     <div class="card chart-card">
-      <h3>Idade média dos alunos</h3>
-      <div class="hint">Média informada: 38 anos. Parcela significativa não informou idade.</div>
+      <h3>Idade</h3>
       <div id="idadeCard"></div>
     </div>
     <div class="card chart-card">
-      <h3>Distribuição por faixa etária</h3>
-      <div class="hint">Alunos agrupados por idade: menores de 25, entre 25-35, maiores de 35 anos.</div>
+      <h3>Faixa Etária</h3>
       <div id="faixaEtariaChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Preferência de turnos</h3>
-      <div class="hint">Distribuição de alunos por turno de aula: manhã, tarde, noite, integral.</div>
+      <h3>Turnos</h3>
       <div id="turnoChart"></div>
     </div>
     <div class="card chart-card">
-      <h3>Estados (UF) de origem</h3>
-      <div class="hint">SP concentra a base (78 alunos); demais estados: MG, PR, RJ, RS com 2-3 cada.</div>
+      <h3>Estados</h3>
       <div id="estadosChart"></div>
     </div>
   </div>
@@ -339,19 +315,8 @@ svg text{font-family:'Nunito',sans-serif}
 
 <!-- 8. LEITURA EXECUTIVA -->
 <section id="leitura">
-  <div class="sec-head"><h2>Leitura Executiva</h2><span class="tag">O que os números dizem</span></div>
-  <div class="grid g-2">
-    <div>
-      <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>25 alunos formados viraram analistas ECGNOW (40% de conversão no seletivo) e 13 estão ativos hoje na operação Holter. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
-      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência financeira em construção.</b><p>As cobranças ASAAS cresceram de R$ 250 (jan) para R$ 3,8 mil (mai) — efeito do parcelamento no cartão das vendas recentes. Mantido o ritmo de vendas, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
-      <div class="insight"><div class="ico g">🎓</div><div><b>Janeiro provou o potencial comercial.</b><p>18 matrículas em um único mês (recorde da série histórica), puxando 2026 a 32 matrículas até maio. A base de 296 contas na Hotmart também dá espaço para campanhas de reativação.</p></div></div>
-    </div>
-    <div>
-      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>R$ 15,4 mil distribuídos em 25 alunos (~32% da base ativa), além de R$ 3,3 mil em boletos vencidos importados. Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
-      <div class="insight"><div class="ico y">📉</div><div><b>O 2º trimestre de vendas desacelerou.</b><p>Após o pico de janeiro (18), as matrículas caíram para 4, 7, 0 e 3 entre fevereiro e maio. Vale cruzar com o investimento em Ads — o forecast da empresa projeta retomada de mídia justamente a partir do 2º semestre.</p></div></div>
-      <div class="insight"><div class="ico r">🕳️</div><div><b>Metade da base está parada no meio da trilha.</b><p>48,6% dos alunos têm menos de 50% do teórico concluído e apenas 65 contas acessaram a plataforma nos últimos 30 dias. Réguas de engajamento (e-mail/WhatsApp por marco da trilha) atacariam diretamente o risco de abandono.</p></div></div>
-    </div>
-  </div>
+  <div class="sec-head"><h2>Destaques Estratégicos</h2><span class="tag">Oportunidades e riscos</span></div>
+  <div class="grid g-2" id="leituraGrid"></div>
 </section>
 
 <div class="foot">
@@ -1166,35 +1131,25 @@ function updateDashboardKPIs(kpis) {
   }
 
   // ============================================================
-  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos)
+  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
   // ============================================================
 
-  const leituraExecutiva = document.querySelector('#leitura .grid');
+  const leituraExecutiva = document.getElementById('leituraGrid');
   if(leituraExecutiva) {
     // Calcular dados dinâmicos dos gráficos
     const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
-    const matrMatrLabels = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) || [];
-    const matrMatrTotal = matrMatrVals.reduce((a,b)=>a+b,0);
-    const matrMatrMaxMes = (matrMatrVals.length > 0) ? Math.max(...matrMatrVals) : 0;
-    const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
-    const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
-
     const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
     const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
     const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
 
     const insights = `
-      <div>
-        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão no seletivo) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
-        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência ASAAS crescente.</b><p>Cobranças crescem — total de ${matrMatrTotal} matrículas em 12 meses com pico em ${mesMaxMatr} (${matrMatrMaxMes} inscrições). Mantido o ritmo, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
-        <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos com forte potencial.</b><p>${total} alunos cadastrados com ${ativoEstudando} estudando agora. Engajamento Alto+Médio de ${pct_engajAltoMedio}% indica base comprometida. Taxa de conclusão de ${taxaConclusao}% mostra desempenho positivo.</p></div></div>
-      </div>
-      <div>
-        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
-        <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico demanda ação.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Cancelamentos e abandonos são oportunidades para reengajamento com réguas automáticas de e-mail/WhatsApp por marco da trilha.</p></div></div>
-        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
-      </div>
+      <div class="insight"><div class="ico g">🧲</div><div><b>Esteira de talentos</b><p>${analistasTotal} formados analistas ECGNOW (${kpis.taxa_aprovacao_pct}% conversão)</p></div></div>
+      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência</b><p>${matrMatrVals.reduce((a,b)=>a+b,0)} matrículas em 12 meses</p></div></div>
+      <div class="insight"><div class="ico g">🎓</div><div><b>Base ativa</b><p>${ativoEstudando} estudando agora (${taxaConclusao}% conclusão)</p></div></div>
+      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência</b><p>${kpis.inadimplencia_valor} em ${kpis.inadimplencia_qtd} alunos</p></div></div>
+      <div class="insight"><div class="ico y">📉</div><div><b>Churn</b><p>${churnQtd} alunos (${churnRate}%)</p></div></div>
+      <div class="insight"><div class="ico r">🕳️</div><div><b>Em risco</b><p>${baseAlunos.abaixo_50pct} abaixo de 50% de progresso</p></div></div>
     `;
 
     leituraExecutiva.innerHTML = insights;
