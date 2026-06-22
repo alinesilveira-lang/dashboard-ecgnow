@@ -80,17 +80,22 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-// Remover apenas declarações duplicadas (const/function)
+// Remover apenas funções essenciais duplicadas no nível superior
 const scriptLines = script.split('\n');
-const declaredVars = new Set();
+const essentialDeclarations = new Set(['KPIS_URL', 'sum', 'fmtN', 'NS', 'svgEl', 'el', 'barChart', 'donut', 'hBars', 'funil', 'loadKPIsFromJSON', 'loadKPIsWithXHR', 'updateDashboardKPIs']);
+const declaredTopLevel = new Set();
 const dedupedLines = scriptLines.filter((line, idx) => {
   const trimmed = line.trim();
-  if (trimmed.startsWith('const ') || trimmed.startsWith('function ')) {
+  // Apenas remover declarações top-level duplicadas (com 2 espaços ou menos de indent)
+  const indent = line.match(/^\s*/)[0].length;
+  if (indent <= 2 && (trimmed.startsWith('const ') || trimmed.startsWith('function '))) {
     const match = trimmed.match(/^(const|function)\s+(\w+)/);
     if (match) {
       const name = match[2];
-      if (declaredVars.has(name)) return false; // Remover duplicata
-      declaredVars.add(name);
+      if (essentialDeclarations.has(name)) {
+        if (declaredTopLevel.has(name)) return false; // Remover duplicata
+        declaredTopLevel.add(name);
+      }
     }
   }
   return true;

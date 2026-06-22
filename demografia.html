@@ -199,9 +199,12 @@ function barChart(cid,labels,vals,opts={}){
   c.appendChild(s);
 }
 function donut(cid,slices,centerTop,centerBot,opts={}){
+  const c=document.getElementById(cid);
   if(!c || !slices || slices.length === 0) return;
   c.innerHTML='';
+  const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
   const tot=sum(slices.map(s=>Number(s.v)||0));
+  const s=svgEl(w,h);
   let a0=-Math.PI/2;
   slices.forEach(sl=>{
     const a1=a0+sl.v/tot*2*Math.PI;
@@ -219,11 +222,16 @@ function donut(cid,slices,centerTop,centerBot,opts={}){
   c.appendChild(s);
 }
 function hBars(cid,items,opts={}){
+  const c=document.getElementById(cid);
   if(!c) return;
   c.innerHTML='';
   if(!items || items.length === 0) return;
+  const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
   const h=padT+items.length*rowH+8;
+  const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
+  const s=svgEl(w,h);
   items.forEach((it,i)=>{
+    const y=padT+i*rowH;
     const bwid=(it.v/max)*(w-padL-padR);
     s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
     s.appendChild(el('rect',{x:padL,y:y+7,width:Math.max(bwid,2),height:rowH-14,rx:6,fill:it.c||'#0a3d6e'}));
@@ -231,11 +239,18 @@ function hBars(cid,items,opts={}){
   c.appendChild(s);
 }
 function funil(cid,steps,opts={}){
+  const c=document.getElementById(cid);
   if(!c || !steps || steps.length === 0) return;
   c.innerHTML='';
+  const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
+  const h=padT+steps.length*rowH+4;
+  const max=Number(steps[0].v)||1;
   const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
   const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
+  const s=svgEl(w,h);
   steps.forEach((st,i)=>{
+    const y=padT+i*rowH;
+    const bwid=Math.max((st.v/max)*maxBar,46);
     s.appendChild(el('rect',{x:padL,y:y+8,width:bwid,height:rowH-16,rx:9,fill:cols[i]||'#0ea5e9'}));
     s.appendChild(el('text',{x:padL+12,y:y+rowH/2+4,'font-size':13,'font-weight':800,fill:'#fff','font-family':'Bricolage Grotesque'},st.v));
     const tx=padL+bwid+12;
@@ -451,6 +466,7 @@ function updateDashboardKPIs(kpis) {
       {n:'Detratores',v:nps_detratores,c:'#ef4444'}
     ];
 
+    const c = document.getElementById('npsDonut');
     if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
 
     const npsCard = document.getElementById('npsCard');
@@ -573,6 +589,8 @@ function updateDashboardKPIs(kpis) {
     const trancado = kpis.trancado_qtd || 0;
     const teorico = kpis.teorico_qtd || 0;
     const pratico = kpis.pratico_qtd || 0;
+    const inadimplencia_qtd = kpis.inadimplencia_qtd || 0;
+    const concluidos = kpis.concluidos || 0;
 
     // Formas de pagamento
     const pagtoChart = document.getElementById('pagamentoChart');
@@ -651,6 +669,7 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   // Declarar variáveis necessárias
+  const trancado = kpis.trancado_qtd || 0;
   const alunoExterno = kpis.aluno_externo || 0;
 
   // Gráfico de Matrículas por mês
@@ -702,6 +721,7 @@ function updateDashboardKPIs(kpis) {
   // Card de Indicadores (Progresso e Engajamento)
   const indicadoresCard = document.getElementById('indicadoresCard');
   if(indicadoresCard) {
+    const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
     const abaixo_50 = baseAlunos.abaixo_50pct || 0;
     const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct || '0';
 
