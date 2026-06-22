@@ -814,6 +814,9 @@ function updateDashboardKPIs(kpis) {
     `;
 
     leituraExecutiva.innerHTML = insights;
+    console.log('✅ Leitura Executiva preenchida com', insights.split('insight').length - 1, 'cards');
+  } else {
+    console.log('⚠️ leituraGrid não encontrado na página');
   }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
