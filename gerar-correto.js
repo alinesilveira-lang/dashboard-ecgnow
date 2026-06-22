@@ -117,7 +117,7 @@ pages.forEach(page => {
   ].join('\n      ');
 
   const topbarMod = topbar.replace(
-    /<nav class="nav">[^<]*<\/nav>/,
+    /<nav class="nav">[\s\S]*?<\/nav>/,
     `<nav class="nav">\n      ${navLinks}\n    </nav>`
   );
 
