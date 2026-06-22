@@ -855,11 +855,44 @@ updateDashboardKPIs = function(kpis) {
 };
 
 
-// Carregar dados
+// Carregar dados da API do Google Apps Script
+const appsScriptUrl = 'https://script.google.com/a/macros/ecgnow.com.br/s/AKfycbwtauH3j_ccA-LYmjxAEASCXYRS13ntOZrWSHv3GlUQpzks_XC6W9DHweSv2jKAdlZH/exec';
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('📍 Tentando carregar dados da API do Apps Script...');
+    fetch(appsScriptUrl)
+      .then(r => r.json())
+      .then(res => {
+        if(res.success && res.data) {
+          console.log('✅ Dados carregados da API do Apps Script');
+          updateDashboardKPIs(res.data);
+        } else {
+          console.log('⚠️ API retornou erro, tentando kpis.json local...');
+          loadKPIsFromJSON();
+        }
+      })
+      .catch(e => {
+        console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+        loadKPIsFromJSON();
+      });
+  });
 } else {
-  loadKPIsFromJSON();
+  console.log('📍 Tentando carregar dados da API do Apps Script...');
+  fetch(appsScriptUrl)
+    .then(r => r.json())
+    .then(res => {
+      if(res.success && res.data) {
+        console.log('✅ Dados carregados da API do Apps Script');
+        updateDashboardKPIs(res.data);
+      } else {
+        console.log('⚠️ API retornou erro, tentando kpis.json local...');
+        loadKPIsFromJSON();
+      }
+    })
+    .catch(e => {
+      console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+      loadKPIsFromJSON();
+    });
 }
 </script>
 </body>

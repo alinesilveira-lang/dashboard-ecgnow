@@ -321,13 +321,11 @@ function funil(cid,steps,opts={}){
     {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
   ];
   const g=document.getElementById('kpisGeral');
-  if(g) { // Proteger: elemento pode não existir em todas as páginas
-    kpis.forEach(k=>{
-      const d=document.createElement('div');d.className='card kpi';
-      d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
-        <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
-      g.appendChild(d);});
-  }
+  kpis.forEach(k=>{
+    const d=document.createElement('div');d.className='card kpi';
+    d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
+      <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
+    g.appendChild(d);});
 })();
 
 /* ============================================================
@@ -341,7 +339,6 @@ function funil(cid,steps,opts={}){
 // Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 (function(){
   const c=document.getElementById('atividadeCard');
-  if(!c) return; // Elemento pode não existir em todas as páginas
   c.innerHTML=`
     <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
       <div style="display:flex;justify-content:space-between;align-items:center;background:#f1f7fc;border-radius:12px;padding:13px 16px">
@@ -374,7 +371,6 @@ function funil(cid,steps,opts={}){
 // Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
 (function(){
   const c=document.getElementById('inadCard');
-  if(!c) return; // Elemento pode não existir em todas as páginas
   c.innerHTML=`
     <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
       <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
@@ -400,6 +396,7 @@ function funil(cid,steps,opts={}){
 function fitResumo(){
   const tb=document.querySelector('.topbar').offsetHeight;
   const v=document.getElementById('viewResumo');
+  if(!v) return;
   if(window.innerWidth>1024) v.style.height=(window.innerHeight-tb)+'px';
   else v.style.height='auto';
 }
@@ -425,7 +422,7 @@ window.addEventListener('scroll',()=>{
   secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id;});
   links.forEach(l=>{if(l.id!=='navResumo')l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
 },{passive:true});
-if(document.getElementById("viewResumo")) fitResumo();
+fitResumo();
 
 /* ============================================================
    CARREGAMENTO DE KPIs — Via arquivo JSON no repositório
@@ -1036,6 +1033,7 @@ setTimeout(() => {
 </div>
 
 <script>
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
 function barChart(cid,labels,vals,opts={}){
   const c=document.getElementById(cid);
   if(!c || !vals || vals.length === 0) return;
@@ -1123,6 +1121,7 @@ function funil(cid,steps,opts={}){
   });
   c.appendChild(s);
 }
+const KPIS_URL = './kpis.json';
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
 
@@ -1666,6 +1665,32 @@ function updateDashboardKPIs(kpis) {
   }
 
   // ============================================================
+  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
+  // ============================================================
+
+  const leituraExecutiva = document.getElementById('leituraGrid');
+  if(leituraExecutiva) {
+    // Calcular dados dinâmicos dos gráficos
+    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
+    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
+    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
+    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
+    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
+
+    const insights = `
+      <div class="insight"><div class="ico g">🧲</div><div><b>Esteira de talentos</b><p>${analistasTotal} formados analistas ECGNOW (${kpis.taxa_aprovacao_pct}% conversão)</p></div></div>
+      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência</b><p>${matrMatrVals.reduce((a,b)=>a+b,0)} matrículas em 12 meses</p></div></div>
+      <div class="insight"><div class="ico g">🎓</div><div><b>Base ativa</b><p>${ativoEstudando} estudando agora (${taxaConclusao}% conclusão)</p></div></div>
+      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência</b><p>${kpis.inadimplencia_valor} em ${kpis.inadimplencia_qtd} alunos</p></div></div>
+      <div class="insight"><div class="ico y">📉</div><div><b>Churn</b><p>${churnQtd} alunos (${churnRate}%)</p></div></div>
+      <div class="insight"><div class="ico r">🕳️</div><div><b>Em risco</b><p>${baseAlunos.abaixo_50pct} abaixo de 50% de progresso</p></div></div>
+    `;
+
+    leituraExecutiva.innerHTML = insights;
+    console.log('✅ Leitura Executiva preenchida com', insights.split('insight').length - 1, 'cards');
+  } else {
+    console.log('⚠️ leituraGrid não encontrado na página');
+  }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
@@ -1687,11 +1712,44 @@ updateDashboardKPIs = function(kpis) {
 };
 
 
-// Carregar dados
+// Carregar dados da API do Google Apps Script
+const appsScriptUrl = 'https://script.google.com/a/macros/ecgnow.com.br/s/AKfycbwtauH3j_ccA-LYmjxAEASCXYRS13ntOZrWSHv3GlUQpzks_XC6W9DHweSv2jKAdlZH/exec';
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('📍 Tentando carregar dados da API do Apps Script...');
+    fetch(appsScriptUrl)
+      .then(r => r.json())
+      .then(res => {
+        if(res.success && res.data) {
+          console.log('✅ Dados carregados da API do Apps Script');
+          updateDashboardKPIs(res.data);
+        } else {
+          console.log('⚠️ API retornou erro, tentando kpis.json local...');
+          loadKPIsFromJSON();
+        }
+      })
+      .catch(e => {
+        console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+        loadKPIsFromJSON();
+      });
+  });
 } else {
-  loadKPIsFromJSON();
+  console.log('📍 Tentando carregar dados da API do Apps Script...');
+  fetch(appsScriptUrl)
+    .then(r => r.json())
+    .then(res => {
+      if(res.success && res.data) {
+        console.log('✅ Dados carregados da API do Apps Script');
+        updateDashboardKPIs(res.data);
+      } else {
+        console.log('⚠️ API retornou erro, tentando kpis.json local...');
+        loadKPIsFromJSON();
+      }
+    })
+    .catch(e => {
+      console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+      loadKPIsFromJSON();
+    });
 }
 </script>
 </body>

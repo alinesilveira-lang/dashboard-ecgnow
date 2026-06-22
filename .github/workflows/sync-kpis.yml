@@ -1,0 +1,47 @@
+name: Sincronizar KPIs da Planilha
+
+on:
+  schedule:
+    # Executar todos os dias às 8:00 AM (UTC-3 = 11:00 AM Brasília)
+    - cron: '0 11 * * *'
+  workflow_dispatch: # Permite executar manualmente
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repositório
+        uses: actions/checkout@v3
+
+      - name: Buscar dados do Google Apps Script
+        id: fetch_data
+        run: |
+          RESPONSE=$(curl -s "https://script.google.com/a/macros/ecgnow.com.br/s/AKfycbwtauH3j_ccA-LYmjxAEASCXYRS13ntOZrWSHv3GlUQpzks_XC6W9DHweSv2jKAdlZH/exec")
+          echo "response=$RESPONSE" >> $GITHUB_OUTPUT
+          echo "✅ Dados recebidos do Apps Script"
+
+      - name: Atualizar kpis.json
+        run: |
+          RESPONSE='${{ steps.fetch_data.outputs.response }}'
+          echo "$RESPONSE" > kpis.json
+          echo "✅ kpis.json atualizado"
+
+      - name: Verificar se há mudanças
+        id: check_changes
+        run: |
+          if git diff --quiet kpis.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "Nenhuma mudança nos dados"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Dados atualizados!"
+          fi
+
+      - name: Commit e Push (se houver mudanças)
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add kpis.json
+          git commit -m "🔄 Sincronizar KPIs da planilha [automated]"
+          git push

@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
+import { execSync } from 'child_process';
+
+const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/ecgnow.com.br/s/AKfycbwtauH3j_ccA-LYmjxAEASCXYRS13ntOZrWSHv3GlUQpzks_XC6W9DHweSv2jKAdlZH/exec';
 
 const original = fs.readFileSync('./dashboard-cpvh.html', 'utf-8');
 
@@ -187,11 +190,44 @@ ${section}
 <script>
 ${pageScript}
 
-// Carregar dados
+// Carregar dados da API do Google Apps Script
+const appsScriptUrl = '${APPS_SCRIPT_URL}';
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadKPIsFromJSON);
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('📍 Tentando carregar dados da API do Apps Script...');
+    fetch(appsScriptUrl)
+      .then(r => r.json())
+      .then(res => {
+        if(res.success && res.data) {
+          console.log('✅ Dados carregados da API do Apps Script');
+          updateDashboardKPIs(res.data);
+        } else {
+          console.log('⚠️ API retornou erro, tentando kpis.json local...');
+          loadKPIsFromJSON();
+        }
+      })
+      .catch(e => {
+        console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+        loadKPIsFromJSON();
+      });
+  });
 } else {
-  loadKPIsFromJSON();
+  console.log('📍 Tentando carregar dados da API do Apps Script...');
+  fetch(appsScriptUrl)
+    .then(r => r.json())
+    .then(res => {
+      if(res.success && res.data) {
+        console.log('✅ Dados carregados da API do Apps Script');
+        updateDashboardKPIs(res.data);
+      } else {
+        console.log('⚠️ API retornou erro, tentando kpis.json local...');
+        loadKPIsFromJSON();
+      }
+    })
+    .catch(e => {
+      console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
+      loadKPIsFromJSON();
+    });
 }
 </script>
 </body>
@@ -200,5 +236,22 @@ if (document.readyState === 'loading') {
   fs.writeFileSync(`./${page.nome}.html`, html);
   console.log(`✅ ${page.nome}.html`);
 });
+
+// Pós-processamento: remover duplicatas com sed
+try {
+  // Remover duplicatas de const sum=
+  execSync(`sed -i '0,/^const sum=/!{/^const sum=/d;}' visao-geral.html base-alunos.html engajamento.html esteira-talentos.html financeiro.html satisfacao.html demografia.html leitura-executiva.html`);
+  // Remover duplicatas de const fmtN=
+  execSync(`sed -i '0,/^const fmtN=/!{/^const fmtN=/d;}' visao-geral.html base-alunos.html engajamento.html esteira-talentos.html financeiro.html satisfacao.html demografia.html leitura-executiva.html`);
+  // Remover duplicatas de const NS=
+  execSync(`sed -i '0,/^const NS=/!{/^const NS=/d;}' visao-geral.html base-alunos.html engajamento.html esteira-talentos.html financeiro.html satisfacao.html demografia.html leitura-executiva.html`);
+  // Remover duplicatas de function svgEl
+  execSync(`sed -i '0,/^function svgEl/!{/^function svgEl/d;}' visao-geral.html base-alunos.html engajamento.html esteira-talentos.html financeiro.html satisfacao.html demografia.html leitura-executiva.html`);
+  // Remover duplicatas de function el(
+  execSync(`sed -i '0,/^function el\\(/!{/^function el\\(/d;}' visao-geral.html base-alunos.html engajamento.html esteira-talentos.html financeiro.html satisfacao.html demografia.html leitura-executiva.html`);
+  console.log('✨ Duplicatas removidas!');
+} catch(e) {
+  console.log('⚠️ Pós-processamento: ' + e.message);
+}
 
 console.log('\n✨ Pronto!');
