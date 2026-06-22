@@ -729,6 +729,11 @@ function updateDashboardKPIs(kpis) {
 
     indicadoresCard.innerHTML = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
+        <div style="background:#fef3c7;border-radius:10px;padding:16px 14px;grid-column:span 2">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#92400e;margin-top:6px">${abaixo_50}</div>
+          <div style="font-size:10px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
+        </div>
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
@@ -738,11 +743,6 @@ function updateDashboardKPIs(kpis) {
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${teoricoMedio}%</div>
           <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progressão geral</div>
-        </div>
-        <div style="background:#fef3c7;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
-          <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
         </div>
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
