@@ -321,11 +321,13 @@ function funil(cid,steps,opts={}){
     {l:'Analistas formados',v:'23',s:'16 ativos na ECGNOW',f:'g'}
   ];
   const g=document.getElementById('kpisGeral');
-  kpis.forEach(k=>{
-    const d=document.createElement('div');d.className='card kpi';
-    d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
-      <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
-    g.appendChild(d);});
+  if(g) { // Proteger: elemento pode não existir em todas as páginas
+    kpis.forEach(k=>{
+      const d=document.createElement('div');d.className='card kpi';
+      d.innerHTML=`<div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
+        <div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div>`;
+      g.appendChild(d);});
+  }
 })();
 
 /* ============================================================
