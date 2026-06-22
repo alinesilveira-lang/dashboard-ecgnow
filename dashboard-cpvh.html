@@ -382,8 +382,9 @@ function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k 
 
 // Barras verticais simples
 function barChart(cid,labels,vals,opts={}){
-  const c=document.getElementById(cid);c.innerHTML='';
-  if(!vals || vals.length === 0) return;
+  const c=document.getElementById(cid);
+  if(!c || !vals || vals.length === 0) return;
+  c.innerHTML='';
   const w=opts.w||560,h=opts.h||250,padL=opts.padL||44,padR=12,padT=22,padB=28;
   const max=Math.max(...vals.map(v=>Number(v)||0))*1.15||1;
   const n=vals.length;
@@ -403,8 +404,9 @@ function barChart(cid,labels,vals,opts={}){
 }
 // Donut com legenda lateral
 function donut(cid,slices,centerTop,centerBot,opts={}){
-  const c=document.getElementById(cid);c.innerHTML='';
-  if(!slices || slices.length === 0) return;
+  const c=document.getElementById(cid);
+  if(!c || !slices || slices.length === 0) return;
+  c.innerHTML='';
   const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
   const tot=sum(slices.map(s=>Number(s.v)||0));
   const s=svgEl(w,h);
@@ -426,7 +428,9 @@ function donut(cid,slices,centerTop,centerBot,opts={}){
 }
 // Barras horizontais
 function hBars(cid,items,opts={}){
-  const c=document.getElementById(cid);c.innerHTML='';
+  const c=document.getElementById(cid);
+  if(!c) return;
+  c.innerHTML='';
   if(!items || items.length === 0) return;
   const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
   const h=padT+items.length*rowH+8;
@@ -442,8 +446,9 @@ function hBars(cid,items,opts={}){
 }
 // Funil horizontal alinhado à esquerda: valor dentro da barra, nome e conversão fora
 function funil(cid,steps,opts={}){
-  const c=document.getElementById(cid);c.innerHTML='';
-  if(!steps || steps.length === 0) return;
+  const c=document.getElementById(cid);
+  if(!c || !steps || steps.length === 0) return;
+  c.innerHTML='';
   const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
   const h=padT+steps.length*rowH+4;
   const max=Number(steps[0].v)||1;
