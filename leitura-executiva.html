@@ -1667,32 +1667,6 @@ function updateDashboardKPIs(kpis) {
   }
 
   // ============================================================
-  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
-  // ============================================================
-
-  const leituraExecutiva = document.getElementById('leituraGrid');
-  if(leituraExecutiva) {
-    // Calcular dados dinâmicos dos gráficos
-    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
-    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
-    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
-    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
-    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
-
-    const insights = `
-      <div class="insight"><div class="ico g">🧲</div><div><b>Esteira de talentos</b><p>${analistasTotal} formados analistas ECGNOW (${kpis.taxa_aprovacao_pct}% conversão)</p></div></div>
-      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência</b><p>${matrMatrVals.reduce((a,b)=>a+b,0)} matrículas em 12 meses</p></div></div>
-      <div class="insight"><div class="ico g">🎓</div><div><b>Base ativa</b><p>${ativoEstudando} estudando agora (${taxaConclusao}% conclusão)</p></div></div>
-      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência</b><p>${kpis.inadimplencia_valor} em ${kpis.inadimplencia_qtd} alunos</p></div></div>
-      <div class="insight"><div class="ico y">📉</div><div><b>Churn</b><p>${churnQtd} alunos (${churnRate}%)</p></div></div>
-      <div class="insight"><div class="ico r">🕳️</div><div><b>Em risco</b><p>${baseAlunos.abaixo_50pct} abaixo de 50% de progresso</p></div></div>
-    `;
-
-    leituraExecutiva.innerHTML = insights;
-    console.log('✅ Leitura Executiva preenchida com', insights.split('insight').length - 1, 'cards');
-  } else {
-    console.log('⚠️ leituraGrid não encontrado na página');
-  }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
 }
