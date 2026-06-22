@@ -80,6 +80,18 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
+// Remover linhas duplicadas do script
+const scriptLines = script.split('\n');
+const seenLines = new Set();
+const dedupedLines = scriptLines.filter(line => {
+  const trimmed = line.trim();
+  if (!trimmed || trimmed.startsWith('//')) return true; // Manter comentários e linhas vazias
+  if (seenLines.has(trimmed)) return false; // Remover duplicata
+  seenLines.add(trimmed);
+  return true;
+});
+script = dedupedLines.join('\n');
+
 // Adicionar proteção para elementos que podem não existir
 script += `
 

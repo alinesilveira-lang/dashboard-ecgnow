@@ -191,12 +191,9 @@ function barChart(cid,labels,vals,opts={}){
   c.appendChild(s);
 }
 function donut(cid,slices,centerTop,centerBot,opts={}){
-  const c=document.getElementById(cid);
   if(!c || !slices || slices.length === 0) return;
-  c.innerHTML='';
   const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
   const tot=sum(slices.map(s=>Number(s.v)||0));
-  const s=svgEl(w,h);
   let a0=-Math.PI/2;
   slices.forEach(sl=>{
     const a1=a0+sl.v/tot*2*Math.PI;
@@ -211,37 +208,26 @@ function donut(cid,slices,centerTop,centerBot,opts={}){
     s.appendChild(el('rect',{x:lx,y:ly,width:12,height:12,rx:4,fill:sl.c}));
     s.appendChild(el('text',{x:lx+18,y:ly+10,'font-size':11,'font-weight':800,fill:'#0D2137'},`${sl.v} · ${(sl.v/tot*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%`));
     s.appendChild(el('text',{x:lx+18,y:ly+22,'font-size':9.5,fill:'#5b7187','font-weight':700},sl.n));});
-  c.appendChild(s);
-}
 function hBars(cid,items,opts={}){
-  const c=document.getElementById(cid);
   if(!c) return;
-  c.innerHTML='';
   if(!items || items.length === 0) return;
   const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
   const h=padT+items.length*rowH+8;
   const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
-  const s=svgEl(w,h);
   items.forEach((it,i)=>{
     const y=padT+i*rowH;
     const bwid=(it.v/max)*(w-padL-padR);
     s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
     s.appendChild(el('rect',{x:padL,y:y+7,width:Math.max(bwid,2),height:rowH-14,rx:6,fill:it.c||'#0a3d6e'}));
     s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
-  c.appendChild(s);
-}
 function funil(cid,steps,opts={}){
-  const c=document.getElementById(cid);
   if(!c || !steps || steps.length === 0) return;
-  c.innerHTML='';
   const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
   const h=padT+steps.length*rowH+4;
   const max=Number(steps[0].v)||1;
   const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
   const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
-  const s=svgEl(w,h);
   steps.forEach((st,i)=>{
-    const y=padT+i*rowH;
     const bwid=Math.max((st.v/max)*maxBar,46);
     s.appendChild(el('rect',{x:padL,y:y+8,width:bwid,height:rowH-16,rx:9,fill:cols[i]||'#0ea5e9'}));
     s.appendChild(el('text',{x:padL+12,y:y+rowH/2+4,'font-size':13,'font-weight':800,fill:'#fff','font-family':'Bricolage Grotesque'},st.v));
@@ -252,10 +238,7 @@ function funil(cid,steps,opts={}){
       s.appendChild(el('text',{x:tx,y:y+rowH/2+11,'font-size':9.5,'font-weight':800,fill:'#0ea5e9'},`▼ ${taxa}% da etapa anterior`));
     }else{
       s.appendChild(el('text',{x:tx,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
-    }
   });
-  c.appendChild(s);
-}
 const KPIS_URL = './kpis.json';
 
 function loadKPIsFromJSON() {
@@ -270,7 +253,6 @@ function loadKPIsFromJSON() {
     console.log('📡 Resposta recebida, status:', res.status);
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     return res.json();
-  })
   .then(result => {
     console.log('📊 JSON parseado:', result);
     if (result.success && result.data) {
@@ -280,14 +262,10 @@ function loadKPIsFromJSON() {
     } else {
       console.error('❌ Resposta inválida:', result.message || 'success=false');
       throw new Error('Invalid response format');
-    }
-  })
   .catch(err => {
     console.error('❌ Fetch falhou:', err.message);
     console.log('🔄 Tentando fallback com XMLHttpRequest...');
     loadKPIsWithXHR();
-  });
-}
 function loadKPIsWithXHR() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', KPIS_URL + '?t=' + Date.now(), true);
@@ -297,28 +275,16 @@ function loadKPIsWithXHR() {
       try {
         const result = JSON.parse(xhr.responseText);
         console.log('📊 JSON parseado via XHR:', result);
-        if (result.success && result.data) {
           console.log('✅ KPIs carregados com sucesso via XHR:', result.data);
           updateDashboardKPIs(result.data);
-        } else {
-          throw new Error('Invalid response format');
-        }
       } catch (e) {
         console.error('❌ Erro ao parsear JSON:', e.message);
-      }
-    } else {
       console.error('❌ XHR falhou com status:', xhr.status);
-    }
   };
   xhr.onerror = function() {
     console.error('❌ XHR erro ao carregar:', xhr.statusText);
-  };
-  try {
     xhr.send();
-  } catch (e) {
     console.error('❌ XHR não pode enviar requisição:', e.message);
-  }
-}
 function updateDashboardKPIs(kpis) {
   const total = kpis.total_alunos || 233;
   const totalCadastrados = kpis.total_cadastrados || 233;
@@ -337,25 +303,21 @@ function updateDashboardKPIs(kpis) {
   const rsVerdict = document.querySelector('.rs-verdict');
   if (rsVerdict) {
     rsVerdict.textContent = `${kpis.total_alunos} matrículas desde ago/2023 e ${analistasTotal} alunos formados contratados como analistas — o curso é a esteira de talentos da operação Holter.`;
-  }
 
   // Atualizar seção de cima (hero)
   const alunoBig = document.querySelector('.rs-big');
   if (alunoBig) {
     alunoBig.innerHTML = `${totalCadastrados} <small>desde ago/2023</small>`;
-  }
 
   // Atualizar "Estudando agora"
   const heroGrid = document.querySelectorAll('.rs-hero-grid > div');
   if (heroGrid.length >= 1) {
     heroGrid[0].innerHTML = `<div class="rs-hl">Estudando agora</div><div class="rs-hv">${ativoEstudando} <small>alunos</small></div>`;
-  }
 
   // Atualizar "Concluíram"
   if (heroGrid.length >= 2) {
     const porcentagem = ((concluidos / total) * 100).toFixed(0);
     heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
-  }
 
   // Recalcular KPIs na visão de resumo (chips)
   const engajAltaMedio = (kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.valor) || 0;
@@ -371,18 +333,14 @@ function updateDashboardKPIs(kpis) {
       s: engajAltaMedio + ' de ' + total + ' alunos',
       f: engajAltaMedioP >= 70 ? 'g' : 'y'
     },
-    {
       l: 'Teórico médio',
       v: teoricoMedio + '%',
       s: 'progresso da base',
       f: teoricoMedio >= 60 ? 'g' : 'y'
-    },
-    {
       l: 'Ativos 30 dias',
       v: ativos30,
       s: 'da base · ' + (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '%',
       f: ativos30 >= 50 ? 'g' : 'y'
-    },
     { l: 'Analistas formados', v: analistas, s: 'ativos na operação Holter', f: 'g' }
   ];
 
@@ -395,7 +353,6 @@ function updateDashboardKPIs(kpis) {
         <div class="s">${chip.s}</div>
       </div>
     `).join('');
-  }
 
   // ============================================================
   // VISÃO GERAL (KPIs na seção expandida)
@@ -417,16 +374,12 @@ function updateDashboardKPIs(kpis) {
       { l: 'Ativos em 30 dias', v: String(ativos30), s: (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '% da base', f: 'y' },
       { l: 'NPS Score', v: nps, s: 'Net Promoter Score', f: nps > 0 ? 'g' : 'r' },
       { l: 'Inadimplência', v: String(inadimplencia_qtd), s: kpis.inadimplencia_valor, f: 'r' }
-    ];
 
     kpisGeral.innerHTML = kpisData.map(k => `
       <div class="card kpi">
         <div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
         <div class="kpi-value">${k.v}</div>
         <div class="kpi-sub">${k.s}</div>
-      </div>
-    `).join('');
-  }
 
   // ============================================================
   // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
@@ -456,7 +409,6 @@ function updateDashboardKPIs(kpis) {
       {n:'Promotores',v:nps_promotores,c:'#10b981'},
       {n:'Neutros',v:nps_neutros,c:'#0ea5e9'},
       {n:'Detratores',v:nps_detratores,c:'#ef4444'}
-    ];
 
     const c = document.getElementById('npsDonut');
     if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
@@ -474,32 +426,24 @@ function updateDashboardKPIs(kpis) {
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_respostas}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Respostas</div></div>
               <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam (${kpis.nps_nao_responderam_pct}%)</div></div>
-            </div>
-          </div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Nota média por engajamento</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#d1fae5;border-radius:10px;padding:11px 14px">
               <div><div style="font-weight:700;color:#047857">Alto</div></div>
               <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nota_alto}</div>
-            </div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#bfdbfe;border-radius:10px;padding:11px 14px">
               <div><div style="font-weight:700;color:#0369a1">Médio</div></div>
               <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nota_medio}</div>
-            </div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#fed7aa;border-radius:10px;padding:11px 14px">
               <div><div style="font-weight:700;color:#b45309">Baixo</div></div>
               <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nota_baixo}</div>
-            </div>
-          </div>
         </div>`;
-    }
   })();
 
   // ============================================================
   // SEÇÃO DEMOGRAFIA - Renderizar dados de perfil
   // ============================================================
 
-  (function(){
     const idade_media = kpis.idade_media || 0;
     const idade_nao_info = kpis.idade_nao_informada || 0;
     const turno_manha = kpis.turno_manha || 0;
@@ -517,17 +461,12 @@ function updateDashboardKPIs(kpis) {
     if(idadeCard) {
       idadeCard.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
             <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Idade média informada</div>
             <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:var(--navy);margin-top:6px">${idade_media} <span style="font-size:14px;color:var(--muted);font-family:'Nunito';font-weight:700">anos</span></div>
-          </div>
           <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
             <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Sem informação</div>
             <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">${idade_nao_info}</div>
             <div style="font-size:11.5px;font-weight:700;color:#92400e">~${((idade_nao_info/total)*100).toFixed(0)}% da base</div>
-          </div>
-        </div>`;
-    }
 
     // Distribuição por faixa etária
     const faixaEtariaChart = document.getElementById('faixaEtariaChart');
@@ -540,9 +479,7 @@ function updateDashboardKPIs(kpis) {
         {n:'Menos de 25 anos',v:alunos_menos_25,c:'#10b981'},
         {n:'Entre 25 e 35 anos',v:alunos_25_35,c:'#0ea5e9'},
         {n:'Mais de 35 anos',v:alunos_mais_35,c:'#8b5cf6'}
-      ];
       hBars('faixaEtariaChart', faixaEtaria, {w:400});
-    }
 
     // Turnos
     const turnoChart = document.getElementById('turnoChart');
@@ -552,9 +489,7 @@ function updateDashboardKPIs(kpis) {
         {n:'Tarde',v:turno_tarde,c:'#0ea5e9'},
         {n:'Noite',v:turno_noite,c:'#0a3d6e'},
         {n:'Integral',v:turno_integral,c:'#8b5cf6'}
-      ];
       hBars('turnoChart', turnos, {w:400});
-    }
 
     // Estados
     const estadosChart = document.getElementById('estadosChart');
@@ -565,16 +500,12 @@ function updateDashboardKPIs(kpis) {
         {n:'Paraná (PR)',v:pr,c:'#0ea5e9'},
         {n:'Rio de Janeiro (RJ)',v:rj,c:'#38bdf8'},
         {n:'Rio Grande do Sul (RS)',v:rs,c:'#7dd3fc'}
-      ];
       hBars('estadosChart', estados, {w:400});
-    }
-  })();
 
   // ============================================================
   // SEÇÃO FINANCEIRO - Adicionar gráficos de pagamento
   // ============================================================
 
-  (function(){
     const asaas = kpis.asaas_qtd || 0;
     const boleto = kpis.boleto_qtd || 0;
     const pix = kpis.pix_qtd || 0;
@@ -591,9 +522,7 @@ function updateDashboardKPIs(kpis) {
         {n:'ASAAS',v:asaas,c:'#0a3d6e'},
         {n:'Boleto',v:boleto,c:'#0d5a94'},
         {n:'Pix',v:pix,c:'#0ea5e9'}
-      ];
       hBars('pagamentoChart', pagto, {w:400});
-    }
 
     // Status de conclusão
     const statusConclusao = document.getElementById('statusConclusaoChart');
@@ -602,27 +531,18 @@ function updateDashboardKPIs(kpis) {
         {n:'Só Teórico',v:teorico,c:'#f59e0b'},
         {n:'Só Prático',v:pratico,c:'#0ea5e9'},
         {n:'Teórico + Prático',v:concluidos,c:'#10b981'}
-      ];
       hBars('statusConclusaoChart', conclusao, {w:400});
-    }
 
     // Atualizar card de inadimplência
     const inadCard = document.getElementById('inadCard');
     if(inadCard) {
       inadCard.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
           <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
             <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
             <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${kpis.inadimplencia_valor}</div>
             <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${inadimplencia_qtd} alunos</div>
-          </div>
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
             <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
             <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix}</div>
-          </div>
-        </div>`;
-    }
-  })();
 
   // ============================================================
   // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 12 meses)
@@ -630,7 +550,6 @@ function updateDashboardKPIs(kpis) {
 
   if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
     barChart('rsChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {w:560,h:215,color:'#0a3d6e'});
-  }
 
   // ============================================================
   // ATUALIZAR FUNIL DA ESTEIRA
@@ -644,30 +563,24 @@ function updateDashboardKPIs(kpis) {
     {n:'Concluíram o curso',v:concluidos},
     {n:'Aprovados',v:aprovados},
     {n:'Analistas ECGNOW',v:analistas}
-  ];
   const rsFunilElem = document.getElementById('rsFunil');
   if(rsFunilElem) {
     funil('rsFunil', funilData, {w:340,rowH:40});
-  }
 
   // Funil grande (Esteira de Talentos)
   const funilGrandeElem = document.getElementById('funilGrande');
   if(funilGrandeElem) {
     funil('funilGrande', funilData, {w:560,rowH:56});
-  }
 
   // ============================================================
   // RENDERIZAR GRÁFICOS DAS SEÇÕES
   // ============================================================
 
   // Declarar variáveis necessárias
-  const trancado = kpis.trancado_qtd || 0;
   const alunoExterno = kpis.aluno_externo || 0;
 
   // Gráfico de Matrículas por mês
-  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
     barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
-  }
 
   // Vínculo com a ECGNow (gráfico horizontal)
   const vinculoChart = document.getElementById('vinculoChart');
@@ -675,9 +588,7 @@ function updateDashboardKPIs(kpis) {
     const vinculo = [
       {n:'Analista ECGNOW',v:analistas,c:'#0ea5e9'},
       {n:'Ex-analista',v:exAnalistas,c:'#94c6e8'}
-    ];
     hBars('vinculoChart', vinculo, {padL:170});
-  }
 
   // Status do curso (Donut)
   // Status do curso (Donut)
@@ -689,11 +600,9 @@ function updateDashboardKPIs(kpis) {
     {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
     {n:'Trancado',v:trancado,c:'#cbd5e1'},
     {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
-  ];
   const statusDonutElem = document.getElementById('statusDonut');
   if(statusDonutElem) {
     donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
-  }
 
   // Card de Alunos em Risco (Abaixo dos 50%)
   const riscoCard = document.getElementById('riscoCard');
@@ -701,14 +610,10 @@ function updateDashboardKPIs(kpis) {
     const abaixo50 = baseAlunos.abaixo_50pct || 0;
     const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
     riscoCard.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
         <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
           <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Alunos em Risco</div>
           <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:#92400e;margin-top:6px">${abaixo50}</div>
           <div style="font-size:11.5px;font-weight:700;color:#92400e">${pctRisco}% da base · Progresso < 50%</div>
-        </div>
-      </div>`;
-  }
 
   // Card de Indicadores (Progresso e Engajamento)
   const indicadoresCard = document.getElementById('indicadoresCard');
@@ -723,44 +628,32 @@ function updateDashboardKPIs(kpis) {
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
           <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
           <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
-        </div>
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${teoricoMedio}%</div>
           <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progressão geral</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
           <div style="font-size:9.5px;color:var(--muted);font-weight:700">${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}% da base</div>
-        </div>
         <div style="background:#d1fae5;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajDetalhado.alto}</div>
           <div style="font-size:9.5px;color:#047857;font-weight:700">${engajDetalhado.alto_pct}%</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${progresso_hotmart}%</div>
           <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progresso médio</div>
-        </div>
         <div style="background:#fed7aa;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b45309">Engaj. Baixo</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b45309;margin-top:4px">${engajDetalhado.baixo}</div>
           <div style="font-size:9.5px;color:#b45309;font-weight:700">${engajDetalhado.baixo_pct}%</div>
-        </div>
         <div style="background:#bfdbfe;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#0369a1">Engaj. Médio</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#0369a1;margin-top:4px">${engajDetalhado.medio}</div>
           <div style="font-size:9.5px;color:#0369a1;font-weight:700">${engajDetalhado.medio_pct}%</div>
-        </div>
         <div style="background:#fee2e2;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b91c1c">Engaj. Nenhum</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b91c1c;margin-top:4px">${engajDetalhado.nenhum}</div>
           <div style="font-size:9.5px;color:#b91c1c;font-weight:700">${engajDetalhado.nenhum_pct}%</div>
-        </div>
-      </div>`;
-  }
 
   // Engajamento detalhado (Donut)
   const engajaTotal = engajDetalhado.alto + engajDetalhado.medio + engajDetalhado.baixo + engajDetalhado.nenhum;
@@ -769,11 +662,9 @@ function updateDashboardKPIs(kpis) {
     {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
     {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
     {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
-  ];
   const engajDonutElem = document.getElementById('engajaDonut');
   if(engajDonutElem) {
     donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:450,h:350,cx:120,r:90,lx:240});
-  }
 
   // Atividade Recente (gráfico de barras)
   const atividadeElem = document.getElementById('atividadeChart');
@@ -782,7 +673,6 @@ function updateDashboardKPIs(kpis) {
     const ativos30d = kpis.ativos_30_dias ? kpis.ativos_30_dias.valor : 14;
     const ativos90d = kpis.ativos_90_dias || 25;
     barChart('atividadeChart', ['7 dias', '30 dias', '90 dias'], [ativos7d, ativos30d, ativos90d], {color:'#0ea5e9', fmt:v=>Math.round(v)});
-  }
 
   // ============================================================
   // ATUALIZAR TAGS E TEXTOS DAS SEÇÕES
@@ -792,13 +682,11 @@ function updateDashboardKPIs(kpis) {
   const baseTag = document.querySelector('#base .sec-head .tag');
   if(baseTag) {
     baseTag.textContent = `${totalCadastrados} matriculados desde ago/2023`;
-  }
 
   // Tag "Engajamento"
   const engajaTag = document.querySelector('#engaja .sec-head .tag');
   if(engajaTag) {
     engajaTag.textContent = `Plataforma Hotmart + trilha do curso`;
-  }
 
   // ============================================================
   // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
@@ -824,12 +712,9 @@ function updateDashboardKPIs(kpis) {
 
     leituraExecutiva.innerHTML = insights;
     console.log('✅ Leitura Executiva preenchida com', insights.split('insight').length - 1, 'cards');
-  } else {
     console.log('⚠️ leituraGrid não encontrado na página');
-  }
 
   console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
-}
 
 
 // Proteger updates para elementos que podem não existir
