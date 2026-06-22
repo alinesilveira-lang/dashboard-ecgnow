@@ -1034,8 +1034,6 @@ setTimeout(() => {
 <script>
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const fmtN=v=>v.toLocaleString('pt-BR');
-
-/* ---------- Helpers SVG (sem dependências) ---------- */
 const NS='http://www.w3.org/2000/svg';
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
 function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
@@ -1110,7 +1108,6 @@ function funil(cid,steps,opts={}){
       s.appendChild(el('text',{x:tx,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
   });
 const KPIS_URL = './kpis.json';
-
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
 

@@ -52,6 +52,12 @@ for (let i = 0; i < lines.length; i++) {
   if (isEssential) {
     inFunction = true;
     braceCount = 0;
+    // Se é uma declaração de variável (const/function), pode estar na mesma linha
+    if (line.trim().startsWith('const ') && line.includes(';')) {
+      script += line + '\n';
+      inFunction = false; // Já completa
+      continue;
+    }
   }
 
   if (inFunction) {
