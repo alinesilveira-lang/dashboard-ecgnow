@@ -80,14 +80,19 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-// Remover linhas duplicadas do script
+// Remover apenas declarações duplicadas (const/function)
 const scriptLines = script.split('\n');
-const seenLines = new Set();
-const dedupedLines = scriptLines.filter(line => {
+const declaredVars = new Set();
+const dedupedLines = scriptLines.filter((line, idx) => {
   const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('//')) return true; // Manter comentários e linhas vazias
-  if (seenLines.has(trimmed)) return false; // Remover duplicata
-  seenLines.add(trimmed);
+  if (trimmed.startsWith('const ') || trimmed.startsWith('function ')) {
+    const match = trimmed.match(/^(const|function)\s+(\w+)/);
+    if (match) {
+      const name = match[2];
+      if (declaredVars.has(name)) return false; // Remover duplicata
+      declaredVars.add(name);
+    }
+  }
   return true;
 });
 script = dedupedLines.join('\n');
