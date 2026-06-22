@@ -42,7 +42,6 @@ let script = '';
 let inFunction = false;
 let braceCount = 0;
 const lines = original.split('\n');
-const addedDeclarations = new Set(); // Rastrear declarações duplicadas
 
 for (let i = 0; i < lines.length; i++) {
   const line = lines[i];
@@ -51,15 +50,6 @@ for (let i = 0; i < lines.length; i++) {
   let isEssential = essentialFunctions.some(fn => line.includes(fn));
 
   if (isEssential) {
-    // Se é uma declaração (const/function), verificar se já foi adicionada
-    if (line.includes('const ') || line.includes('function ')) {
-      const declMatch = line.match(/(const|function)\s+(\w+)/);
-      if (declMatch) {
-        const declName = declMatch[2];
-        if (addedDeclarations.has(declName)) continue; // Pular duplicata
-        addedDeclarations.add(declName);
-      }
-    }
     inFunction = true;
     braceCount = 0;
   }
@@ -80,24 +70,16 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-// Remover apenas funções essenciais duplicadas no nível superior
+// Remover declarações duplicadas por linha exata
 const scriptLines = script.split('\n');
-const essentialDeclarations = new Set(['KPIS_URL', 'sum', 'fmtN', 'NS', 'svgEl', 'el', 'barChart', 'donut', 'hBars', 'funil', 'loadKPIsFromJSON', 'loadKPIsWithXHR', 'updateDashboardKPIs']);
-const declaredTopLevel = new Set();
-const dedupedLines = scriptLines.filter((line, idx) => {
+const seenLines = new Set();
+const dedupedLines = scriptLines.filter(line => {
   const trimmed = line.trim();
-  // Apenas remover declarações top-level duplicadas (com 2 espaços ou menos de indent)
-  const indent = line.match(/^\s*/)[0].length;
-  if (indent <= 2 && (trimmed.startsWith('const ') || trimmed.startsWith('function '))) {
-    const match = trimmed.match(/^(const|function)\s+(\w+)/);
-    if (match) {
-      const name = match[2];
-      if (essentialDeclarations.has(name)) {
-        if (declaredTopLevel.has(name)) return false; // Remover duplicata
-        declaredTopLevel.add(name);
-      }
-    }
+  // Remover linhas idênticas (especialmente declarações duplicadas como "const sum=...")
+  if (trimmed && seenLines.has(trimmed)) {
+    return false;
   }
+  seenLines.add(trimmed);
   return true;
 });
 script = dedupedLines.join('\n');
