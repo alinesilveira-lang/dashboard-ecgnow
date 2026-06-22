@@ -42,6 +42,7 @@ let script = '';
 let inFunction = false;
 let braceCount = 0;
 const lines = original.split('\n');
+const addedDeclarations = new Set(); // Rastrear declarações duplicadas
 
 for (let i = 0; i < lines.length; i++) {
   const line = lines[i];
@@ -50,6 +51,15 @@ for (let i = 0; i < lines.length; i++) {
   let isEssential = essentialFunctions.some(fn => line.includes(fn));
 
   if (isEssential) {
+    // Se é uma declaração (const/function), verificar se já foi adicionada
+    if (line.includes('const ') || line.includes('function ')) {
+      const declMatch = line.match(/(const|function)\s+(\w+)/);
+      if (declMatch) {
+        const declName = declMatch[2];
+        if (addedDeclarations.has(declName)) continue; // Pular duplicata
+        addedDeclarations.add(declName);
+      }
+    }
     inFunction = true;
     braceCount = 0;
   }
