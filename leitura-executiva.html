@@ -396,7 +396,6 @@ function funil(cid,steps,opts={}){
 function fitResumo(){
   const tb=document.querySelector('.topbar').offsetHeight;
   const v=document.getElementById('viewResumo');
-  if(!v) return;
   if(window.innerWidth>1024) v.style.height=(window.innerHeight-tb)+'px';
   else v.style.height='auto';
 }
