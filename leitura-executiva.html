@@ -396,8 +396,9 @@ function funil(cid,steps,opts={}){
    TROCA DE VISÕES — Capa ↔ Dashboard expandido
    ============================================================ */
 function fitResumo(){
-  const tb=document.querySelector('.topbar').offsetHeight;
   const v=document.getElementById('viewResumo');
+  if(!v) return;
+  const tb=document.querySelector('.topbar').offsetHeight;
   if(window.innerWidth>1024) v.style.height=(window.innerHeight-tb)+'px';
   else v.style.height='auto';
 }
@@ -1137,12 +1138,12 @@ if (document.readyState === 'loading') {
           updateDashboardKPIs(res.data);
         } else {
           console.log('⚠️ API retornou erro, tentando kpis.json local...');
-          loadKPIsFromJSON();
+          try { loadKPIsFromJSON(); } catch(err) { console.error('⚠️ Erro ao carregar JSON:', err.message); }
         }
       })
       .catch(e => {
         console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
-        loadKPIsFromJSON();
+        try { loadKPIsFromJSON(); } catch(err) { console.error('⚠️ Erro ao carregar JSON:', err.message); }
       });
   });
 } else {
