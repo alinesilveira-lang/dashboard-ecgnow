@@ -680,7 +680,15 @@ function updateDashboardKPIs(kpis) {
     const total = parseInt(resumo['Total Matriculados']) || 232;
     const ativoEstudando = parseInt(resumo['Estudando Agora']) || 79;
     const concluidos = parseInt(resumo['Concluídos']) || 95;
-    const taxaConclusao = Math.round((concluidos / total) * 100);
+    const g_taxa = resumo['Taxa Conclusão'];
+    // A taxa vem da planilha; recalcular aqui daria outro número. O cálculo cru
+    // (concluídos ÷ total) usa a base inteira, enquanto a coordenação tira do
+    // denominador quem não chegou a cursar. O fallback só cobre planilha antiga
+    // que ainda não traga a coluna.
+    const taxaPlanilha = parseFloat(String(g_taxa || "").replace("%","").replace(",","."));
+    const taxaConclusao = Number.isFinite(taxaPlanilha)
+      ? Math.round(taxaPlanilha)
+      : Math.round((concluidos / total) * 100);
 
     // Esteira de Talentos
     const esteira = data.ESTEIRA_TALENTOS?.Geral || {};
