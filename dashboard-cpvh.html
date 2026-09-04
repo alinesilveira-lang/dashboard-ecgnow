@@ -21,7 +21,11 @@
   --radius:18px; --shadow:0 4px 18px rgba(13,33,55,.07);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5}
+/* overflow-x:hidden na raiz: elementos decorativos posicionados para fora do
+   card (como o .rs-hero::after, em right:-70px) esticavam a pagina e criavam
+   uma barra de rolagem horizontal que nao rolava para conteudo nenhum. */
+html{overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5;overflow-x:hidden;max-width:100%}
 h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
 
 /* ---------- Topbar ---------- */
