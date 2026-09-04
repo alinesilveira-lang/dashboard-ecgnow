@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escoamento · Dashboard CPVH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2137;--navy2:#0a3d6e;--cyan:#0ea5e9;--cyan-soft:#e0f2fe;--bg:#f4f8fb;--card:#ffffff;--line:#e2e8f0;--txt:#0D2137;--muted:#5b7187;--ok:#10b981;--ok-soft:#d1fae5;--warn:#f59e0b;--warn-soft:#fef3c7;--bad:#ef4444;--bad-soft:#fee2e2;--radius:18px;--shadow:0 4px 18px rgba(13,33,55,.07)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px}
+h1,h2,h3,.brand{font-family:'Bricolage Grotesque',sans-serif}
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;box-shadow:0 2px 14px rgba(13,33,55,.25)}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.brand small{font-family:'Nunito';font-weight:700;font-size:11px;color:#9fd8f8;text-transform:uppercase;letter-spacing:1.5px;display:block}
+.period-chip{background:rgba(14,165,233,.18);border:1px solid rgba(14,165,233,.45);color:#bfe9ff;font-size:12px;font-weight:800;padding:5px 14px;border-radius:999px;white-space:nowrap}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{color:#cfe7f7;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;transition:.2s}
+.nav a:hover,.nav a.active{background:rgba(14,165,233,.25);color:#fff}
+.wrap{max-width:1280px;margin:0 auto;padding:30px 28px 70px}
+section{margin-bottom:48px;scroll-margin-top:90px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+.sec-head h2{font-size:24px;font-weight:800;color:var(--navy)}
+.sec-head .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--cyan);background:var(--cyan-soft);padding:4px 12px;border-radius:999px}
+.sec-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;max-width:880px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px}
+.grid{display:grid;gap:16px}
+.g-2{grid-template-columns:1fr 1fr}
+.g-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:980px){.g-2,.g-3{grid-template-columns:1fr}}
+@media(max-width:640px){.wrap{padding:20px 14px 60px}}
+.chart-card h3{font-size:15.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.chart-card .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+svg text{font-family:'Nunito',sans-serif}
+.foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}
+.kpi-mini{display:flex;gap:20px;margin-bottom:20px}
+.kpi-mini-item{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center}
+.kpi-mini-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.kpi-mini-value{font-family:'Bricolage Grotesque';font-size:28px;font-weight:800;color:var(--navy);margin:6px 0}
+.kpi-mini-sub{font-size:12px;color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span><div>ECGNow<small>Educação · CPVH · Viver de Holter</small></div></div>
+    <span class="period-chip">Base atualizada · Jun/2026</span>
+    <nav class="nav">
+      <a href="resumo.html">Resumo</a>
+      <a href="visao-geral.html">Visão Geral</a>
+      <a href="base-alunos.html">Base de Alunos</a>
+      <a href="escoamento.html" class="active">Escoamento</a>
+      <a href="engajamento.html">Engajamento</a>
+      <a href="esteira-talentos.html">Esteira de Talentos</a>
+      <a href="financeiro.html">Financeiro</a>
+      <a href="satisfacao.html">Satisfação</a>
+      <a href="leitura-executiva.html">Leitura Executiva</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="ld">
+    <div class="sec-head"><h2>LD + Turma</h2><span class="tag">Últimos 12 Meses</span></div>
+    <p class="sec-sub">Ciclo teórico-prático na modalidade de turmas e aulas ao vivo.</p>
+
+    <div class="kpi-mini" id="ldKpis"></div>
+
+    <div class="grid g-2">
+      <div class="card chart-card">
+        <h3>Funil de Conversão</h3>
+        <div class="hint">Teórica → Prática → Formação</div>
+        <div id="ldFunil"></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Aprovações por Mês</h3>
+        <div class="hint">Evolução de ago/2025 a ago/2026</div>
+        <div id="ldMeses"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mentoria">
+    <div class="sec-head"><h2>Mentoria</h2><span class="tag">Últimos 12 Meses</span></div>
+    <p class="sec-sub">Ciclo teórico-prático na modalidade 1-on-1 com tutores.</p>
+
+    <div class="kpi-mini" id="mentKpis"></div>
+
+    <div class="grid g-2">
+      <div class="card chart-card">
+        <h3>Funil de Conversão</h3>
+        <div class="hint">Teórica → Prática → Formação</div>
+        <div id="mentFunil"></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Aprovações por Mês</h3>
+        <div class="hint">Evolução de ago/2025 a ago/2026</div>
+        <div id="mentMeses"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Dashboard CPVH · Jun/2026</div>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
+const fmtN=v=>v.toLocaleString('pt-BR');
+
+function hBars(cid,items,opts={}){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!items || items.length === 0) return;
+  const w=opts.w||500,rowH=42,padL=opts.padL||140,padR=64,padT=12;
+  const h=padT+items.length*rowH+8;
+  const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
+  const s=svgEl(w,h);
+  items.forEach((it,i)=>{
+    const y=padT+i*rowH;
+    const bwid=(it.v/max)*(w-padL-padR);
+    s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
+    s.appendChild(el('rect',{x:padL,y:y+10,width:Math.max(bwid,2),height:rowH-18,rx:6,fill:it.c||'#0a3d6e'}));
+    s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
+  c.appendChild(s);
+}
+
+function barChart(cid,labels,values){
+  const c=document.getElementById(cid);c.innerHTML='';
+  if(!labels || labels.length === 0) return;
+  const w=500,h=240,padL=40,padR=24,padT=20,padB=60;
+  const max=Math.max(...values.map(v=>Number(v)||0))||1;
+  const s=svgEl(w,h);
+  const cw=(w-padL-padR)/labels.length;
+  const scale=(h-padT-padB)/max;
+
+  labels.forEach((lbl,i)=>{
+    const v=Number(values[i])||0;
+    const bx=padL+i*cw+cw*0.15;
+    const by=padT+Math.max(0,(max-v)*scale);
+    const bh=Math.max(2,v*scale);
+    s.appendChild(el('rect',{x:bx,y:by,width:cw*0.7,height:bh,rx:4,fill:'#0ea5e9'}));
+    s.appendChild(el('text',{x:bx+cw*0.35,y:padT+h-padB+20,'text-anchor':'middle','font-size':9,'font-weight':700,fill:'#0D2137'},lbl));
+    if(v>0)s.appendChild(el('text',{x:bx+cw*0.35,y:by-6,'text-anchor':'middle','font-size':10,'font-weight':800,fill:'#0D2137'},v));
+  });
+
+  s.appendChild(el('line',{x1:padL,y1:padT+h-padB,x2:w-padR,y2:padT+h-padB,stroke:'#e2e8f0','stroke-width':1}));
+  c.appendChild(s);
+}
+
+fetch('./kpis.json?t='+Date.now())
+  .then(r=>r.json())
+  .then(data=>{
+    const arr=Array.isArray(data)?data:data.data||[];
+    const base=arr.reduce((a,r)=>{
+      a[r.SEÇÃO]=a[r.SEÇÃO]||{};
+      a[r.SEÇÃO][r.CATEGORIA]=a[r.SEÇÃO][r.CATEGORIA]||{};
+      a[r.SEÇÃO][r.CATEGORIA][r.MÉTRICA]=r.VALOR;
+      return a;
+    },{});
+
+    // LD+TURMA
+    const ldTurma=base['ESCOAMENTO_LD+TURMA']?.['Teórico+Prático']||{};
+    const ldAT=parseInt(ldTurma['Ativos Teórica (últimos 12m)'])||0;
+    const ldPr=parseInt(ldTurma['Na prática (últimos 12m)'])||0;
+    const ldFm=parseInt(ldTurma['Formados (últimos 12m)'])||0;
+    const ldAp=parseInt(ldTurma['Aprovados (últimos 12m)'])||0;
+
+    document.getElementById('ldKpis').innerHTML=`
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Ativos Teórica</div><div class="kpi-mini-value">${ldAT}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Na Prática</div><div class="kpi-mini-value">${ldPr}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Formados</div><div class="kpi-mini-value">${ldFm}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Aprovados</div><div class="kpi-mini-value">${ldAp}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+    `;
+
+    const items1=[
+      {n:'Ativos Teórica',v:ldAT,c:'#0ea5e9'},
+      {n:'Na Prática',v:ldPr,c:'#8b5cf6'},
+      {n:'Formados',v:ldFm,c:'#10b981'},
+      {n:'Aprovados',v:ldAp,c:'#06b6d4'}
+    ];
+    hBars('ldFunil',items1);
+
+    const mesesAbrev=['Ago','Set','Out','Nov','Dez','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago'];
+    const mesesFull=['Agosto 2025','Setembro 2025','Outubro 2025','Novembro 2025','Dezembro 2025','Janeiro 2026','Fevereiro 2026','Março 2026','Abril 2026','Maio 2026','Junho 2026','Julho 2026','Agosto 2026'];
+    const valuesLd=mesesFull.map(m=>{
+      const key='Aprovados ('+m+')';
+      return parseInt(ldTurma[key])||0;
+    });
+    barChart('ldMeses',mesesAbrev,valuesLd);
+
+    // MENTORIA
+    const mentoria=base['ESCOAMENTO_MENTORIA']?.['Teórico+Prático']||{};
+    const menAT=parseInt(mentoria['Ativos Teórica (últimos 12m)'])||0;
+    const menPr=parseInt(mentoria['Na prática (últimos 12m)'])||0;
+    const menFm=parseInt(mentoria['Formados (últimos 12m)'])||0;
+    const menAp=parseInt(mentoria['Aprovados (últimos 12m)'])||0;
+
+    document.getElementById('mentKpis').innerHTML=`
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Ativos Teórica</div><div class="kpi-mini-value">${menAT}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Na Prática</div><div class="kpi-mini-value">${menPr}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Formados</div><div class="kpi-mini-value">${menFm}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+      <div class="kpi-mini-item"><div class="kpi-mini-label">Aprovados</div><div class="kpi-mini-value">${menAp}</div><div class="kpi-mini-sub">últimos 12m</div></div>
+    `;
+
+    const items2=[
+      {n:'Ativos Teórica',v:menAT,c:'#0ea5e9'},
+      {n:'Na Prática',v:menPr,c:'#8b5cf6'},
+      {n:'Formados',v:menFm,c:'#10b981'},
+      {n:'Aprovados',v:menAp,c:'#06b6d4'}
+    ];
+    hBars('mentFunil',items2);
+
+    const valuesMent=mesesFull.map(m=>{
+      const key='Aprovados ('+m+')';
+      return parseInt(mentoria[key])||0;
+    });
+    barChart('mentMeses',mesesAbrev,valuesMent);
+  });
+</script>
+
+</body>
+</html>
