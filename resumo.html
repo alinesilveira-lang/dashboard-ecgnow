@@ -699,6 +699,12 @@ function updateDashboardKPIs(kpis) {
     // Base de Alunos
     const baseTP = data.BASE_ALUNOS?.['Teórico+Prático'] || {};
     const baseST = data.BASE_ALUNOS?.['Só Teórico'] || {};
+    // Denominador dos indicadores da PRATICA. Os percentuais eram calculados
+    // sobre o total geral (239), mas a coordenacao usa a base Teorico+Pratico
+    // (227): quem e so teorico nao faz pratica e nao entra na conta. Com o total
+    // geral, TODOS os derivados saiam ~5% abaixo da planilha.
+    const basePratica = parseInt(baseTP.Total) || total;
+
     const baseAlunos = {
       tp_total: parseInt(baseTP.Total) || 223,
       tp_emcurso: parseInt(baseTP['Em Curso']) || 79,
@@ -751,7 +757,7 @@ function updateDashboardKPIs(kpis) {
 
   // Atualizar "Concluíram"
   if (heroGrid.length >= 2) {
-    const porcentagem = ((concluidos / total) * 100).toFixed(0);
+    const porcentagem = ((concluidos / basePratica) * 100).toFixed(0);
     heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
   }
 
@@ -1129,7 +1135,7 @@ function updateDashboardKPIs(kpis) {
   const riscoCard = document.getElementById('riscoCard');
   if(riscoCard) {
     const abaixo50 = baseAlunos.abaixo_50pct || 0;
-    const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
+    const pctRisco = ((abaixo50 / basePratica) * 100).toFixed(1);
     riscoCard.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
         <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
@@ -1230,9 +1236,9 @@ function updateDashboardKPIs(kpis) {
     const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
     const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
 
-    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
+    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / basePratica) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
-    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
+    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / basePratica) * 100).toFixed(0);
     const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
 
     const insights = `
