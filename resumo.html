@@ -1272,6 +1272,44 @@ function updateDashboardKPIs(kpis) {
 console.log('🚀 Inicializando dashboard...');
 loadKPIsFromJSON();
 
+/* ============================================================
+   INADIMPLÊNCIA AO VIVO — do CRM, sincronizado com o ASAAS
+   ============================================================
+   Era o número que mais envelhecia na planilha: as faturas vencem e são pagas
+   todo dia, mas o valor só mudava quando alguém reexportava à mão.
+
+   Vem do CRM (base completa do curso), e não da mentoria: somar só os alunos de
+   mentoria daria R$ 274 contra os ~R$ 12 mil reais — 2% do valor.
+
+   Se a consulta falhar, o valor da planilha continua na tela: melhor um número
+   defasado do que um espaço vazio. */
+function carregarInadimplencia() {
+  fetch('/api/dashboard/inadimplencia', { credentials: 'same-origin' })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (d) {
+      var celula = document.querySelectorAll('.rs-hero-grid > div')[3];
+      if (!celula) return;
+      var mil = (d.total / 1000).toFixed(1).replace('.', ',');
+      celula.innerHTML =
+        '<div class="rs-hl">Inadimplência</div>' +
+        '<div class="rs-hv">R$ ' + mil + ' mil <small>' + d.inadimplentes + ' alunos</small></div>';
+
+      /* Quem ainda não tem ASAAS vinculado não entra na conta. Dizer isso no
+         título evita que um total abaixo do esperado passe por número completo. */
+      var quando = d.atualizado_em
+        ? new Date(d.atualizado_em).toLocaleString('pt-BR')
+        : 'sincronização ainda não registrada';
+      celula.title = 'Do CRM · ' + quando +
+        (d.sem_vinculo ? ' · ' + d.sem_vinculo + ' pessoas ainda sem ASAAS vinculado' : '');
+      console.log('✅ Inadimplência do CRM: R$ ' + d.total + ' em ' + d.inadimplentes +
+                  ' pessoas (' + d.com_asaas + ' de ' + d.pessoas + ' sincronizadas)');
+    })
+    .catch(function (e) {
+      console.warn('⚠️ Inadimplência ao vivo indisponível, mantendo o valor da planilha:', e.message);
+    });
+}
+carregarInadimplencia();
+
 // Failsafe: se dados não carregarem em 5 segundos, avisar usuário
 setTimeout(() => {
   const elem = document.getElementById('viewResumo');
