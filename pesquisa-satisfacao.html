@@ -94,7 +94,6 @@ details summary{cursor:pointer;font-weight:800;color:var(--navy2);font-size:12.5
     <span class="period-chip" id="chipPeriodo">Pesquisa pós-curso</span>
     <nav class="nav">
       <a href="resumo.html">Resumo</a>
-      <a href="visao-geral.html">Visão Geral</a>
       <a href="base-alunos.html">Base de Alunos</a>
       <a href="escoamento.html">Escoamento</a>
       <a href="engajamento.html">Engajamento</a>
@@ -117,7 +116,7 @@ details summary{cursor:pointer;font-weight:800;color:var(--navy2);font-size:12.5
 
   <section id="nps">
     <div class="sec-head"><h2>NPS · Recomendação</h2><span class="tag">Escala 0 a 10</span></div>
-    <p class="sec-sub">"Qual é a probabilidade de você recomendar nosso curso para um amigo ou colega de profissão?" O NPS é a diferença entre o percentual de promotores (notas 9-10) e o de detratores (notas 0-6). O número em destaque soma as duas pesquisas já aplicadas; os gráficos abaixo detalham a atual, cujas respostas temos em aberto.</p>
+    <p class="sec-sub">"Qual é a probabilidade de você recomendar nosso curso para um amigo ou colega de profissão?" O NPS é a diferença entre o percentual de promotores (notas 9-10) e o de detratores (notas 0-6). O número em destaque e a composição da base somam as duas pesquisas já aplicadas; só a distribuição nota a nota fica restrita à atual, porque da anterior não sobraram as notas individuais.</p>
     <div class="card" style="margin-bottom:16px">
       <h3 style="font-size:15.5px;font-family:'Bricolage Grotesque';font-weight:700;color:var(--navy);margin-bottom:2px">Como o NPS geral é composto</h3>
       <div class="hint">As duas pesquisas somadas, e o resultado de cada uma isolada.</div>
@@ -126,8 +125,8 @@ details summary{cursor:pointer;font-weight:800;color:var(--navy2);font-size:12.5
     </div>
     <div class="grid g-2">
       <div class="card chart-card">
-        <h3>Distribuição das notas <span style="font-weight:400;color:var(--muted);font-size:12.5px">· pesquisa atual</span></h3>
-        <div class="hint">Cada barra mostra quantos alunos deram aquela nota.</div>
+        <h3>Distribuição das notas <span style="font-weight:400;color:var(--muted);font-size:12.5px">· só a pesquisa atual</span></h3>
+        <div class="hint">Quantos alunos deram cada nota, entre os 39 da pesquisa atual. A pesquisa anterior não entra aqui: dela sobraram os totais por grupo, não as notas uma a uma.</div>
         <div id="npsDist"></div>
         <div class="legend">
           <span><i style="background:#e34948"></i>Detratores (0-6)</span>
@@ -136,8 +135,8 @@ details summary{cursor:pointer;font-weight:800;color:var(--navy2);font-size:12.5
         </div>
       </div>
       <div class="card chart-card">
-        <h3>Composição da base <span style="font-weight:400;color:var(--muted);font-size:12.5px">· pesquisa atual</span></h3>
-        <div class="hint">Participação de cada grupo no total de respondentes.</div>
+        <h3>Composição da base <span style="font-weight:400;color:var(--muted);font-size:12.5px">· as duas pesquisas</span></h3>
+        <div class="hint">Participação de cada grupo nos 116 respondentes das duas pesquisas.</div>
         <div id="npsComp"></div>
       </div>
     </div>
@@ -304,11 +303,15 @@ document.getElementById('rodape').textContent=
 
 /* NPS composição */
 (function(){
-  const n=DATA.nps.n;
+  // Usa o consolidado das duas pesquisas: aqui só são precisos os totais por
+  // grupo, que temos exatos para ambas. (A distribuição nota a nota, ao lado,
+  // não pode fazer o mesmo — ver o comentário lá.)
+  const C2=DATA.npsCombinado;
+  const n=C2.n;
   const grupos=[
-    {n:'Promotores',v:DATA.nps.promotores,c:C.ok,d:'notas 9 e 10'},
-    {n:'Passivos',v:DATA.nps.passivos,c:C.warn,d:'notas 7 e 8'},
-    {n:'Detratores',v:DATA.nps.detratores,c:C.bad,d:'notas 0 a 6'}
+    {n:'Promotores',v:C2.promotores,c:C.ok,d:'notas 9 e 10'},
+    {n:'Passivos',v:C2.passivos,c:C.warn,d:'notas 7 e 8'},
+    {n:'Detratores',v:C2.detratores,c:C.bad,d:'notas 0 a 6'}
   ];
   const W=520,H=56;
   const s=el('svg',{viewBox:'0 0 '+W+' '+H,width:'100%',role:'img','aria-label':'Composição de promotores, passivos e detratores'});
@@ -328,7 +331,7 @@ document.getElementById('rodape').textContent=
   box.insertAdjacentHTML('beforeend',
     '<div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th>Grupo</th><th>Notas</th><th style="text-align:right">Alunos</th><th style="text-align:right">%</th></tr></thead><tbody>'+
     grupos.map(g=>'<tr><td><i style="width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;background:'+g.c+'"></i>'+g.n+'</td><td style="color:var(--muted)">'+g.d+'</td><td class="num">'+g.v+'</td><td class="num">'+Math.round(g.v/n*100)+'%</td></tr>').join('')+
-    '<tr><td colspan="3" style="font-weight:800">NPS = % promotores − % detratores</td><td class="num" style="font-weight:800;color:'+(DATA.nps.score>=75?'#047857':'#b45309')+'">'+DATA.nps.score+'</td></tr>'+
+    '<tr><td colspan="3" style="font-weight:800">NPS = % promotores − % detratores</td><td class="num" style="font-weight:800;color:'+(C2.score>=75?'#047857':'#b45309')+'">'+C2.score+'</td></tr>'+
     '</tbody></table></div>');
 })();
 
