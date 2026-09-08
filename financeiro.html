@@ -135,5 +135,30 @@ fetch('./kpis.json?t='+Date.now())
   });
 </script>
 
+
+<script>
+/* O rótulo "Base atualizada" ficava escrito no HTML e envelhecia calado: marcava
+   Jun/2026 enquanto os dados já iam até ago/2026. Agora sai do próprio arquivo —
+   o mês mais recente da série de matrículas, que é o que define o alcance da base. */
+(function(){
+  var chip=document.querySelector('.period-chip');
+  if(!chip) return;
+  var MES={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
+  var NOME=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  fetch('./kpis.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    var arr=Array.isArray(d)?d:(d.data||d.kpis||[]);
+    if(!Array.isArray(arr)) return;
+    var ult=null;
+    arr.forEach(function(row){
+      if(row['SEÇÃO']!=='MATRÍCULAS') return;
+      var m=String(row.CATEGORIA||'').match(/^([a-zç]{3})\.?\/(\d{4})$/i);
+      if(!m) return;
+      var v={mes:MES[m[1].toLowerCase()],ano:+m[2]};
+      if(v.mes&&(!ult||v.ano>ult.ano||(v.ano===ult.ano&&v.mes>ult.mes))) ult=v;
+    });
+    if(ult) chip.textContent='Base atualizada · '+NOME[ult.mes]+'/'+ult.ano;
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
