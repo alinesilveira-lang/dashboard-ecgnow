@@ -3,28 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Educação · CPVH · ECGNow</title>
+<title>Esteira de Talentos · Dashboard CPVH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   DASHBOARD EDUCAÇÃO ECGNOW · CPVH (Curso Profissão Viver de Holter)
-   Design System oficial: Bricolage Grotesque + Nunito · navy/cyan
-   Capa compacta (1 tela) + visão expandida
-   ============================================================ */
-:root{
-  --navy:#0D2137; --navy2:#0a3d6e; --cyan:#0ea5e9; --cyan-soft:#e0f2fe;
-  --bg:#f4f8fb; --card:#ffffff; --line:#e2e8f0;
-  --txt:#0D2137; --muted:#5b7187;
-  --ok:#10b981; --ok-soft:#d1fae5; --warn:#f59e0b; --warn-soft:#fef3c7;
-  --bad:#ef4444; --bad-soft:#fee2e2;
-  --radius:18px; --shadow:0 4px 18px rgba(13,33,55,.07);
-}
+:root{--navy:#0D2137;--navy2:#0a3d6e;--cyan:#0ea5e9;--cyan-soft:#e0f2fe;--bg:#f4f8fb;--card:#ffffff;--line:#e2e8f0;--txt:#0D2137;--muted:#5b7187;--ok:#10b981;--ok-soft:#d1fae5;--warn:#f59e0b;--warn-soft:#fef3c7;--bad:#ef4444;--bad-soft:#fee2e2;--radius:18px;--shadow:0 4px 18px rgba(13,33,55,.07)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5}
-h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
-
-/* ---------- Topbar ---------- */
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);font-size:15px}
+h1,h2,h3,.brand{font-family:'Bricolage Grotesque',sans-serif}
 .topbar{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;box-shadow:0 2px 14px rgba(13,33,55,.25)}
 .topbar-inner{max-width:1280px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px}
@@ -34,90 +20,21 @@ h1,h2,h3,.brand,.kpi-value{font-family:'Bricolage Grotesque',sans-serif}
 .nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
 .nav a{color:#cfe7f7;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;transition:.2s}
 .nav a:hover,.nav a.active{background:rgba(14,165,233,.25);color:#fff}
-
 .wrap{max-width:1280px;margin:0 auto;padding:30px 28px 70px}
 section{margin-bottom:48px;scroll-margin-top:90px}
 .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
 .sec-head h2{font-size:24px;font-weight:800;color:var(--navy)}
 .sec-head .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--cyan);background:var(--cyan-soft);padding:4px 12px;border-radius:999px}
 .sec-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;max-width:880px}
-
-/* ---------- Cards & grids ---------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px}
 .grid{display:grid;gap:16px}
 .g-2{grid-template-columns:1fr 1fr}
-.g-3{grid-template-columns:repeat(3,1fr)}
-.g-4{grid-template-columns:repeat(4,1fr)}
-@media(max-width:980px){.g-2,.g-3,.g-4{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.g-2,.g-3,.g-4{grid-template-columns:1fr}.wrap{padding:20px 14px 60px}}
-
-.kpi{position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cyan),var(--navy2))}
-.kpi-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:6px}
-.kpi-value{font-size:26px;font-weight:800;color:var(--navy);margin:6px 0 2px;white-space:nowrap}
-.kpi-sub{color:var(--muted);font-weight:700;font-size:11.5px}
-.farol{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
-.farol.g{background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
-.farol.y{background:var(--warn);box-shadow:0 0 0 4px var(--warn-soft)}
-.farol.r{background:var(--bad);box-shadow:0 0 0 4px var(--bad-soft)}
-
+@media(max-width:980px){.g-2{grid-template-columns:1fr}}
+@media(max-width:640px){.wrap{padding:20px 14px 60px}}
 .chart-card h3{font-size:15.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
 .chart-card .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
-.legend span{display:flex;align-items:center;gap:6px}
-.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
 svg text{font-family:'Nunito',sans-serif}
-
-.insight{display:flex;gap:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;margin-bottom:12px;align-items:flex-start}
-.insight .ico{flex:none;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
-.insight b{color:var(--navy)}
-.insight p{font-size:13.5px;color:#3b536b;margin-top:2px}
-.ico.g{background:var(--ok-soft)}.ico.y{background:var(--warn-soft)}.ico.r{background:var(--bad-soft)}.ico.b{background:var(--cyan-soft)}
-
-.pill{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:800}
-.pill.g{background:var(--ok-soft);color:#047857}.pill.y{background:var(--warn-soft);color:#92400e}.pill.r{background:var(--bad-soft);color:#b91c1c}
-
 .foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}
-
-/* ---------- Capa · Resumo (1 tela) ---------- */
-#viewResumo{max-width:1280px;margin:0 auto;padding:16px 28px 20px;display:grid;grid-template-columns:370px minmax(0,1fr);gap:16px;overflow:hidden}
-.rs-hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0c5a9e 100%);border-radius:22px;color:#fff;padding:26px 26px 22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 10px 30px rgba(13,33,55,.28);position:relative;overflow:hidden}
-.rs-hero::after{content:'';position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.35),transparent 70%)}
-.rs-kicker{font-size:10.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#9fd8f8}
-.rs-titulo{font-family:'Bricolage Grotesque';font-size:clamp(22px,3vh,28px);font-weight:800;line-height:1.15;margin-top:4px}
-.rs-verdict{font-size:12.5px;color:#cfe7f7;font-weight:600;margin-top:6px;line-height:1.45}
-.rs-big{font-family:'Bricolage Grotesque';font-size:clamp(34px,5vh,46px);font-weight:800;line-height:1.05;margin:2px 0 2px}
-.rs-big small{font-size:15px;font-weight:700;color:#9fd8f8;font-family:'Nunito'}
-.rs-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;position:relative;z-index:1}
-.rs-hl{font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#9fd8f8}
-.rs-hv{font-family:'Bricolage Grotesque';font-size:clamp(15px,2.1vh,19px);font-weight:700;margin-top:2px}
-.rs-hv small{font-family:'Nunito';font-size:11.5px;font-weight:700;color:#bfe9ff}
-.rs-proj{margin-top:auto;font-size:11.5px;font-weight:700;color:#bfe9ff;background:rgba(14,165,233,.16);border:1px solid rgba(14,165,233,.4);border-radius:12px;padding:9px 13px;line-height:1.5;position:relative;z-index:1}
-.rs-proj b{color:#fff;font-weight:800}
-.rs-proj .pl{font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#7dd3fc;display:block;margin-bottom:2px}
-.rs-cta{margin-top:12px;align-self:flex-start;border:none;cursor:pointer;font-family:'Nunito';font-weight:800;font-size:13.5px;color:var(--navy);background:linear-gradient(90deg,#7dd3fc,#38bdf8);padding:11px 20px;border-radius:999px;box-shadow:0 4px 16px rgba(14,165,233,.45);transition:.2s;position:relative;z-index:1}
-.rs-cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(14,165,233,.55)}
-.rs-right{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:14px;min-width:0}
-.rs-chips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.rs-chip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
-.rs-chip .l{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px}
-.rs-chip .v{font-family:'Bricolage Grotesque';font-size:clamp(18px,2.6vh,23px);font-weight:800;color:var(--navy);margin-top:3px}
-.rs-chip .s{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:2px}
-.rs-mid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;min-height:0}
-.rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px}
-.rs-card-title{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--navy)}
-.rs-card-sub{font-family:'Nunito';font-size:11px;color:var(--muted);font-weight:700;margin-left:6px}
-.rs-chart{flex:1;min-height:0;display:flex;align-items:center}
-.rs-chart svg{width:100%;max-height:100%}
-.rs-funil{flex:1;min-height:0;display:flex;align-items:center}
-.rs-funil svg{width:100%;max-height:100%}
-.rs-destaques{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 20px}
-.rs-dest{display:flex;gap:11px;align-items:flex-start}
-.rs-dest .ico{flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.rs-dest b{font-size:12.5px;color:var(--navy);display:block;margin-bottom:2px}
-.rs-dest p{font-size:11.8px;color:#3b536b;line-height:1.45}
-@media(max-width:1024px){#viewResumo{grid-template-columns:1fr;overflow:auto;height:auto !important}.rs-chips{grid-template-columns:repeat(2,1fr)}.rs-mid,.rs-destaques{grid-template-columns:1fr}}
-@media(max-height:760px) and (min-width:1024px){.rs-hero{padding:18px 22px 16px;gap:10px}.rs-destaques{padding:12px 16px}.rs-chip{padding:9px 12px}}
 </style>
 </head>
 <body>
@@ -128,91 +45,47 @@ svg text{font-family:'Nunito',sans-serif}
     <span class="period-chip">Base atualizada · Jun/2026</span>
     <nav class="nav">
       <a href="resumo.html">Resumo</a>
-      <a href="visao-geral.html" class="">Visão Geral</a>
-      <a href="base-alunos.html" class="">Base de Alunos</a>
-      <a href="engajamento.html" class="">Engajamento</a>
+      <a href="visao-geral.html">Visão Geral</a>
+      <a href="base-alunos.html">Base de Alunos</a>
+      <a href="escoamento.html">Escoamento</a>
+      <a href="engajamento.html">Engajamento</a>
       <a href="esteira-talentos.html" class="active">Esteira de Talentos</a>
-      <a href="financeiro.html" class="">Financeiro</a>
-      <a href="satisfacao.html" class="">Satisfação</a>
-      <a href="demografia.html" class="">Demografia</a>
-      <a href="leitura-executiva.html" class="">Leitura Executiva</a>
+      <a href="financeiro.html">Financeiro</a>
+      <a href="satisfacao.html">Satisfação</a>
+      <a href="demografia.html">Demografia</a>
+      <a href="pesquisa-satisfacao.html">Pesquisa Pós-Curso</a>
+      <a href="leitura-executiva.html">Leitura Executiva</a>
     </nav>
-  </div>
-</div>
   </div>
 </div>
 
 <div class="wrap">
-<section id="esteira">
-  <div class="sec-head"><h2>Esteira de Talentos</h2><span class="tag">Do curso à operação Holter</span></div>
-  <div class="grid g-2">
-    <div class="card chart-card">
-      <h3>Funil de Conversão</h3>
-      <div id="funilGrande"></div>
-    </div>
-  </div>
-</section>
+  <section id="esteira">
+    <div class="sec-head"><h2>Esteira de Talentos</h2><span class="tag">Pipeline de contratação</span></div>
+    <p class="sec-sub">O CPVH funciona como esteira de talentos para a operação de Holter da ECGNow, alimentando o quadro de Analistas.</p>
 
-<!-- 5. FINANCEIRO -->
-</section>
+    <div class="grid g-2">
+      <div class="card chart-card">
+        <h3>Esteira · Distribuição</h3>
+        <div class="hint">Alunos por categoria: analistas ECGNOW, ex-analistas, externos.</div>
+        <div id="chart1"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Dashboard CPVH · Jun/2026</div>
 </div>
 
 <script>
-const sum=a=>a.reduce((x,y)=>x+y,0);
-const fmtN=v=>v.toLocaleString('pt-BR');
 const NS='http://www.w3.org/2000/svg';
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
 function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
-function barChart(cid,labels,vals,opts={}){
-  const c=document.getElementById(cid);
-  if(!c || !vals || vals.length === 0) return;
-  c.innerHTML='';
-  const w=opts.w||560,h=opts.h||250,padL=opts.padL||44,padR=12,padT=22,padB=28;
-  const max=Math.max(...vals.map(v=>Number(v)||0))*1.15||1;
-  const n=vals.length;
-  const s=svgEl(w,h);
-  const x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.16;
-  const bw=(w-padL-padR)/n*0.68;
-  const y=v=>padT+(h-padT-padB)*(1-v/max);
-  for(let g=0;g<=3;g++){const v=max*g/3;
-    s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
-    s.appendChild(el('text',{x:padL-7,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},opts.fmt?opts.fmt(v):Math.round(v)));}
-  vals.forEach((v,i)=>{
-    const hl=opts.highlight!=null&&i===opts.highlight;
-    s.appendChild(el('rect',{x:x(i),y:y(v),width:bw,height:Math.max(y(0)-y(v),1),fill:hl?'#0ea5e9':(opts.color||'#0a3d6e'),rx:5}));
-    s.appendChild(el('text',{x:x(i)+bw/2,y:y(v)-6,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},opts.fmt?opts.fmt(v):v));
-    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':10.5,'font-weight':700,fill:'#5b7187'},labels[i]));});
-  c.appendChild(s);
-}
-function donut(cid,slices,centerTop,centerBot,opts={}){
-  const c=document.getElementById(cid);
-  if(!c || !slices || slices.length === 0) return;
-  c.innerHTML='';
-  const w=opts.w||380,h=opts.h||250,cx=opts.cx||115,cy=h/2,r=opts.r||86,ir=r-32;
-  const tot=sum(slices.map(s=>Number(s.v)||0));
-  const s=svgEl(w,h);
-  let a0=-Math.PI/2;
-  slices.forEach(sl=>{
-    const a1=a0+sl.v/tot*2*Math.PI;
-    const large=(a1-a0)>Math.PI?1:0;
-    s.appendChild(el('path',{d:`M ${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A ${r} ${r} 0 ${large} 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} L ${cx+ir*Math.cos(a1)} ${cy+ir*Math.sin(a1)} A ${ir} ${ir} 0 ${large} 0 ${cx+ir*Math.cos(a0)} ${cy+ir*Math.sin(a0)} Z`,fill:sl.c}));
-    a0=a1;});
-  s.appendChild(el('text',{x:cx,y:cy-3,'text-anchor':'middle','font-size':19,'font-weight':800,fill:'#0D2137','font-family':'Bricolage Grotesque'},centerTop));
-  s.appendChild(el('text',{x:cx,y:cy+15,'text-anchor':'middle','font-size':10,fill:'#5b7187','font-weight':700},centerBot));
-  const lx=opts.lx||232, lh=Math.min(34,(h-30)/slices.length);
-  slices.forEach((sl,i)=>{
-    const ly=(h-slices.length*lh)/2+i*lh+10;
-    s.appendChild(el('rect',{x:lx,y:ly,width:12,height:12,rx:4,fill:sl.c}));
-    s.appendChild(el('text',{x:lx+18,y:ly+10,'font-size':11,'font-weight':800,fill:'#0D2137'},`${sl.v} · ${(sl.v/tot*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%`));
-    s.appendChild(el('text',{x:lx+18,y:ly+22,'font-size':9.5,fill:'#5b7187','font-weight':700},sl.n));});
-  c.appendChild(s);
-}
+const fmtN=v=>v.toLocaleString('pt-BR');
+
 function hBars(cid,items,opts={}){
-  const c=document.getElementById(cid);
-  if(!c) return;
-  c.innerHTML='';
+  const c=document.getElementById(cid);c.innerHTML='';
   if(!items || items.length === 0) return;
-  const w=opts.w||560,rowH=34,padL=opts.padL||150,padR=64,padT=8;
+  const w=opts.w||540,rowH=42,padL=opts.padL||160,padR=64,padT=12;
   const h=padT+items.length*rowH+8;
   const max=Math.max(...items.map(i=>Number(i.v)||0))||1;
   const s=svgEl(w,h);
@@ -220,666 +93,35 @@ function hBars(cid,items,opts={}){
     const y=padT+i*rowH;
     const bwid=(it.v/max)*(w-padL-padR);
     s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
-    s.appendChild(el('rect',{x:padL,y:y+7,width:Math.max(bwid,2),height:rowH-14,rx:6,fill:it.c||'#0a3d6e'}));
+    s.appendChild(el('rect',{x:padL,y:y+10,width:Math.max(bwid,2),height:rowH-18,rx:6,fill:it.c||'#0a3d6e'}));
     s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
   c.appendChild(s);
 }
-function funil(cid,steps,opts={}){
-  const c=document.getElementById(cid);
-  if(!c || !steps || steps.length === 0) return;
-  c.innerHTML='';
-  const w=opts.w||560,rowH=opts.rowH||52,padL=8,padR=10,padT=4;
-  const h=padT+steps.length*rowH+4;
-  const max=Number(steps[0].v)||1;
-  const maxBar=(w-padL-padR)*0.52; // barras ocupam até metade; nomes ficam à direita
-  const cols=['#0a3d6e','#0d5a94','#0ea5e9','#38bdf8','#10b981'];
-  const s=svgEl(w,h);
-  steps.forEach((st,i)=>{
-    const y=padT+i*rowH;
-    const bwid=Math.max((st.v/max)*maxBar,46);
-    s.appendChild(el('rect',{x:padL,y:y+8,width:bwid,height:rowH-16,rx:9,fill:cols[i]||'#0ea5e9'}));
-    s.appendChild(el('text',{x:padL+12,y:y+rowH/2+4,'font-size':13,'font-weight':800,fill:'#fff','font-family':'Bricolage Grotesque'},st.v));
-    const tx=padL+bwid+12;
-    if(i>0){
-      const taxa=(st.v/steps[i-1].v*100).toLocaleString('pt-BR',{maximumFractionDigits:0});
-      s.appendChild(el('text',{x:tx,y:y+rowH/2-2,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
-      s.appendChild(el('text',{x:tx,y:y+rowH/2+11,'font-size':9.5,'font-weight':800,fill:'#0ea5e9'},`▼ ${taxa}% da etapa anterior`));
-    }else{
-      s.appendChild(el('text',{x:tx,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},st.n));
-    }
-  });
-  c.appendChild(s);
-}
-const KPIS_URL = './kpis.json';
-function loadKPIsFromJSON() {
-  console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
 
-  // Tentar primeiro com fetch (moderno)
-  fetch(KPIS_URL + '?t=' + Date.now(), {
-    method: 'GET',
-    cache: 'no-cache'
-  })
-  .then(res => {
-    console.log('📡 Resposta recebida, status:', res.status);
-    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    return res.json();
-  })
-  .then(result => {
-    console.log('📊 JSON parseado:', result);
-    if (result.success && result.data) {
-      const kpis = result.data;
-      console.log('✅ KPIs carregados com sucesso via fetch:', kpis);
-      updateDashboardKPIs(kpis);
-    } else {
-      console.error('❌ Resposta inválida:', result.message || 'success=false');
-      throw new Error('Invalid response format');
-    }
-  })
-  .catch(err => {
-    console.error('❌ Fetch falhou:', err.message);
-    console.log('🔄 Tentando fallback com XMLHttpRequest...');
-    loadKPIsWithXHR();
-  });
-}
-function loadKPIsWithXHR() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', KPIS_URL + '?t=' + Date.now(), true);
-  xhr.onload = function() {
-    console.log('📡 XHR Resposta recebida, status:', xhr.status);
-    if (xhr.status === 200) {
-      try {
-        const result = JSON.parse(xhr.responseText);
-        console.log('📊 JSON parseado via XHR:', result);
-        if (result.success && result.data) {
-          console.log('✅ KPIs carregados com sucesso via XHR:', result.data);
-          updateDashboardKPIs(result.data);
-        } else {
-          throw new Error('Invalid response format');
-        }
-      } catch (e) {
-        console.error('❌ Erro ao parsear JSON:', e.message);
+fetch('./kpis.json?t='+Date.now())
+  .then(r=>r.json())
+  .then(data=>{
+    const arr=Array.isArray(data)?data:data.data||[];
+    if(!arr || arr.length===0)throw new Error('Sem dados');
+    const esteira=arr.reduce((a,r)=>{
+      if(r.SEÇÃO==='ESTEIRA_TALENTOS'){
+        a[r.CATEGORIA]=a[r.CATEGORIA]||{};
+        a[r.CATEGORIA][r.MÉTRICA]=r.VALOR;
       }
-    } else {
-      console.error('❌ XHR falhou com status:', xhr.status);
-    }
-  };
-  xhr.onerror = function() {
-    console.error('❌ XHR erro ao carregar:', xhr.statusText);
-  };
-  try {
-    xhr.send();
-  } catch (e) {
-    console.error('❌ XHR não pode enviar requisição:', e.message);
-  }
-}
-function updateDashboardKPIs(kpis) {
-  const total = kpis.total_alunos || 233;
-  const totalCadastrados = kpis.total_cadastrados || 233;
-  const ativoEstudando = kpis.ativo_estudando || 86;
-  const concluidos = kpis.concluidos || 95;
-  const taxaConclusao = kpis.taxa_conclusao || 57;
-  const analistas = kpis.analistas_ecgnow || 16;
-  const exAnalistas = kpis.ex_analistas_ecgnow || 7;
-  const analistasTotal = analistas + exAnalistas;
+      return a;
+    },{});
 
-  // ============================================================
-  // RESUMO (Capa)
-  // ============================================================
+    const geral=esteira['Geral']||{};
 
-  // Atualizar texto do verdict (93 matrículas, 25 alunos formados)
-  const rsVerdict = document.querySelector('.rs-verdict');
-  if (rsVerdict) {
-    rsVerdict.textContent = `${kpis.total_alunos} matrículas desde ago/2023 e ${analistasTotal} alunos formados contratados como analistas — o curso é a esteira de talentos da operação Holter.`;
-  }
-
-  // Atualizar seção de cima (hero)
-  const alunoBig = document.querySelector('.rs-big');
-  if (alunoBig) {
-    alunoBig.innerHTML = `${totalCadastrados} <small>desde ago/2023</small>`;
-  }
-
-  // Atualizar "Estudando agora"
-  const heroGrid = document.querySelectorAll('.rs-hero-grid > div');
-  if (heroGrid.length >= 1) {
-    heroGrid[0].innerHTML = `<div class="rs-hl">Estudando agora</div><div class="rs-hv">${ativoEstudando} <small>alunos</small></div>`;
-  }
-
-  // Atualizar "Concluíram"
-  if (heroGrid.length >= 2) {
-    const porcentagem = ((concluidos / total) * 100).toFixed(0);
-    heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
-  }
-
-  // Recalcular KPIs na visão de resumo (chips)
-  const engajAltaMedio = (kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.valor) || 0;
-  const engajAltaMedioP = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0);
-  const teoricoMedio = kpis.progresso_medio_teorico || 0;
-  const ativos30 = (kpis.ativos_30_dias && kpis.ativos_30_dias.valor) || 0;
-
-  const chips = [
-    { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: concluidos + ' de ' + total + ' alunos', f: 'g' },
-    {
-      l: 'Engajamento A+M',
-      v: engajAltaMedioP.toFixed(1) + '%',
-      s: engajAltaMedio + ' de ' + total + ' alunos',
-      f: engajAltaMedioP >= 70 ? 'g' : 'y'
-    },
-    {
-      l: 'Teórico médio',
-      v: teoricoMedio + '%',
-      s: 'progresso da base',
-      f: teoricoMedio >= 60 ? 'g' : 'y'
-    },
-    {
-      l: 'Ativos 30 dias',
-      v: ativos30,
-      s: 'da base · ' + (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '%',
-      f: ativos30 >= 50 ? 'g' : 'y'
-    },
-    { l: 'Analistas formados', v: analistas, s: 'ativos na operação Holter', f: 'g' }
-  ];
-
-  const chipsContainer = document.querySelector('.rs-chips');
-  if (chipsContainer) {
-    chipsContainer.innerHTML = chips.map(chip => `
-      <div class="rs-chip">
-        <div class="l"><span>${chip.l}</span><span class="farol ${chip.f}"></span></div>
-        <div class="v">${chip.v}</div>
-        <div class="s">${chip.s}</div>
-      </div>
-    `).join('');
-  }
-
-  // ============================================================
-  // VISÃO GERAL (KPIs na seção expandida)
-  // ============================================================
-
-  const kpisGeral = document.getElementById('kpisGeral');
-  if (kpisGeral) {
-    const taxa_aprovacao = kpis.taxa_aprovacao_pct || 74;
-    const progresso_hotmart = kpis.progresso_medio_hotmart || 44;
-    const inadimplencia_qtd = kpis.inadimplencia_qtd || 24;
-    const nps = kpis.nps_score || 24;
-
-    const kpisData = [
-      { l: 'Alunos matriculados', v: String(total), s: 'Histórico desde ago/2023', f: 'g' },
-      { l: 'Taxa aprovação', v: taxa_aprovacao + '%', s: kpis.taxa_aprovacao_qtd + ' alunos aprovados', f: 'g' },
-      { l: 'Teórico médio', v: teoricoMedio + '%', s: 'progresso da base', f: teoricoMedio >= 60 ? 'g' : 'y' },
-      { l: 'Progresso Hotmart', v: progresso_hotmart + '%', s: 'média de evolução', f: progresso_hotmart >= 50 ? 'g' : 'y' },
-      { l: 'Engajamento Alto+Médio', v: engajAltaMedioP.toFixed(1) + '%', s: engajAltaMedio + ' contas da plataforma', f: 'g' },
-      { l: 'Ativos em 30 dias', v: String(ativos30), s: (kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0' + '% da base', f: 'y' },
-      { l: 'NPS Score', v: nps, s: 'Net Promoter Score', f: nps > 0 ? 'g' : 'r' },
-      { l: 'Inadimplência', v: String(inadimplencia_qtd), s: kpis.inadimplencia_valor, f: 'r' }
+    // Gráfico 1: Esteira
+    const items1=[
+      {n:'Analistas ECGNOW',v:parseInt(geral['Analistas ECGNOW'])||0,c:'#10b981'},
+      {n:'Ex-Analistas ECGNOW',v:parseInt(geral['Ex-Analistas ECGNOW'])||0,c:'#0ea5e9'},
+      {n:'Analistas Externos',v:parseInt(geral['Analistas Externos'])||0,c:'#0a3d6e'}
     ];
-
-    kpisGeral.innerHTML = kpisData.map(k => `
-      <div class="card kpi">
-        <div class="kpi-label"><span>${k.l}</span><span class="farol ${k.f}"></span></div>
-        <div class="kpi-value">${k.v}</div>
-        <div class="kpi-sub">${k.s}</div>
-      </div>
-    `).join('');
-  }
-
-  // ============================================================
-  // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
-  // ============================================================
-
-  const baseAlunos = kpis.base_alunos || {aluno_externo:0, cancelou:0, cancelou_pct:'0', abandono:0, abandono_pct:'0', bloqueado:0, bloqueado_pct:'0', so_teoria:0, so_teoria_pct:'0', abaixo_50pct:0, abaixo_50pct_pct:'0'};
-
-  // ============================================================
-  // ENGAJAMENTO - Atualizar com dados detalhados
-  // ============================================================
-
-  const engajDetalhado = kpis.engajamento_detalhado || {alto:0, alto_pct:'0', medio:0, medio_pct:'0', baixo:0, baixo_pct:'0', nenhum:0, nenhum_pct:'0'};
-
-  // ============================================================
-  // SEÇÃO NPS - Renderizar dados de satisfação
-  // ============================================================
-
-  (function(){
-    const nps_promotores = kpis.nps_promotores_pct || 0;
-    const nps_neutros = kpis.nps_neutros_pct || 0;
-    const nps_detratores = kpis.nps_detratores_pct || 0;
-    const nps_respostas = kpis.nps_respostas || 0;
-    const nps_nao_responderam = kpis.nps_nao_responderam || 0;
-    const nps_score = kpis.nps_score || 0;
-
-    const npsSlices = [
-      {n:'Promotores',v:nps_promotores,c:'#10b981'},
-      {n:'Neutros',v:nps_neutros,c:'#0ea5e9'},
-      {n:'Detratores',v:nps_detratores,c:'#ef4444'}
-    ];
-
-    const c = document.getElementById('npsDonut');
-    if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
-
-    const npsCard = document.getElementById('npsCard');
-    if(npsCard) {
-      const nota_alto = kpis.nota_media_engajamento_alto || 0;
-      const nota_medio = kpis.nota_media_engajamento_medio || 0;
-      const nota_baixo = kpis.nota_media_engajamento_baixo || 0;
-
-      npsCard.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Pesquisa de Satisfação</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_respostas}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Respostas</div></div>
-              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam (${kpis.nps_nao_responderam_pct}%)</div></div>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Nota média por engajamento</div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;background:#d1fae5;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#047857">Alto</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nota_alto}</div>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;background:#bfdbfe;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#0369a1">Médio</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nota_medio}</div>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;background:#fed7aa;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#b45309">Baixo</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nota_baixo}</div>
-            </div>
-          </div>
-        </div>`;
-    }
-  })();
-
-  // ============================================================
-  // SEÇÃO DEMOGRAFIA - Renderizar dados de perfil
-  // ============================================================
-
-  (function(){
-    const idade_media = kpis.idade_media || 0;
-    const idade_nao_info = kpis.idade_nao_informada || 0;
-    const turno_manha = kpis.turno_manha || 0;
-    const turno_tarde = kpis.turno_tarde || 0;
-    const turno_noite = kpis.turno_noite || 0;
-    const turno_integral = kpis.turno_integral || 0;
-    const sp = kpis.sp || 0;
-    const mg = kpis.mg || 0;
-    const pr = kpis.pr || 0;
-    const rj = kpis.rj || 0;
-    const rs = kpis.rs || 0;
-
-    // Idade
-    const idadeCard = document.getElementById('idadeCard');
-    if(idadeCard) {
-      idadeCard.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Idade média informada</div>
-            <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:var(--navy);margin-top:6px">${idade_media} <span style="font-size:14px;color:var(--muted);font-family:'Nunito';font-weight:700">anos</span></div>
-          </div>
-          <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Sem informação</div>
-            <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">${idade_nao_info}</div>
-            <div style="font-size:11.5px;font-weight:700;color:#92400e">~${((idade_nao_info/total)*100).toFixed(0)}% da base</div>
-          </div>
-        </div>`;
-    }
-
-    // Distribuição por faixa etária
-    const faixaEtariaChart = document.getElementById('faixaEtariaChart');
-    if(faixaEtariaChart) {
-      const alunos_menos_25 = kpis.alunos_menos_25 || 0;
-      const alunos_25_35 = kpis.alunos_25_35 || 0;
-      const alunos_mais_35 = kpis.alunos_mais_35 || 0;
-
-      const faixaEtaria = [
-        {n:'Menos de 25 anos',v:alunos_menos_25,c:'#10b981'},
-        {n:'Entre 25 e 35 anos',v:alunos_25_35,c:'#0ea5e9'},
-        {n:'Mais de 35 anos',v:alunos_mais_35,c:'#8b5cf6'}
-      ];
-      hBars('faixaEtariaChart', faixaEtaria, {w:400});
-    }
-
-    // Turnos
-    const turnoChart = document.getElementById('turnoChart');
-    if(turnoChart) {
-      const turnos = [
-        {n:'Manhã',v:turno_manha,c:'#f59e0b'},
-        {n:'Tarde',v:turno_tarde,c:'#0ea5e9'},
-        {n:'Noite',v:turno_noite,c:'#0a3d6e'},
-        {n:'Integral',v:turno_integral,c:'#8b5cf6'}
-      ];
-      hBars('turnoChart', turnos, {w:400});
-    }
-
-    // Estados
-    const estadosChart = document.getElementById('estadosChart');
-    if(estadosChart) {
-      const estados = [
-        {n:'São Paulo (SP)',v:sp,c:'#0a3d6e'},
-        {n:'Minas Gerais (MG)',v:mg,c:'#0d5a94'},
-        {n:'Paraná (PR)',v:pr,c:'#0ea5e9'},
-        {n:'Rio de Janeiro (RJ)',v:rj,c:'#38bdf8'},
-        {n:'Rio Grande do Sul (RS)',v:rs,c:'#7dd3fc'}
-      ];
-      hBars('estadosChart', estados, {w:400});
-    }
-  })();
-
-  // ============================================================
-  // SEÇÃO FINANCEIRO - Adicionar gráficos de pagamento
-  // ============================================================
-
-  (function(){
-    const asaas = kpis.asaas_qtd || 0;
-    const boleto = kpis.boleto_qtd || 0;
-    const pix = kpis.pix_qtd || 0;
-    const trancado = kpis.trancado_qtd || 0;
-    const teorico = kpis.teorico_qtd || 0;
-    const pratico = kpis.pratico_qtd || 0;
-    const inadimplencia_qtd = kpis.inadimplencia_qtd || 0;
-    const concluidos = kpis.concluidos || 0;
-
-    // Formas de pagamento
-    const pagtoChart = document.getElementById('pagamentoChart');
-    if(pagtoChart) {
-      const pagto = [
-        {n:'ASAAS',v:asaas,c:'#0a3d6e'},
-        {n:'Boleto',v:boleto,c:'#0d5a94'},
-        {n:'Pix',v:pix,c:'#0ea5e9'}
-      ];
-      hBars('pagamentoChart', pagto, {w:400});
-    }
-
-    // Status de conclusão
-    const statusConclusao = document.getElementById('statusConclusaoChart');
-    if(statusConclusao) {
-      const conclusao = [
-        {n:'Só Teórico',v:teorico,c:'#f59e0b'},
-        {n:'Só Prático',v:pratico,c:'#0ea5e9'},
-        {n:'Teórico + Prático',v:concluidos,c:'#10b981'}
-      ];
-      hBars('statusConclusaoChart', conclusao, {w:400});
-    }
-
-    // Atualizar card de inadimplência
-    const inadCard = document.getElementById('inadCard');
-    if(inadCard) {
-      inadCard.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-          <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
-            <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${kpis.inadimplencia_valor}</div>
-            <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${inadimplencia_qtd} alunos</div>
-          </div>
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix}</div>
-          </div>
-        </div>`;
-    }
-  })();
-
-  // ============================================================
-  // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 12 meses)
-  // ============================================================
-
-  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
-    barChart('rsChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {w:560,h:215,color:'#0a3d6e'});
-  }
-
-  // ============================================================
-  // ATUALIZAR FUNIL DA ESTEIRA
-  // ============================================================
-
-  const aprovados = kpis.taxa_aprovacao_qtd || 73;
-
-  // Funil pequeno (Capa)
-  const funilData = [
-    {n:'Matriculados',v:totalCadastrados},
-    {n:'Concluíram o curso',v:concluidos},
-    {n:'Aprovados',v:aprovados},
-    {n:'Analistas ECGNOW',v:analistas}
-  ];
-  const rsFunilElem = document.getElementById('rsFunil');
-  if(rsFunilElem) {
-    funil('rsFunil', funilData, {w:340,rowH:40});
-  }
-
-  // Funil grande (Esteira de Talentos)
-  const funilGrandeElem = document.getElementById('funilGrande');
-  if(funilGrandeElem) {
-    funil('funilGrande', funilData, {w:560,rowH:56});
-  }
-
-  // ============================================================
-  // RENDERIZAR GRÁFICOS DAS SEÇÕES
-  // ============================================================
-
-  // Declarar variáveis necessárias
-  const trancado = kpis.trancado_qtd || 0;
-  const alunoExterno = kpis.aluno_externo || 0;
-
-  // Gráfico de Matrículas por mês
-  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
-    barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
-  }
-
-  // Vínculo com a ECGNow (gráfico horizontal)
-  const vinculoChart = document.getElementById('vinculoChart');
-  if(vinculoChart) {
-    const vinculo = [
-      {n:'Analista ECGNOW',v:analistas,c:'#0ea5e9'},
-      {n:'Ex-analista',v:exAnalistas,c:'#94c6e8'}
-    ];
-    hBars('vinculoChart', vinculo, {padL:170});
-  }
-
-  // Status do curso (Donut)
-  // Status do curso (Donut)
-  const statusChart = [
-    {n:'Concluído',v:concluidos,c:'#10b981'},
-    {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
-    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
-    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
-    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
-    {n:'Trancado',v:trancado,c:'#cbd5e1'},
-    {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
-  ];
-  const statusDonutElem = document.getElementById('statusDonut');
-  if(statusDonutElem) {
-    donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
-  }
-
-  // Card de Alunos em Risco (Abaixo dos 50%)
-  const riscoCard = document.getElementById('riscoCard');
-  if(riscoCard) {
-    const abaixo50 = baseAlunos.abaixo_50pct || 0;
-    const pctRisco = ((abaixo50 / total) * 100).toFixed(1);
-    riscoCard.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-        <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
-          <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Alunos em Risco</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:#92400e;margin-top:6px">${abaixo50}</div>
-          <div style="font-size:11.5px;font-weight:700;color:#92400e">${pctRisco}% da base · Progresso < 50%</div>
-        </div>
-      </div>`;
-  }
-
-  // Card de Indicadores (Progresso e Engajamento)
-  const indicadoresCard = document.getElementById('indicadoresCard');
-  if(indicadoresCard) {
-    const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
-    const abaixo_50 = baseAlunos.abaixo_50pct || 0;
-    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct || '0';
-
-    indicadoresCard.innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
-        <div style="background:#fef3c7;border-radius:10px;padding:14px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
-          <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Teórico médio</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${teoricoMedio}%</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progressão geral</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}% da base</div>
-        </div>
-        <div style="background:#d1fae5;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajDetalhado.alto}</div>
-          <div style="font-size:9.5px;color:#047857;font-weight:700">${engajDetalhado.alto_pct}%</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${progresso_hotmart}%</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progresso médio</div>
-        </div>
-        <div style="background:#fed7aa;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b45309">Engaj. Baixo</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b45309;margin-top:4px">${engajDetalhado.baixo}</div>
-          <div style="font-size:9.5px;color:#b45309;font-weight:700">${engajDetalhado.baixo_pct}%</div>
-        </div>
-        <div style="background:#bfdbfe;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#0369a1">Engaj. Médio</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#0369a1;margin-top:4px">${engajDetalhado.medio}</div>
-          <div style="font-size:9.5px;color:#0369a1;font-weight:700">${engajDetalhado.medio_pct}%</div>
-        </div>
-        <div style="background:#fee2e2;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b91c1c">Engaj. Nenhum</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b91c1c;margin-top:4px">${engajDetalhado.nenhum}</div>
-          <div style="font-size:9.5px;color:#b91c1c;font-weight:700">${engajDetalhado.nenhum_pct}%</div>
-        </div>
-      </div>`;
-  }
-
-  // Engajamento detalhado (Donut)
-  const engajaTotal = engajDetalhado.alto + engajDetalhado.medio + engajDetalhado.baixo + engajDetalhado.nenhum;
-  const engajaChart = [
-    {n:'Alto',v:engajDetalhado.alto,c:'#10b981'},
-    {n:'Médio',v:engajDetalhado.medio,c:'#0ea5e9'},
-    {n:'Baixo',v:engajDetalhado.baixo,c:'#f59e0b'},
-    {n:'Nenhum',v:engajDetalhado.nenhum,c:'#ef4444'}
-  ];
-  const engajDonutElem = document.getElementById('engajaDonut');
-  if(engajDonutElem) {
-    donut('engajaDonut', engajaChart, String(engajDetalhado.alto + engajDetalhado.medio), 'contas', {w:450,h:350,cx:120,r:90,lx:240});
-  }
-
-  // Atividade Recente (gráfico de barras)
-  const atividadeElem = document.getElementById('atividadeChart');
-  if(atividadeElem) {
-    const ativos7d = kpis.ativos_7_dias || 8;
-    const ativos30d = kpis.ativos_30_dias ? kpis.ativos_30_dias.valor : 14;
-    const ativos90d = kpis.ativos_90_dias || 25;
-    barChart('atividadeChart', ['7 dias', '30 dias', '90 dias'], [ativos7d, ativos30d, ativos90d], {color:'#0ea5e9', fmt:v=>Math.round(v)});
-  }
-
-  // ============================================================
-  // ATUALIZAR TAGS E TEXTOS DAS SEÇÕES
-  // ============================================================
-
-  // Tag "Base de Alunos"
-  const baseTag = document.querySelector('#base .sec-head .tag');
-  if(baseTag) {
-    baseTag.textContent = `${totalCadastrados} matriculados desde ago/2023`;
-  }
-
-  // Tag "Engajamento"
-  const engajaTag = document.querySelector('#engaja .sec-head .tag');
-  if(engajaTag) {
-    engajaTag.textContent = `Plataforma Hotmart + trilha do curso`;
-  }
-
-  // ============================================================
-  // ATUALIZAR LEITURA EXECUTIVA (Insights dinâmicos — compactos)
-  // ============================================================
-
-  const leituraExecutiva = document.getElementById('leituraGrid');
-  if(leituraExecutiva) {
-    // Calcular dados dinâmicos dos gráficos
-    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
-    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / total) * 100).toFixed(1);
-    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
-    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / total) * 100).toFixed(0);
-    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
-
-    const insights = `
-      <div class="insight"><div class="ico g">🧲</div><div><b>Esteira de talentos</b><p>${analistasTotal} formados analistas ECGNOW (${kpis.taxa_aprovacao_pct}% conversão)</p></div></div>
-      <div class="insight"><div class="ico b">📈</div><div><b>Recorrência</b><p>${matrMatrVals.reduce((a,b)=>a+b,0)} matrículas em 12 meses</p></div></div>
-      <div class="insight"><div class="ico g">🎓</div><div><b>Base ativa</b><p>${ativoEstudando} estudando agora (${taxaConclusao}% conclusão)</p></div></div>
-      <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência</b><p>${kpis.inadimplencia_valor} em ${kpis.inadimplencia_qtd} alunos</p></div></div>
-      <div class="insight"><div class="ico y">📉</div><div><b>Churn</b><p>${churnQtd} alunos (${churnRate}%)</p></div></div>
-      <div class="insight"><div class="ico r">🕳️</div><div><b>Em risco</b><p>${baseAlunos.abaixo_50pct} abaixo de 50% de progresso</p></div></div>
-    `;
-
-    leituraExecutiva.innerHTML = insights;
-    console.log('✅ Leitura Executiva preenchida com', insights.split('insight').length - 1, 'cards');
-  } else {
-    console.log('⚠️ leituraGrid não encontrado na página');
-  }
-
-  console.log('✨ Dashboard atualizado com TODOS os dados do JSON');
-}
-
-
-// Proteger updates para elementos que podem não existir
-const safeUpdate = (id, content) => {
-  const elem = document.getElementById(id);
-  if (elem) elem.innerHTML = content;
-};
-
-const originalUpdate = updateDashboardKPIs;
-updateDashboardKPIs = function(kpis) {
-  try {
-    originalUpdate.call(this, kpis);
-  } catch (e) {
-    console.log('Alguns elementos não existem nesta página - ignorando:', e.message);
-  }
-};
-
-
-// Carregar dados da API do Google Apps Script
-const appsScriptUrl = 'https://script.google.com/a/macros/ecgnow.com.br/s/AKfycbwtauH3j_ccA-LYmjxAEASCXYRS13ntOZrWSHv3GlUQpzks_XC6W9DHweSv2jKAdlZH/exec';
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('📍 Tentando carregar dados da API do Apps Script...');
-    fetch(appsScriptUrl)
-      .then(r => r.json())
-      .then(res => {
-        if(res.success && res.data) {
-          console.log('✅ Dados carregados da API do Apps Script');
-          updateDashboardKPIs(res.data);
-        } else {
-          console.log('⚠️ API retornou erro, tentando kpis.json local...');
-          loadKPIsFromJSON();
-        }
-      })
-      .catch(e => {
-        console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
-        loadKPIsFromJSON();
-      });
+    hBars('chart1',items1,{w:500,padL:160});
   });
-} else {
-  console.log('📍 Tentando carregar dados da API do Apps Script...');
-  fetch(appsScriptUrl)
-    .then(r => r.json())
-    .then(res => {
-      if(res.success && res.data) {
-        console.log('✅ Dados carregados da API do Apps Script');
-        updateDashboardKPIs(res.data);
-      } else {
-        console.log('⚠️ API retornou erro, tentando kpis.json local...');
-        loadKPIsFromJSON();
-      }
-    })
-    .catch(e => {
-      console.log('⚠️ Erro na API:', e.message, '- tentando kpis.json local...');
-      loadKPIsFromJSON();
-    });
-}
 </script>
+
 </body>
 </html>
