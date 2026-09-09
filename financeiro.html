@@ -66,13 +66,19 @@ svg text{font-family:'Nunito',sans-serif}
     <div class="grid g-2">
       <div class="card chart-card">
         <h3>Geral · Inadimplência</h3>
-        <div class="hint">Inadimplência da base de alunos.</div>
+        <div class="hint">Valor em aberto no ASAAS, conforme a última exportação.</div>
+        <div class="hint" id="fin-resumo" style="color:#0D2137;font-weight:600"></div>
         <div id="chart1"></div>
       </div>
       <div class="card chart-card">
         <h3>Pagamento · Formas</h3>
-        <div class="hint">Distribuição de cobranças entre Cartão, Pix e Boleto.</div>
+        <div class="hint">Distribuição dos inadimplentes entre Cartão, Pix e Boleto.</div>
         <div id="chart2"></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Inadimplência · Faixas de atraso</h3>
+        <div class="hint">Onde está o valor em aberto, por gravidade do atraso.</div>
+        <div id="chart3"></div>
       </div>
     </div>
   </section>
@@ -80,6 +86,7 @@ svg text{font-family:'Nunito',sans-serif}
   <div class="foot">Dashboard CPVH · Jun/2026</div>
 </div>
 
+<script src="./dados.js?v=2"></script>
 <script>
 const NS='http://www.w3.org/2000/svg';
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';return s;}
@@ -129,37 +136,39 @@ function hBars(cid,items,opts={}){
   c.appendChild(s);
 }
 
-fetch('./kpis.json?t='+Date.now())
-  .then(r=>r.json())
-  .then(data=>{
-    const arr=Array.isArray(data)?data:data.data||[];
-    if(!arr || arr.length===0)throw new Error('Sem dados');
-    const fin=arr.reduce((a,r)=>{
-      if(r.SEÇÃO==='FINANCEIRO'){
-        a[r.CATEGORIA]=a[r.CATEGORIA]||{};
-        a[r.CATEGORIA][r.MÉTRICA]=r.VALOR;
-      }
-      return a;
-    },{});
+/* Inadimplência e formas de pagamento saem da aba ASAAS, exportada do sistema.
+   Antes vinham da seção FINANCEIRO da aba Dashboard, que encolheu para uma única
+   linha (boleto antigo, desatualizada) — as métricas usadas aqui não existem
+   mais lá. */
+lerInadimplencia()
+  .then(inad=>{
+    // A soma dos devedores é conferida contra a linha TOTAL da própria planilha:
+    // divergência aqui significa exportação truncada, e é melhor saber.
+    if(inad.totalPlanilha!=null && Math.abs(inad.soma-inad.totalPlanilha)>0.01)
+      console.warn('[financeiro] soma dos devedores ('+inad.soma+') difere do TOTAL da planilha ('+inad.totalPlanilha+')');
 
-    const geral=fin['Geral']||{};
-    const pag=fin['Pagamento']||{};
+    hBars('chart1',[
+      {n:'Inadimplência Total',v:inad.soma,vfmt:moedaBR(inad.soma),c:'#ef4444'}
+    ],{w:500,padL:140,padR:140});
 
-    // Gráfico 1: Geral (valor em R$, vem como "R$ 15.361,68" — converter pra número mantendo os centavos)
-    const inadValor=parseFloat((geral['Inadimplência Total']||'0').replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',','.'))||0;
-    const items1=[
-      {n:'Inadimplência Total',v:inadValor,vfmt:inadValor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),c:'#ef4444'}
-    ];
-    hBars('chart1',items1,{w:500,padL:140,padR:140});
+    // Faixas de atraso: mostram onde está o dinheiro, não só o total.
+    const ordem=[['Crítica','#b91c1c'],['Alta','#ef4444'],['Média','#f59e0b'],['Recente','#0ea5e9']];
+    const porFaixa=ordem
+      .filter(([f])=>inad.faixas[f])
+      .map(([f,c])=>({n:f+' ('+inad.faixas[f].alunos+')',v:inad.faixas[f].valor,vfmt:moedaBR(inad.faixas[f].valor),c}));
+    if(porFaixa.length) hBars('chart3',porFaixa,{w:500,padL:140,padR:140});
 
-    // Gráfico 2: Pagamento
-    const items2=[
-      {n:'Cartão (ASAAS)',v:parseInt(pag['Cartão (ASAAS)'])||0,c:'#0ea5e9'},
-      {n:'Pix',v:parseInt(pag['Pix'])||0,c:'#10b981'},
-      {n:'Boleto',v:parseInt(pag['Boleto'])||0,c:'#0a3d6e'}
-    ];
-    hBars('chart2',items2,{w:500,padL:140});
-  });
+    hBars('chart2',[
+      {n:'Cartão (ASAAS)',v:inad.formas['Cartão']||0,c:'#0ea5e9'},
+      {n:'Pix',v:inad.formas['Pix']||0,c:'#10b981'},
+      {n:'Boleto',v:inad.formas['Boleto']||0,c:'#0a3d6e'}
+    ],{w:500,padL:140});
+
+    const res=document.getElementById('fin-resumo');
+    if(res) res.textContent=inad.devedores.length+' alunos inadimplentes · '+
+      inad.parcelasVencidas+' parcelas vencidas · '+moedaBR(inad.soma)+' em aberto';
+  })
+  .catch(e=>avisarErro(['chart1','chart2','chart3'],e));
 </script>
 
 
@@ -172,9 +181,7 @@ fetch('./kpis.json?t='+Date.now())
   if(!chip) return;
   var MES={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
   var NOME=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  fetch('./kpis.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var arr=Array.isArray(d)?d:(d.data||d.kpis||[]);
-    if(!Array.isArray(arr)) return;
+  lerAba('Dashboard').then(function(arr){
     var ult=null;
     arr.forEach(function(row){
       if(row['SEÇÃO']!=='MATRÍCULAS') return;

@@ -1,0 +1,84 @@
+SEÇÃO,CATEGORIA,MÉTRICA,VALOR,PERCENTUAL,COR
+RESUMO,Geral,Total Matriculados,232,100%,g
+RESUMO,Geral,Estudando Agora,79,34.05%,g
+RESUMO,Geral,Concluídos,95,40.95%,g
+RESUMO,Geral,Inadimplência,R$ 15.4k,6.45%,r
+MATRÍCULAS,Jun/2025,Quantidade,6,,
+MATRÍCULAS,Jul/2025,Quantidade,4,,
+MATRÍCULAS,Ago/2025,Quantidade,9,,
+MATRÍCULAS,Set/2025,Quantidade,13,,
+MATRÍCULAS,Out/2025,Quantidade,5,,
+MATRÍCULAS,Nov/2025,Quantidade,16,,
+MATRÍCULAS,Dez/2025,Quantidade,8,,
+MATRÍCULAS,Jan/2026,Quantidade,18,,
+MATRÍCULAS,Fev/2026,Quantidade,4,,
+MATRÍCULAS,Mar/2026,Quantidade,7,,
+MATRÍCULAS,Abr/2026,Quantidade,0,,
+MATRÍCULAS,Mai/2026,Quantidade,3,,
+BASE_ALUNOS,Teórico+Prático,Total,223,95.71%,g
+BASE_ALUNOS,Teórico+Prático,Em Curso,79,35.43%,g
+BASE_ALUNOS,Teórico+Prático,Desengajados,28,12.56%,y
+BASE_ALUNOS,Teórico+Prático,Concluídos,95,42.60%,g
+BASE_ALUNOS,Teórico+Prático,Aprovados,73,32.73%,g
+BASE_ALUNOS,Teórico+Prático,Reprovados,22,9.87%,r
+BASE_ALUNOS,Teórico+Prático,Cancelou,15,6.73%,r
+BASE_ALUNOS,Teórico+Prático,Abandono,13,5.83%,r
+BASE_ALUNOS,Teórico+Prático,Bloqueado,10,4.48%,y
+BASE_ALUNOS,Teórico+Prático,Trancado,5,2.24%,y
+BASE_ALUNOS,Só Teórico,Total,9,3.86%,y
+BASE_ALUNOS,Só Teórico,Em Curso,0,0%,r
+BASE_ALUNOS,Só Teórico,Desengajados,4,44.44%,r
+BASE_ALUNOS,Só Teórico,Concluídos,0,0%,r
+BASE_ALUNOS,Só Teórico,Aprovados,0,0%,r
+BASE_ALUNOS,Só Teórico,Reprovados,0,0%,r
+BASE_ALUNOS,Só Teórico,Cancelou,3,33.33%,r
+BASE_ALUNOS,Só Teórico,Abandono,2,22.22%,r
+BASE_ALUNOS,Só Teórico,Bloqueado,0,0%,r
+BASE_ALUNOS,Só Teórico,Trancado,0,0%,r
+ENGAJAMENTO,Teórico+Prático,Alto+Médio %,74.4%,74.40%,g
+ENGAJAMENTO,Teórico+Prático,Alto+Médio Qt,166,74.40%,g
+ENGAJAMENTO,Teórico+Prático,Ativos 30d,67,30.04%,y
+ENGAJAMENTO,Teórico+Prático,Estudando,79,35.43%,g
+ENGAJAMENTO,Teórico+Prático,Abaixo 50%,57,25.56%,y
+ENGAJAMENTO,Teórico+Prático,Alto,100,44.84%,g
+ENGAJAMENTO,Teórico+Prático,Médio,66,29.60%,g
+ENGAJAMENTO,Teórico+Prático,Baixo,35,15.70%,y
+ENGAJAMENTO,Teórico+Prático,Nenhum,22,9.87%,r
+ENGAJAMENTO,Só Teórico,Alto+Médio %,44.4%,44.44%,y
+ENGAJAMENTO,Só Teórico,Alto+Médio Qt,4,44.44%,y
+ENGAJAMENTO,Só Teórico,Ativos 30d,2,22.22%,r
+ENGAJAMENTO,Só Teórico,Estudando,0,0%,r
+ENGAJAMENTO,Só Teórico,Abaixo 50%,5,55.56%,r
+ENGAJAMENTO,Só Teórico,Alto,3,33.33%,y
+ENGAJAMENTO,Só Teórico,Médio,1,11.11%,y
+ENGAJAMENTO,Só Teórico,Baixo,3,33.33%,y
+ENGAJAMENTO,Só Teórico,Nenhum,2,22.22%,r
+ESTEIRA_TALENTOS,Geral,Analistas ECGNOW,25,10.78%,g
+ESTEIRA_TALENTOS,Geral,Ex-Analistas ECGNOW,9,3.88%,g
+ESTEIRA_TALENTOS,Geral,Analistas Externos,50,21.55%,g
+ESTEIRA_TALENTOS,Geral,Alunos Externos,148,63.79%,y
+FINANCEIRO,Geral,Inadimplência Total,R$ 15.4k,6.45%,r
+FINANCEIRO,Geral,Boletos Vencidos,R$ 3.3k,1.41%,r
+FINANCEIRO,Pagamento,Cartão (ASAAS),42,18.10%,g
+FINANCEIRO,Pagamento,Pix,8,3.45%,g
+FINANCEIRO,Pagamento,Boleto,1,0.43%,y
+FINANCEIRO,Status,Só Teórico,9,3.88%,y
+FINANCEIRO,Status,Só Prático,0,0%,g
+FINANCEIRO,Status,Teórico+Prático,223,96.12%,g
+NPS,Geral,Score,82.86,82.86%,g
+NPS,Respondentes,Promotores %,87.14%,87.14%,g
+NPS,Respondentes,Neutros %,8.57%,8.57%,y
+NPS,Respondentes,Detratores %,4.29%,4.29%,r
+NPS,Total,Responderam,70,30.17%,y
+NPS,Total,Não Responderam,162,69.83%,r
+DEMOGRAFIA,Estado,São Paulo (SP),180,77.59%,g
+DEMOGRAFIA,Estado,Minas Gerais (MG),15,6.47%,g
+DEMOGRAFIA,Estado,Paraná (PR),8,3.45%,g
+DEMOGRAFIA,Estado,Rio de Janeiro (RJ),15,6.47%,g
+DEMOGRAFIA,Estado,Distrito Federal (DF),8,3.45%,g
+DEMOGRAFIA,Estado,Bahia (BA),4,1.72%,g
+DEMOGRAFIA,Turno,Semana Manhã,120,51.72%,g
+DEMOGRAFIA,Turno,Semana Tarde,45,19.40%,g
+DEMOGRAFIA,Turno,Sábado (Manhã/Tarde),55,23.70%,g
+DEMOGRAFIA,Turno,Semana Noite,8,3.45%,y
+DEMOGRAFIA,Turno,Próxima Turma,4,1.72%,y

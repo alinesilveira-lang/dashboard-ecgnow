@@ -114,6 +114,7 @@ section{margin-bottom:48px;scroll-margin-top:90px}
   <div class="foot">Dashboard CPVH · Jun/2026 · ECGNow Medicina Diagnóstica</div>
 </div>
 
+<script src="./dados.js?v=2"></script>
 <script>
 /* O rótulo "Base atualizada" ficava escrito no HTML e envelhecia calado: marcava
    Jun/2026 enquanto os dados já iam até ago/2026. Agora sai do próprio arquivo —
@@ -123,9 +124,7 @@ section{margin-bottom:48px;scroll-margin-top:90px}
   if(!chip) return;
   var MES={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
   var NOME=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  fetch('./kpis.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var arr=Array.isArray(d)?d:(d.data||d.kpis||[]);
-    if(!Array.isArray(arr)) return;
+  lerAba('Dashboard').then(function(arr){
     var ult=null;
     arr.forEach(function(row){
       if(row['SEÇÃO']!=='MATRÍCULAS') return;

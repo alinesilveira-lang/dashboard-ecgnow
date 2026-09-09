@@ -333,6 +333,7 @@ svg text{font-family:'Nunito',sans-serif}
 </div>
 </div><!-- /viewDetalhe -->
 
+<script src="./dados.js?v=2"></script>
 <script>
 /* ============================================================
    BASE DE DADOS — extraída da planilha Cadastro de Alunos CPVH
@@ -630,7 +631,9 @@ fitResumo();
 /* ============================================================
    CARREGAMENTO DE KPIs — Via arquivo JSON no repositório
    ============================================================ */
-const KPIS_URL = './kpis.json';
+/* Lê a aba Dashboard da planilha ao vivo; antes era o ./kpis.json commitado
+   à mão, que estava em formato incompatível. */
+const KPIS_URL = urlAba('Dashboard');
 
 function loadKPIsFromJSON() {
   console.log('📂 Tentando carregar kpis.json de:', KPIS_URL);
@@ -1240,9 +1243,7 @@ setTimeout(() => {
   if(!chip) return;
   var MES={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
   var NOME=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  fetch('./kpis.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var arr=Array.isArray(d)?d:(d.data||d.kpis||[]);
-    if(!Array.isArray(arr)) return;
+  lerAba('Dashboard').then(function(arr){
     var ult=null;
     arr.forEach(function(row){
       if(row['SEÇÃO']!=='MATRÍCULAS') return;
