@@ -86,6 +86,21 @@ function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('v
 function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
 const fmtN=v=>v.toLocaleString('pt-BR');
 
+// Largura aproximada do rotulo em 11.5px bold: SVG nao mede texto antes de
+// renderizar, e medir no DOM forcaria reflow a cada barra. 6.35px/char erra
+// pouco para o nosso alfabeto e erra para o lado seguro (quebra antes).
+function labelWidth(t){return t.length*6.35;}
+function wrapLabel(t,maxW){
+  if(labelWidth(t)<=maxW) return [t];
+  const p=t.split(' ');
+  if(p.length<2) return [t];
+  let melhor=1,dif=Infinity;
+  for(let i=1;i<p.length;i++){
+    const d=Math.abs(labelWidth(p.slice(0,i).join(' '))-labelWidth(p.slice(i).join(' ')));
+    if(d<dif){dif=d;melhor=i;}
+  }
+  return [p.slice(0,melhor).join(' '),p.slice(melhor).join(' ')];
+}
 function hBars(cid,items,opts={}){
   const c=document.getElementById(cid);c.innerHTML='';
   if(!items || items.length === 0) return;
@@ -96,7 +111,19 @@ function hBars(cid,items,opts={}){
   items.forEach((it,i)=>{
     const y=padT+i*rowH;
     const bwid=(it.v/max)*(w-padL-padR);
-    s.appendChild(el('text',{x:padL-10,y:y+rowH/2+4,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'},it.n));
+    // Rotulo longo (ex.: "Bloqueados por inadimplencia") nao cabia na calha e
+    // vazava para fora do viewBox: SVG <text> nao quebra linha sozinho.
+    // Quebra em 2 linhas na palavra mais proxima do meio quando nao couber.
+    const lbl=el('text',{x:padL-10,'text-anchor':'end','font-size':11.5,'font-weight':700,fill:'#0D2137'});
+    const linhas=wrapLabel(String(it.n),padL-14);
+    if(linhas.length===1){
+      lbl.setAttribute('y',y+rowH/2+4);
+      lbl.textContent=linhas[0];
+    }else{
+      lbl.setAttribute('y',y+rowH/2-2);
+      linhas.forEach((ln,li)=>lbl.appendChild(el('tspan',{x:padL-10,dy:li===0?0:12.5},ln)));
+    }
+    s.appendChild(lbl);
     s.appendChild(el('rect',{x:padL,y:y+10,width:Math.max(bwid,2),height:rowH-18,rx:6,fill:it.c||'#0a3d6e'}));
     s.appendChild(el('text',{x:padL+bwid+8,y:y+rowH/2+4,'font-size':11.5,'font-weight':800,fill:'#0D2137'},fmtN(it.v)));});
   c.appendChild(s);
