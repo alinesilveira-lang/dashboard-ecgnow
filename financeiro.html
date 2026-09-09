@@ -66,8 +66,9 @@ svg text{font-family:'Nunito',sans-serif}
     <div class="grid g-2">
       <div class="card chart-card">
         <h3>Geral · Inadimplência</h3>
-        <div class="hint">Valor em aberto no ASAAS, conforme a última exportação.</div>
+        <div class="hint">Valor vencido e não pago no ASAAS. Estorno não conta como dívida.</div>
         <div class="hint" id="fin-resumo" style="color:#0D2137;font-weight:600"></div>
+        <div class="hint" id="fin-fonte" style="font-weight:600"></div>
         <div id="chart1"></div>
       </div>
       <div class="card chart-card">
@@ -140,11 +141,11 @@ function hBars(cid,items,opts={}){
    Antes vinham da seção FINANCEIRO da aba Dashboard, que encolheu para uma única
    linha (boleto antigo, desatualizada) — as métricas usadas aqui não existem
    mais lá. */
-lerInadimplencia()
+lerInadimplenciaAoVivo()
   .then(inad=>{
     // A soma dos devedores é conferida contra a linha TOTAL da própria planilha:
     // divergência aqui significa exportação truncada, e é melhor saber.
-    if(inad.totalPlanilha!=null && Math.abs(inad.soma-inad.totalPlanilha)>0.01)
+    if(inad.fonte==='planilha' && inad.totalPlanilha!=null && Math.abs(inad.soma-inad.totalPlanilha)>0.01)
       console.warn('[financeiro] soma dos devedores ('+inad.soma+') difere do TOTAL da planilha ('+inad.totalPlanilha+')');
 
     hBars('chart1',[
@@ -164,9 +165,26 @@ lerInadimplencia()
       {n:'Boleto',v:inad.formas['Boleto']||0,c:'#0a3d6e'}
     ],{w:500,padL:140});
 
+    // `devedores` vem como lista (planilha) ou como contagem (servidor).
+    const qtd=Array.isArray(inad.devedores)?inad.devedores.length:inad.devedores;
     const res=document.getElementById('fin-resumo');
-    if(res) res.textContent=inad.devedores.length+' alunos inadimplentes · '+
+    if(res) res.textContent=qtd+' alunos inadimplentes · '+
       inad.parcelasVencidas+' parcelas vencidas · '+moedaBR(inad.soma)+' em aberto';
+
+    // De onde veio o número: ao vivo do ASAAS ou da última exportação colada
+    // na planilha. Sem isso, um servidor fora do ar passaria por dado atual.
+    const fonte=document.getElementById('fin-fonte');
+    if(fonte){
+      if(inad.fonte==='asaas'){
+        const h=inad.consultadoEm?new Date(inad.consultadoEm)
+          .toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+        fonte.textContent='Ao vivo do ASAAS'+(h?' · consultado '+h:'');
+        fonte.style.color='#059669';
+      }else{
+        fonte.textContent='Da planilha (última exportação) — ASAAS ao vivo indisponível agora';
+        fonte.style.color='#b45309';
+      }
+    }
   })
   .catch(e=>avisarErro(['chart1','chart2','chart3'],e));
 </script>

@@ -94,6 +94,40 @@ async function lerInadimplencia(){
   };
 }
 
+/* Inadimplencia ao vivo, direto do ASAAS.
+ *
+ * O dashboard e pagina estatica: nao pode guardar a ASAAS_API_KEY. Quem consulta
+ * o ASAAS e o servidor da Mentoria, que ja tem a chave, e expoe so os totais em
+ * /api/publico/inadimplencia.
+ *
+ * Cobre o CPVH inteiro (consulta por status=OVERDUE, sem filtrar aluno), e a
+ * regra de estorno e a mesma que barra agendamento na Mentoria.
+ *
+ * Se o servidor estiver fora, cai para a aba ASAAS da planilha: numero de ontem
+ * e melhor que card vazio. A tela diz de onde veio.
+ */
+async function lerInadimplenciaAoVivo(){
+  const API='https://mentoria-viver-de-holter-production.up.railway.app/api/publico/inadimplencia';
+  try{
+    const r=await fetch(API);
+    if(!r.ok) throw new Error('servidor respondeu '+r.status);
+    const d=await r.json();
+    if(typeof d.total!=='number') throw new Error('resposta sem total');
+    return {
+      soma:d.total, devedores:d.devedores, parcelasVencidas:d.parcelas_vencidas,
+      formas:d.por_forma||{},
+      faixas:Object.fromEntries(Object.entries(d.por_faixa||{})
+        .map(([f,v])=>[f,{alunos:v.pessoas,valor:v.valor}])),
+      fonte:'asaas', consultadoEm:d.consultado_em, totalPlanilha:null
+    };
+  }catch(e){
+    console.warn('[dashboard] ASAAS ao vivo indisponivel, usando a planilha:',e.message);
+    const p=await lerInadimplencia();
+    p.fonte='planilha';
+    return p;
+  }
+}
+
 /* Avisa na tela quando a planilha não responde, em vez de deixar o card vazio
  * sem explicação. */
 function avisarErro(ids,e){
