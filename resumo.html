@@ -108,11 +108,18 @@ svg text{font-family:'Nunito',sans-serif}
 .rs-chip .l{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px}
 .rs-chip .v{font-family:'Bricolage Grotesque';font-size:clamp(18px,2.6vh,23px);font-weight:800;color:var(--navy);margin-top:3px}
 .rs-chip .s{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:2px}
-.rs-mid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;min-height:0}
+/* O grafico de matriculas tem 14 barras e o funil so 4 linhas: com 1.6fr as
+   barras ficavam finas demais para ler o rotulo do mes. O funil nao precisa
+   da largura que tinha. */
+.rs-mid{display:grid;grid-template-columns:2.3fr 1fr;gap:14px;min-height:0}
 .rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px}
 .rs-card-title{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--navy)}
 .rs-card-sub{font-family:'Nunito';font-size:11px;color:var(--muted);font-weight:700;margin-left:6px}
-.rs-chart{flex:1;min-height:0;display:flex;align-items:center}
+/* O SVG tem viewBox fixo e width:100%: sozinho ele so ocupa a altura
+   proporcional a largura, deixando o card meio vazio e as barras baixas.
+   Esticar o svg ate o fim do card usa a altura que ja estava reservada. */
+.rs-chart{flex:1;min-height:0;display:flex;align-items:stretch}
+.rs-chart>svg{width:100%;height:100%}
 .rs-chart svg{width:100%;max-height:100%}
 .rs-funil{flex:1;min-height:0;display:flex;align-items:center}
 .rs-funil svg{width:100%;max-height:100%}
@@ -757,7 +764,10 @@ function updateDashboardKPIs(kpis) {
     // Engajamento
     const engajTP = kpis.ENGAJAMENTO?.['Teórico+Prático'] || {};
     const engajAltaMedio = parseInt(engajTP['Alto+Médio Qt']) || 166;
-    const engajAltaMedioP = parseFloat(engajTP['Alto+Médio %']?.toString().replace('%', '')) || 74.4;
+    // A planilha escreve o percentual em pt-BR ("18,86%"). parseFloat para na
+    // virgula e devolvia 18, jogando fora a casa decimal: a tela mostrava
+    // "18.0%" onde a planilha diz 18,86%. Troca a virgula por ponto antes.
+    const engajAltaMedioP = parseFloat(String(engajTP['Alto+Médio %'] ?? '').replace('%','').replace(',','.')) || 74.4;
     const ativos30 = parseInt(engajTP['Ativos 30d']) || 67;
 
     // Variável temporária para compatibilidade
@@ -1274,7 +1284,10 @@ function updateDashboardKPIs(kpis) {
     const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / basePratica) * 100).toFixed(1);
     const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
     const pct_inadequimplencia = ((kpis.inadimplencia_qtd / basePratica) * 100).toFixed(0);
-    const pct_engajAltoMedio = parseFloat((kpis.engajamento_alto_medio && kpis.engajamento_alto_medio.percentual) || 0).toFixed(1);
+    // engajAltaMedioP ja veio da planilha acima. O caminho antigo
+    // (kpis.engajamento_alto_medio) e do formato do kpis.json aposentado e
+    // hoje nao existe, entao o texto saia sempre "0.0%".
+    const pct_engajAltoMedio = engajAltaMedioP.toFixed(1);
 
     const insights = `
       <div>

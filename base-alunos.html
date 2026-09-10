@@ -64,18 +64,18 @@ svg text{font-family:'Nunito',sans-serif}
 
 <div class="wrap">
   <section id="base">
-    <div class="sec-head"><h2>Base de Alunos</h2><span class="tag">235 matriculados</span></div>
+    <div class="sec-head"><h2>Base de Alunos</h2><span class="tag" id="tagTotal">—</span></div>
     <p class="sec-sub">Distribuição da base por modalidade (Teórico+Prático e Só Teórico) e status de cada grupo.</p>
 
     <div class="grid g-2">
       <div class="card chart-card">
         <h3>Teórico+Prático · Composição</h3>
-        <div class="hint">224 alunos (95,32%) nesta modalidade, distribuídos por status.</div>
+        <div class="hint" id="hint1">—</div>
         <div id="chart1"></div>
       </div>
       <div class="card chart-card">
         <h3>Só Teórico · Composição</h3>
-        <div class="hint">11 alunos (4,68%) cursam apenas teórico, todos em andamento.</div>
+        <div class="hint" id="hint2">—</div>
         <div id="chart2"></div>
       </div>
     </div>
@@ -83,12 +83,12 @@ svg text{font-family:'Nunito',sans-serif}
     <div class="grid g-2" style="margin-top:20px">
       <div class="card chart-card">
         <h3>Teórico+Prático · Detalhes</h3>
-        <div class="hint">Indicadores-chave dos 224 alunos: progressão, aprovação e situação.</div>
+        <div class="hint" id="hint3">—</div>
         <div id="chart3"></div>
       </div>
       <div class="card chart-card">
         <h3>Só Teórico · Detalhes</h3>
-        <div class="hint">Indicadores dos 11 alunos em modalidade teórica pura.</div>
+        <div class="hint" id="hint4">—</div>
         <div id="chart4"></div>
       </div>
     </div>
@@ -156,6 +156,20 @@ lerIndicadores()
     const baseAlunos=base.BASE_ALUNOS||{};
     const tp=baseAlunos['Teórico+Prático']||{};
     const st=baseAlunos['Só Teórico']||{};
+
+    // Os textos de cabecalho saem dos dados. Antes estavam escritos no HTML
+    // (235/224/11) e ficaram defasados enquanto os graficos ja liam ao vivo,
+    // fazendo a mesma tela mostrar dois totais diferentes.
+    const nTP=parseInt(tp['Total'])||0, nST=parseInt(st['Total'])||0;
+    const totalBase=nTP+nST;
+    const pct=n=>totalBase?(n*100/totalBase).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%':'—';
+    const txt=(id,s)=>{const e=document.getElementById(id);if(e)e.textContent=s;};
+
+    txt('tagTotal',fmtN(totalBase)+' matriculados');
+    txt('hint1',`${fmtN(nTP)} alunos (${pct(nTP)}) nesta modalidade, distribuídos por status.`);
+    txt('hint2',`${fmtN(nST)} alunos (${pct(nST)}) cursam apenas teórico.`);
+    txt('hint3',`Indicadores-chave dos ${fmtN(nTP)} alunos: progressão, aprovação e situação.`);
+    txt('hint4',`Indicadores dos ${fmtN(nST)} alunos em modalidade teórica pura.`);
 
     // Gráfico 1: Teórico+Prático
     const items1=[
