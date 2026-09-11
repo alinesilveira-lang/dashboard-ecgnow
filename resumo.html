@@ -115,14 +115,19 @@ svg text{font-family:'Nunito',sans-serif}
 .rs-chart-card,.rs-funil-card{display:flex;flex-direction:column;min-height:0;padding:16px 18px}
 .rs-card-title{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--navy)}
 .rs-card-sub{font-family:'Nunito';font-size:11px;color:var(--muted);font-weight:700;margin-left:6px}
-/* O SVG tem viewBox fixo e width:100%: sozinho ele so ocupa a altura
-   proporcional a largura, deixando o card meio vazio e as barras baixas.
-   Esticar o svg ate o fim do card usa a altura que ja estava reservada. */
-.rs-chart{flex:1;min-height:0;display:flex;align-items:stretch}
-.rs-chart>svg{width:100%;height:100%}
-.rs-chart svg{width:100%;max-height:100%}
-.rs-funil{flex:1;min-height:0;display:flex;align-items:center}
-.rs-funil svg{width:100%;max-height:100%}
+/* O SVG tinha width:100%;height:100% dentro de um flex:1 que também estica
+   (align-items:stretch): a altura do card dependia do SVG e a altura do SVG
+   dependia do card, um ciclo que o layout resolve por aproximação — cada
+   reflow (fonte do Google Fonts chegando com font-display:swap, resize,
+   clamp(...,vh,...) recalculando) dava um valor um pouco diferente, e por
+   isso os gráficos "respiravam" (cresciam e encolhiam) sozinhos.
+   position:relative + o SVG em position:absolute inset:0 tira essa altura do
+   cálculo do flexbox: o card usa só o espaço que o grid já reservou (min-height:0
+   no ancestral), sem o SVG realimentar de volta o tamanho do próprio container. */
+.rs-chart{flex:1;min-height:0;position:relative}
+.rs-chart>svg{position:absolute;inset:0;width:100%;height:100%}
+.rs-funil{flex:1;min-height:0;position:relative}
+.rs-funil svg{position:absolute;inset:0;width:100%;height:auto;max-height:100%;margin:auto}
 .rs-destaques{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 20px}
 .rs-dest{display:flex;gap:11px;align-items:flex-start}
 .rs-dest .ico{flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -170,7 +175,7 @@ svg text{font-family:'Nunito',sans-serif}
       <div><div class="rs-hl">Recorrência Mai/26</div><div class="rs-hv">R$ 3,8 mil <small>ASAAS</small></div></div>
       <div><div class="rs-hl">Inadimplência</div><div class="rs-hv">R$ 15,4 mil <small>25 alunos</small></div></div>
     </div>
-    <div class="rs-proj"><span class="pl">Esteira de talentos · histórico</span>
+    <div class="rs-proj" id="rsProj"><span class="pl">Esteira de talentos · histórico</span>
       <b>28 alunos</b> chegaram a Analista ECGNOW · <b>21 ativos</b> na ECGNOW</div>
   </div>
 
@@ -192,9 +197,9 @@ svg text{font-family:'Nunito',sans-serif}
       </div>
     </div>
     <div class="card rs-destaques">
-      <div class="rs-dest"><div class="ico b">🎓</div><div><b>Vendas</b><p>32 matrículas em 2026 YTD; janeiro foi o melhor mês da história (18), mas o 2º tri desacelerou (abr 0, mai 3).</p></div></div>
-      <div class="rs-dest"><div class="ico g">🧲</div><div><b>Esteira</b><p>40% dos candidatos do seletivo viraram analistas ECGNOW — o curso abastece a operação de Holter com mão de obra já formada.</p></div></div>
-      <div class="rs-dest"><div class="ico y">⚠️</div><div><b>Risco</b><p>Inadimplência de R$ 15,4 mil atinge 25 alunos (~32% da base ativa) e o churn histórico (cancelamento + abandono) soma 38 alunos.</p></div></div>
+      <div class="rs-dest"><div class="ico b">🎓</div><div><b>Vendas</b><p id="destVendas">32 matrículas em 2026 YTD; janeiro foi o melhor mês da história (18), mas o 2º tri desacelerou (abr 0, mai 3).</p></div></div>
+      <div class="rs-dest"><div class="ico g">🧲</div><div><b>Esteira</b><p id="destEsteira">40% dos candidatos do seletivo viraram analistas ECGNOW — o curso abastece a operação de Holter com mão de obra já formada.</p></div></div>
+      <div class="rs-dest"><div class="ico y">⚠️</div><div><b>Risco</b><p id="destRisco">Inadimplência de R$ 15,4 mil atinge 25 alunos (~32% da base ativa) e o churn histórico (cancelamento + abandono) soma 38 alunos.</p></div></div>
     </div>
   </div>
 </div>
@@ -540,8 +545,8 @@ function funil(cid,steps,opts={}){
   // Dados padrão (serão sobrescritos por loadKPIsFromJSON)
   const labels=['Ago','Set','Out','Nov','Dez','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago'];
   const vals=[6,5,11,15,6,16,10,20,4,7,0,2,4];
-  window.renderMatriculas = function(vals){
-    barChart('rsChart',labels,vals,{h:240,w:580});
+  window.renderMatriculas = function(vals, rotulos){
+    barChart('rsChart', rotulos || labels, vals, {h:240,w:580});
   };
   barChart('rsChart',labels,vals,{h:240,w:580});
 
@@ -595,27 +600,47 @@ function funil(cid,steps,opts={}){
 /* ============================================================
    5. FINANCEIRO
    ============================================================ */
-// Gráficos serão renderizados dinamicamente por updateDashboardKPIs()
-(function(){
-  const c=document.getElementById('inadCard');
-  c.innerHTML=`
-    <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-      <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">R$ 15.361,68</div>
-        <div style="font-size:11.5px;font-weight:700;color:#b91c1c">25 alunos · ~32% da base ativa</div>
-      </div>
-      <div style="background:var(--warn-soft);border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Boletos vencidos (importados)</div>
-        <div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:#92400e">R$ 3.338,24</div>
-        <div style="font-size:11.5px;font-weight:700;color:#92400e">13 títulos sem baixa</div>
-      </div>
-      <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-        <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
-        <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">Cartão 42 · Pix 8 · Boleto 1</div>
-      </div>
-    </div>`;
-})();
+// O card de inadimplência lia campos de `kpis.*` (inadimplencia_valor,
+// inadimplencia_qtd) de uma API antiga que não existe mais, e antes disso
+// mostrava um valor cravado no HTML (R$ 15.361,68) que nunca mudava. Usa a
+// mesma fonte ao vivo que financeiro.html já consome — ASAAS agora, com a
+// planilha como reserva se o servidor estiver fora.
+lerInadimplenciaAoVivo()
+  .then(inad=>{
+    const c=document.getElementById('inadCard');
+    const qtd=Array.isArray(inad.devedores)?inad.devedores.length:inad.devedores;
+    const fonteTxt = inad.fonte==='asaas' ? 'Ao vivo do ASAAS' : 'Da planilha (ASAAS indisponível agora)';
+    if(c){
+      const formasTxt=['Cartão','Pix','Boleto']
+        .map(f=>f+' '+(inad.formas[f]||0)).join(' · ');
+      c.innerHTML=`
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
+            <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${moedaBR(inad.soma)}</div>
+            <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${qtd} alunos · ${inad.parcelasVencidas} parcelas vencidas</div>
+          </div>
+          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento</div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">${formasTxt}</div>
+          </div>
+          <div style="font-size:9.5px;color:${inad.fonte==='asaas'?'#059669':'#b45309'};font-weight:700">${fonteTxt}</div>
+        </div>`;
+    }
+    // Sobrescreve o valor da planilha no hero da capa e no destaque "Risco"
+    // com o número ao vivo do ASAAS, assim que a chamada resolver.
+    const heroGrid4 = document.querySelectorAll('.rs-hero-grid > div');
+    if (inad.fonte==='asaas' && heroGrid4.length >= 4) {
+      heroGrid4[3].innerHTML = `<div class="rs-hl">Inadimplência</div><div class="rs-hv">${moedaBR(inad.soma)} <small>${qtd} alunos</small></div>`;
+    }
+    const destRisco2 = document.getElementById('destRisco');
+    if (inad.fonte==='asaas' && destRisco2) {
+      const partes = destRisco2.textContent.split('e o churn');
+      destRisco2.textContent = `Inadimplência de ${moedaBR(inad.soma)} (ao vivo do ASAAS) atinge ${qtd} alunos` +
+        (partes.length > 1 ? ' e o churn' + partes[1] : '.');
+    }
+  })
+  .catch(e=>avisarErro('inadCard',e));
 
 /* ============================================================
    TROCA DE VISÕES — Capa ↔ Dashboard expandido
@@ -709,13 +734,36 @@ function updateDashboardKPIs(kpis) {
     const data = Array.isArray(kpis) ? arrayToStructured(kpis) : kpis;
 
     // ============================================================
-    // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 12 meses: ago/2025 a ago/2026)
+    // ATUALIZAR GRÁFICO DE MATRÍCULAS (últimos 13 meses presentes no arquivo)
     // ============================================================
+    // Os meses saíam de uma lista fixa terminando em ago/2026: um mês novo
+    // entrava na planilha (set/2026 já existe) e não aparecia no gráfico, sem
+    // nada indicando que faltava. Agora saem do próprio arquivo, ordenados por
+    // ano e mês, pegando os últimos 13 — a janela desliza sozinha.
+    const MES_NUM = {jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
     const matriculas = data.MATRÍCULAS || {};
-    const mesesOrdenados = ['ago./2025','set./2025','out./2025','nov./2025','dez./2025','jan./2026','fev./2026','mar./2026','abr./2026','mai./2026','jun./2026','jul./2026','ago./2026'];
-    const valsMatriculas = mesesOrdenados.map(m => parseInt(matriculas[m]?.Quantidade) || 0);
-    console.log('📊 Matrículas carregadas:', valsMatriculas);
-    if(window.renderMatriculas) window.renderMatriculas(valsMatriculas);
+    const mesesOrdenados = Object.keys(matriculas)
+      .map(k => {
+        const m = k.match(/^([a-zç]{3})\.?\/(\d{4})$/i);
+        return m ? {k, mes: MES_NUM[m[1].toLowerCase()], ano: +m[2]} : null;
+      })
+      .filter(x => x && x.mes)
+      .sort((a,b) => a.ano - b.ano || a.mes - b.mes)
+      .slice(-13);
+    const valsMatriculas = mesesOrdenados.map(x => parseInt(matriculas[x.k]?.Quantidade) || 0);
+    const rotulosMatriculas = mesesOrdenados.map(x => {
+      const nome = x.k.split(/[.\/]/)[0];
+      return nome.charAt(0).toUpperCase() + nome.slice(1);
+    });
+    console.log('📊 Matrículas carregadas:', rotulosMatriculas.join(','), '=', valsMatriculas.join(','));
+    if(window.renderMatriculas) window.renderMatriculas(valsMatriculas, rotulosMatriculas);
+
+    // O subtítulo dizia "jun/25 – jul/26" fixo; agora acompanha os dados.
+    const subMatriculas = document.querySelector('.rs-card-sub');
+    if (subMatriculas && mesesOrdenados.length) {
+      const fmt = x => x.k.replace(/\.?\/(\d{2})(\d{2})/, '/$2');
+      subMatriculas.textContent = fmt(mesesOrdenados[0]) + ' – ' + fmt(mesesOrdenados[mesesOrdenados.length-1]);
+    }
 
     // Extrair dados do JSON estruturado
     const resumo = data.RESUMO?.Geral || {};
@@ -747,28 +795,45 @@ function updateDashboardKPIs(kpis) {
     // geral, TODOS os derivados saiam ~5% abaixo da planilha.
     const basePratica = parseInt(baseTP.Total) || total;
 
+    // Os nomes de coluna aqui não batiam com os da planilha ('Cancelou' em vez
+    // de 'Cancelaram o curso', 'Bloqueado' em vez de 'Bloqueados por
+    // inadimplência', 'Trancado' em vez de 'Trancaram'): parseInt(undefined) é
+    // NaN, o `||` engolia e cada um desses campos ficava travado no número
+    // fixo do fallback, por mais que a planilha mudasse.
     const baseAlunos = {
-      tp_total: parseInt(baseTP.Total) || 223,
-      tp_emcurso: parseInt(baseTP['Em Curso']) || 79,
-      tp_concluidos: parseInt(baseTP.Concluídos) || 95,
-      tp_cancelou: parseInt(baseTP.Cancelou) || 15,
-      tp_abandono: parseInt(baseTP.Abandono) || 13,
-      tp_bloqueado: parseInt(baseTP.Bloqueado) || 10,
-      tp_trancado: parseInt(baseTP.Trancado) || 5,
-      st_total: parseInt(baseST.Total) || 9,
+      tp_total: parseInt(baseTP.Total) || 0,
+      tp_emcurso: parseInt(baseTP['Em Curso']) || 0,
+      tp_desengajados: parseInt(baseTP['Desengajados']) || 0,
+      tp_concluidos: parseInt(baseTP.Concluídos) || 0,
+      tp_aprovados: parseInt(baseTP.Aprovados) || 0,
+      tp_reprovados: parseInt(baseTP.Reprovados) || 0,
+      tp_cancelou: parseInt(baseTP['Cancelaram o curso']) || 0,
+      tp_abandono: parseInt(baseTP['Abandonaram o curso']) || 0,
+      tp_bloqueado: parseInt(baseTP['Bloqueados por inadimplência']) || 0,
+      tp_trancado: parseInt(baseTP['Trancaram']) || 0,
+      st_total: parseInt(baseST.Total) || 0,
       st_emcurso: parseInt(baseST['Em Curso']) || 0,
-      st_cancelou: parseInt(baseST.Cancelou) || 3,
-      st_abandono: parseInt(baseST.Abandono) || 2
+      st_desengajados: parseInt(baseST['Desengajados']) || 0,
+      st_concluidos: parseInt(baseST.Concluídos) || 0,
+      st_cancelou: parseInt(baseST['Cancelaram o curso']) || 0,
+      st_abandono: parseInt(baseST['Abandonaram o curso']) || 0,
+      st_bloqueado: parseInt(baseST['Bloqueados por inadimplência']) || 0,
+      st_trancado: parseInt(baseST['Trancaram']) || 0
     };
 
     // Engajamento
-    const engajTP = kpis.ENGAJAMENTO?.['Teórico+Prático'] || {};
-    const engajAltaMedio = parseInt(engajTP['Alto+Médio Qt']) || 166;
+    // Usava `kpis.ENGAJAMENTO` (o array bruto de linhas, sem essa propriedade)
+    // em vez de `data.ENGAJAMENTO` (o objeto já agrupado por SEÇÃO/CATEGORIA):
+    // o optional chaining engolia o erro e caía sempre no fallback fixo — por
+    // isso "Engajamento A+M" mostrava 74,4% parado enquanto a planilha já
+    // tinha outro valor havia meses.
+    const engajTP = data.ENGAJAMENTO?.['Teórico+Prático'] || {};
+    const engajAltaMedio = parseInt(engajTP['Alto+Médio Qt']) || 0;
     // A planilha escreve o percentual em pt-BR ("18,86%"). parseFloat para na
     // virgula e devolvia 18, jogando fora a casa decimal: a tela mostrava
     // "18.0%" onde a planilha diz 18,86%. Troca a virgula por ponto antes.
-    const engajAltaMedioP = parseFloat(String(engajTP['Alto+Médio %'] ?? '').replace('%','').replace(',','.')) || 74.4;
-    const ativos30 = parseInt(engajTP['Ativos 30d']) || 67;
+    const engajAltaMedioP = parseFloat(String(engajTP['Alto+Médio %'] ?? '').replace('%','').replace(',','.')) || 0;
+    const ativos30 = parseInt(engajTP['Ativos 30d']) || parseInt(resumo['Ativos 30 dias']) || 0;
 
     // Variável temporária para compatibilidade
     const engajDetalhado = {
@@ -806,6 +871,21 @@ function updateDashboardKPIs(kpis) {
     heroGrid[1].innerHTML = `<div class="rs-hl">Concluíram</div><div class="rs-hv">${concluidos} <small>${porcentagem}% da base</small></div>`;
   }
 
+  // "Recorrência Mai/26" ficava escrito assim, sempre — não existe essa
+  // métrica (faturamento recorrente mensal) na aba Dashboard hoje, então em
+  // vez de inventar um mês e um valor, o card avisa que falta a fonte.
+  if (heroGrid.length >= 3) {
+    heroGrid[2].innerHTML = `<div class="rs-hl">Recorrência</div><div class="rs-hv" style="font-size:13px">indisponível <small>sem fonte na planilha</small></div>`;
+  }
+
+  // Inadimplência: valor imediato da planilha (RESUMO), substituído pelo ASAAS
+  // ao vivo quando lerInadimplenciaAoVivo() resolver, mais abaixo no script.
+  if (heroGrid.length >= 4) {
+    const inadTxt = resumo['Inadimplência'] || '—';
+    const inadDesc = getDesc('RESUMO', 'Inadimplência') || '';
+    heroGrid[3].innerHTML = `<div class="rs-hl">Inadimplência</div><div class="rs-hv" style="font-size:15px">${inadTxt} <small>${inadDesc}</small></div>`;
+  }
+
   // KPIs na visão de resumo (chips)
   const chips = [
     { l: 'Taxa de conclusão', v: taxaConclusao + '%', s: getDesc('RESUMO', 'Taxa Conclusão') || concluidos + ' de ' + baseAlunos.tp_total + ' alunos', f: 'g' },
@@ -834,6 +914,59 @@ function updateDashboardKPIs(kpis) {
       </div>
     `).join('');
   }
+
+  // ============================================================
+  // TEXTOS DA CAPA — rodapé "Esteira" e os 3 destaques
+  // ============================================================
+  // Estes quatro textos ficavam escritos à mão no HTML (28 alunos, 40%,
+  // R$ 15,4 mil, 38 alunos...) e nunca acompanhavam o resto da capa, que já lia
+  // a planilha. Agora saem dos mesmos números que os chips e o funil usam.
+  (function(){
+    const rsProj = document.getElementById('rsProj');
+    if (rsProj) {
+      rsProj.innerHTML = `<span class="pl">Esteira de talentos · histórico</span>` +
+        `<b>${analistasTotal} alunos</b> chegaram a Analista ECGNOW · <b>${analistas} ativos</b> na ECGNOW`;
+    }
+
+    // "Vendas": soma as matrículas do ano corrente (a partir de jan/ANO), usando
+    // a mesma série mensal do gráfico — sem re-somar tudo, aproveita o que já
+    // foi lido e ordenado.
+    const destVendas = document.getElementById('destVendas');
+    if (destVendas && typeof mesesOrdenados !== 'undefined' && mesesOrdenados.length) {
+      const anoAtual = mesesOrdenados[mesesOrdenados.length - 1].ano;
+      const doAno = mesesOrdenados.filter(x => x.ano === anoAtual);
+      const totalAno = doAno.reduce((s,x) => s + (parseInt(matriculas[x.k]?.Quantidade) || 0), 0);
+      let melhor = null;
+      doAno.forEach(x => {
+        const v = parseInt(matriculas[x.k]?.Quantidade) || 0;
+        if (!melhor || v > melhor.v) melhor = {k:x.k, v};
+      });
+      const NOME_MES = ['','janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+      const nomeMelhor = melhor ? NOME_MES[MES_NUM[melhor.k.split(/[.\/]/)[0].toLowerCase()]] : '';
+      destVendas.textContent = `${totalAno} matrículas em ${anoAtual} YTD` +
+        (melhor ? `; ${nomeMelhor} foi o melhor mês do ano (${melhor.v}).` : '.');
+    }
+
+    // "Esteira": conversão de aprovados para analistas. Usa baseAlunos.tp_aprovados
+    // (BASE_ALUNOS) em vez da variável `aprovados` declarada mais abaixo perto do
+    // funil — que hoje só existe para o funil e não está disponível aqui ainda.
+    const destEsteira = document.getElementById('destEsteira');
+    if (destEsteira) {
+      const totalAprovados = baseAlunos.tp_aprovados;
+      const pctConversao = totalAprovados ? Math.round((analistas / totalAprovados) * 100) : 0;
+      destEsteira.textContent = `${pctConversao}% dos aprovados viraram analistas ECGNOW (${analistas} de ${totalAprovados}) — o curso abastece a operação de Holter com mão de obra já formada.`;
+    }
+
+    // "Risco": mesma inadimplência do card acima, e o churn (cancelamento +
+    // abandono) somado das duas modalidades da Base de Alunos.
+    const destRisco = document.getElementById('destRisco');
+    if (destRisco) {
+      const churn = baseAlunos.tp_cancelou + baseAlunos.tp_abandono + baseAlunos.st_cancelou + baseAlunos.st_abandono;
+      const inadTxt = resumo['Inadimplência'] || '—';
+      const inadDesc = getDesc('RESUMO', 'Inadimplência') || '';
+      destRisco.textContent = `Inadimplência de ${inadTxt}${inadDesc ? ' (' + inadDesc + ')' : ''} e o churn histórico (cancelamento + abandono) soma ${churn} alunos.`;
+    }
+  })();
 
   // ============================================================
   // BASE DE ALUNOS - Atualizar gráficos com dados detalhados
@@ -925,12 +1058,19 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   (function(){
-    const nps_promotores = kpis.nps_promotores_pct || 0;
-    const nps_neutros = kpis.nps_neutros_pct || 0;
-    const nps_detratores = kpis.nps_detratores_pct || 0;
-    const nps_respostas = kpis.nps_respostas || 0;
-    const nps_nao_responderam = kpis.nps_nao_responderam || 0;
-    const nps_score = kpis.nps_score || 0;
+    // Lia `kpis.nps_*` (a API antiga); os campos reais estão em `data.NPS`,
+    // no mesmo formato SEÇÃO/CATEGORIA/MÉTRICA das outras seções.
+    const npsGeral = data.NPS?.Geral || {};
+    const npsResp = data.NPS?.Respondentes || {};
+    const npsTotal = data.NPS?.Total || {};
+    const pctNum = s => parseFloat(String(s||'').replace('%','').replace(',','.')) || 0;
+
+    const nps_promotores = pctNum(npsResp['Promotores %']);
+    const nps_neutros = pctNum(npsResp['Neutros %']);
+    const nps_detratores = pctNum(npsResp['Detratores %']);
+    const nps_respostas = parseInt(npsTotal['Responderam']) || 0;
+    const nps_nao_responderam = parseInt(npsTotal['Não Responderam']) || 0;
+    const nps_score = Math.round(pctNum(npsGeral['Score']));
 
     const npsSlices = [
       {n:'Promotores',v:nps_promotores,c:'#10b981'},
@@ -939,36 +1079,32 @@ function updateDashboardKPIs(kpis) {
     ];
 
     const c = document.getElementById('npsDonut');
-    // if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
+    if(c) donut('npsDonut', npsSlices, String(nps_score), 'NPS Score', {w:380,h:250,cx:100,r:78,lx:212});
 
     const npsCard = document.getElementById('npsCard');
     if(npsCard) {
-      const nota_alto = kpis.nota_media_engajamento_alto || 0;
-      const nota_medio = kpis.nota_media_engajamento_medio || 0;
-      const nota_baixo = kpis.nota_media_engajamento_baixo || 0;
-
       npsCard.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:14px;padding-top:6px">
           <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Pesquisa de Satisfação</div>
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Pesquisa de Satisfação (Base Unificada)</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_respostas}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Respostas</div></div>
-              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam (${kpis.nps_nao_responderam_pct}%)</div></div>
+              <div><div style="font-family:'Bricolage Grotesque';font-size:22px;font-weight:800;color:var(--navy)">${nps_nao_responderam}</div><div style="font-size:10px;color:var(--muted);font-weight:700">Não responderam</div></div>
             </div>
+            <div style="font-size:10px;color:var(--muted);font-weight:700;margin-top:6px">Detalhe completo na página Pesquisa Pós-Curso.</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <div><div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Nota média por engajamento</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#d1fae5;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#047857">Alto</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nota_alto}</div>
+              <div><div style="font-weight:700;color:#047857">Promotores</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#047857">${nps_promotores.toFixed(1)}%</div>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#bfdbfe;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#0369a1">Médio</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nota_medio}</div>
+              <div><div style="font-weight:700;color:#0369a1">Neutros</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#0369a1">${nps_neutros.toFixed(1)}%</div>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;background:#fed7aa;border-radius:10px;padding:11px 14px">
-              <div><div style="font-weight:700;color:#b45309">Baixo</div></div>
-              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nota_baixo}</div>
+              <div><div style="font-weight:700;color:#b45309">Detratores</div></div>
+              <div style="font-family:'Bricolage Grotesque';font-size:20px;font-weight:800;color:#b45309">${nps_detratores.toFixed(1)}%</div>
             </div>
           </div>
         </div>`;
@@ -1055,52 +1191,24 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   (function(){
-    const asaas = kpis.asaas_qtd || 0;
-    const boleto = kpis.boleto_qtd || 0;
-    const pix = kpis.pix_qtd || 0;
-    const trancado = kpis.trancado_qtd || 0;
-    const teorico = kpis.teorico_qtd || 0;
-    const pratico = kpis.pratico_qtd || 0;
-    const inadimplencia_qtd = kpis.inadimplencia_qtd || 0;
-    const concluidos = kpis.concluidos || 0;
-
-    // Formas de pagamento
+    // `pagamentoChart` e `statusConclusaoChart` liam campos de `kpis.*_qtd`
+    // que nunca existiram no array da planilha — ficavam sempre em 0 (ASAAS 0 ·
+    // Boleto 0 · Pix 0, um gráfico de barras vazio, sem indicar que faltava
+    // dado). Não há hoje, na aba Dashboard, "cobranças totais por forma de
+    // pagamento" nem "só teórico / só prático" como fonte separada do que
+    // BASE_ALUNOS já cobre — então os dois cards avisam, em vez de mostrar
+    // zeros como se fossem reais. `inadCard`, no card acima, já traz a
+    // inadimplência por forma de pagamento a partir do ASAAS ao vivo.
     const pagtoChart = document.getElementById('pagamentoChart');
     if(pagtoChart) {
-      const pagto = [
-        {n:'ASAAS',v:asaas,c:'#0a3d6e'},
-        {n:'Boleto',v:boleto,c:'#0d5a94'},
-        {n:'Pix',v:pix,c:'#0ea5e9'}
-      ];
-      hBars('pagamentoChart', pagto, {w:400});
+      pagtoChart.innerHTML = '<div style="padding:18px;color:#64748b;font-size:12.5px;line-height:1.5">'+
+        'Cobranças totais por forma de pagamento não estão na planilha — veja a inadimplência por forma acima.</div>';
     }
 
-    // Status de conclusão
     const statusConclusao = document.getElementById('statusConclusaoChart');
     if(statusConclusao) {
-      const conclusao = [
-        {n:'Só Teórico',v:teorico,c:'#f59e0b'},
-        {n:'Só Prático',v:pratico,c:'#0ea5e9'},
-        {n:'Teórico + Prático',v:concluidos,c:'#10b981'}
-      ];
-      hBars('statusConclusaoChart', conclusao, {w:400});
-    }
-
-    // Atualizar card de inadimplência
-    const inadCard = document.getElementById('inadCard');
-    if(inadCard) {
-      inadCard.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-          <div style="background:var(--bad-soft);border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b91c1c">Inadimplência apurada</div>
-            <div style="font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;color:#b91c1c">${kpis.inadimplencia_valor}</div>
-            <div style="font-size:11.5px;font-weight:700;color:#b91c1c">${inadimplencia_qtd} alunos</div>
-          </div>
-          <div style="background:#f1f7fc;border-radius:12px;padding:14px 16px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)">Formas de pagamento (ASAAS)</div>
-            <div style="font-size:12.5px;font-weight:800;color:var(--navy);margin-top:4px">ASAAS ${asaas} · Boleto ${boleto} · Pix ${pix}</div>
-          </div>
-        </div>`;
+      statusConclusao.innerHTML = '<div style="padding:18px;color:#64748b;font-size:12.5px;line-height:1.5">'+
+        'Esse corte (só teórico / só prático / os dois) não está na planilha atual.</div>';
     }
   })();
 
@@ -1116,7 +1224,10 @@ function updateDashboardKPIs(kpis) {
   // ATUALIZAR FUNIL DA ESTEIRA
   // ============================================================
 
-  const aprovados = kpis.taxa_aprovacao_qtd || 73;
+  // `kpis` é o array bruto de linhas; `kpis.taxa_aprovacao_qtd` nunca existiu
+  // ali e o funil ficava sempre com o valor fixo do fallback (73). O real já
+  // está em baseAlunos, lido de BASE_ALUNOS.
+  const aprovados = baseAlunos.tp_aprovados || 0;
 
   // Funil pequeno (Capa)
   const funilData = [
@@ -1141,12 +1252,32 @@ function updateDashboardKPIs(kpis) {
   // ============================================================
 
   // Declarar variáveis necessárias
-  const trancado = kpis.trancado_qtd || 0;
-  const alunoExterno = kpis.aluno_externo || 0;
+  // `kpis.trancado_qtd` e `kpis.aluno_externo` nunca existiram no array da
+  // planilha; os reais estão em `baseAlunos` (BASE_ALUNOS) e ESTEIRA_TALENTOS.
+  const trancado = baseAlunos.tp_trancado + baseAlunos.st_trancado;
+  const alunoExterno = parseInt((data.ESTEIRA_TALENTOS?.Geral || {})['Analistas Externos']) || 0;
 
-  // Gráfico de Matrículas por mês
-  if (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels && kpis.matriculas_12_meses.labels.length > 0) {
-    barChart('matriculasChart', kpis.matriculas_12_meses.labels, kpis.matriculas_12_meses.vals, {highlight:7});
+  // Gráfico de Matrículas por mês — reaproveita a mesma série já lida e
+  // ordenada no topo da função (`mesesOrdenados`/`rotulosMatriculas`), em vez
+  // de `kpis.matriculas_12_meses`, que não existe nesta fonte de dados.
+  // O título e o hint ficam no mesmo .card do gráfico: sobe a partir do id
+  // 'matriculasChart' para achar os dois sem depender de posição entre os
+  // vários <h3> da seção #base.
+  if (typeof mesesOrdenados !== 'undefined' && mesesOrdenados.length) {
+    barChart('matriculasChart', rotulosMatriculas, valsMatriculas, {highlight:mesesOrdenados.length-1});
+    const cardMatriculas = document.getElementById('matriculasChart')?.closest('.card');
+    const fmt = x => x.k.replace(/\.?\/(\d{2})(\d{2})/, '/$2');
+    if (cardMatriculas) {
+      const h3 = cardMatriculas.querySelector('h3');
+      if (h3) h3.textContent = `Matrículas por mês · ${fmt(mesesOrdenados[0])} – ${fmt(mesesOrdenados[mesesOrdenados.length-1])}`;
+      const hint = cardMatriculas.querySelector('.hint');
+      if (hint) {
+        const totalPeriodo = valsMatriculas.reduce((a,b)=>a+b,0);
+        let maxV=0, maxLbl='';
+        mesesOrdenados.forEach((x,i)=>{ if(valsMatriculas[i]>maxV){ maxV=valsMatriculas[i]; maxLbl=rotulosMatriculas[i]; } });
+        hint.textContent = `${totalPeriodo} matrículas no período. Pico em ${maxLbl} (${maxV}).`;
+      }
+    }
   }
 
   // Vínculo com a ECGNow (gráfico horizontal)
@@ -1158,82 +1289,71 @@ function updateDashboardKPIs(kpis) {
       {n:'Ex-analista',v:exAnalistas,c:'#94c6e8'}
     ];
     hBars('vinculoChart', vinculo, {padL:170});
+    const cardVinculo = vinculoChart.closest('.card');
+    const hintVinculo = cardVinculo?.querySelector('.hint');
+    if (hintVinculo) {
+      hintVinculo.textContent = `A maior parte da base é de alunos externos; ${analistas} analistas ativos e ${exAnalistas} ex-analistas passaram pelo curso.`;
+    }
   }
 
-  // Status do curso (Donut)
-  // Status do curso (Donut)
+  // Status do curso (Donut) — o donut() em si está comentado (não renderiza),
+  // mas o array usava nomes que nunca existiram em `baseAlunos`; ajustado para
+  // os campos reais (soma das duas modalidades) para não deixar `undefined` à
+  // espera de alguém religar o donut mais tarde.
   const statusChart = [
     {n:'Concluído',v:concluidos,c:'#10b981'},
     {n:'Ativo (estudando)',v:ativoEstudando,c:'#0ea5e9'},
-    {n:'Cancelou',v:baseAlunos.cancelou,c:'#ef4444'},
-    {n:'Abandono',v:baseAlunos.abandono,c:'#f0879b'},
-    {n:'Bloqueado',v:baseAlunos.bloqueado,c:'#94a3b8'},
+    {n:'Cancelou',v:baseAlunos.tp_cancelou+baseAlunos.st_cancelou,c:'#ef4444'},
+    {n:'Abandono',v:baseAlunos.tp_abandono+baseAlunos.st_abandono,c:'#f0879b'},
+    {n:'Bloqueado',v:baseAlunos.tp_bloqueado+baseAlunos.st_bloqueado,c:'#94a3b8'},
     {n:'Trancado',v:trancado,c:'#cbd5e1'},
     {n:'Aluno externo',v:alunoExterno,c:'#8b5cf6'}
   ];
   const statusDonutElem = document.getElementById('statusDonut');
   if(statusDonutElem) {
-    // donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+    donut('statusDonut', statusChart, String(total), 'alunos', {w:420,h:260,lx:240});
+    const cardStatus = statusDonutElem.closest('.card');
+    const hintStatus = cardStatus?.querySelector('.hint');
+    if (hintStatus && total) {
+      const pctAtivos = (((concluidos + ativoEstudando) / total) * 100).toFixed(0);
+      const pctChurn = basePratica ? (((baseAlunos.tp_cancelou + baseAlunos.tp_abandono + baseAlunos.st_cancelou + baseAlunos.st_abandono) / basePratica) * 100).toFixed(1) : '0.0';
+      hintStatus.textContent = `Concluintes e alunos ativos somam ${pctAtivos}% da base; churn histórico (cancelamento formal + abandono) é de ${pctChurn}%.`;
+    }
   }
 
-  // Card de Alunos em Risco (Abaixo dos 50%)
+  // Card de Alunos em Risco (Abaixo dos 50%) — a planilha não traz mais esse
+  // corte (não existe "abaixo de 50%" em BASE_ALUNOS nem em ENGAJAMENTO hoje).
+  // Mostrar 0 aqui seria afirmar "ninguém em risco", o que não é um dado — é a
+  // ausência de um. O card avisa em vez de inventar um número.
   const riscoCard = document.getElementById('riscoCard');
   if(riscoCard) {
-    const abaixo50 = baseAlunos.abaixo_50pct || 0;
-    const pctRisco = ((abaixo50 / basePratica) * 100).toFixed(1);
     riscoCard.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
-        <div style="background:#fef3c7;border-radius:12px;padding:14px 16px">
-          <div style="font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#92400e">Alunos em Risco</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:34px;font-weight:800;color:#92400e;margin-top:6px">${abaixo50}</div>
-          <div style="font-size:11.5px;font-weight:700;color:#92400e">${pctRisco}% da base · Progresso < 50%</div>
-        </div>
+      <div style="padding:18px;color:#64748b;font-size:12.5px;line-height:1.5">
+        Esse indicador (progresso abaixo de 50%) não está mais na planilha.
       </div>`;
   }
 
-  // Card de Indicadores (Progresso e Engajamento)
+  // Card de Indicadores (Progresso e Engajamento) — mesmo motivo: hotmart e
+  // "abaixo de 50%" não têm fonte na planilha atual.
   const indicadoresCard = document.getElementById('indicadoresCard');
   if(indicadoresCard) {
-    const progresso_hotmart = kpis.progresso_medio_hotmart || 0;
-    const abaixo_50 = baseAlunos.abaixo_50pct || 0;
-    const pct_abaixo_50 = baseAlunos.abaixo_50pct_pct || '0';
-
+    // Os quatro cards à direita (Hotmart, Abaixo 50%, Engaj. por nível) liam
+    // `kpis.progresso_medio_hotmart`, `baseAlunos.abaixo_50pct*` e um
+    // `engajDetalhado.alto/medio/baixo/nenhum` que é de uma OUTRA declaração
+    // de `engajDetalhado` (dentro de um IIFE mais acima) — nenhum desses
+    // campos tem fonte na planilha atual, que só traz "Alto+Médio" agregado,
+    // não os quatro níveis separados. Mostra só o que existe de fato.
     indicadoresCard.innerHTML = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:6px">
         <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
           <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Ativos 30 dias</div>
           <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${ativos30}</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}% da base</div>
-        </div>
-        <div style="background:#fef3c7;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#92400e">Abaixo 50%</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#92400e;margin-top:4px">${abaixo_50}</div>
-          <div style="font-size:9.5px;color:#92400e;font-weight:700">${pct_abaixo_50}% em risco</div>
-        </div>
-        <div style="background:#f1f7fc;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)">Hotmart</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:var(--navy);margin-top:4px">${progresso_hotmart}%</div>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:700">Progresso médio</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:700">últimos 30 dias</div>
         </div>
         <div style="background:#d1fae5;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajDetalhado.alto}</div>
-          <div style="font-size:9.5px;color:#047857;font-weight:700">${engajDetalhado.alto_pct}%</div>
-        </div>
-        <div style="background:#bfdbfe;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#0369a1">Engaj. Médio</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#0369a1;margin-top:4px">${engajDetalhado.medio}</div>
-          <div style="font-size:9.5px;color:#0369a1;font-weight:700">${engajDetalhado.medio_pct}%</div>
-        </div>
-        <div style="background:#fed7aa;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b45309">Engaj. Baixo</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b45309;margin-top:4px">${engajDetalhado.baixo}</div>
-          <div style="font-size:9.5px;color:#b45309;font-weight:700">${engajDetalhado.baixo_pct}%</div>
-        </div>
-        <div style="background:#fee2e2;border-radius:10px;padding:12px 14px">
-          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#b91c1c">Engaj. Nenhum</div>
-          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#b91c1c;margin-top:4px">${engajDetalhado.nenhum}</div>
-          <div style="font-size:9.5px;color:#b91c1c;font-weight:700">${engajDetalhado.nenhum_pct}%</div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#047857">Engaj. Alto+Médio</div>
+          <div style="font-family:'Bricolage Grotesque';font-size:18px;font-weight:800;color:#047857;margin-top:4px">${engajAltaMedio}</div>
+          <div style="font-size:9.5px;color:#047857;font-weight:700">${engajAltaMedioP.toFixed(1)}%</div>
         </div>
       </div>`;
   }
@@ -1273,32 +1393,38 @@ function updateDashboardKPIs(kpis) {
 
   const leituraExecutiva = document.querySelector('#leitura .grid');
   if(leituraExecutiva) {
-    // Calcular dados dinâmicos dos gráficos
-    const matrMatrVals = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.vals) || [];
-    const matrMatrLabels = (kpis.matriculas_12_meses && kpis.matriculas_12_meses.labels) || [];
-    const matrMatrTotal = matrMatrVals.reduce((a,b)=>a+b,0);
-    const matrMatrMaxMes = (matrMatrVals.length > 0) ? Math.max(...matrMatrVals) : 0;
-    const matrMatrMaxMesIdx = matrMatrVals.indexOf(matrMatrMaxMes);
-    const mesMaxMatr = matrMatrLabels[matrMatrMaxMesIdx] || 'N/A';
-
-    const churnRate = (((baseAlunos.cancelou + baseAlunos.abandono) / basePratica) * 100).toFixed(1);
-    const churnQtd = baseAlunos.cancelou + baseAlunos.abandono;
-    const pct_inadequimplencia = ((kpis.inadimplencia_qtd / basePratica) * 100).toFixed(0);
-    // engajAltaMedioP ja veio da planilha acima. O caminho antigo
-    // (kpis.engajamento_alto_medio) e do formato do kpis.json aposentado e
-    // hoje nao existe, entao o texto saia sempre "0.0%".
+    // Estes textos liam campos de `kpis.*` (matriculas_12_meses,
+    // taxa_aprovacao_pct, inadimplencia_qtd/valor, ativos_30_dias) que vinham
+    // de uma API JSON antiga e nunca existiram no array que a planilha devolve
+    // hoje — a tela mostrava "undefined distribuídos em undefined alunos" e
+    // "N/A". Reconstruído a partir dos mesmos dados que o resto da capa usa.
+    const churnQtd = baseAlunos.tp_cancelou + baseAlunos.tp_abandono + baseAlunos.st_cancelou + baseAlunos.st_abandono;
+    const churnRate = basePratica ? ((churnQtd / basePratica) * 100).toFixed(1) : '0.0';
     const pct_engajAltoMedio = engajAltaMedioP.toFixed(1);
+    const pctConversaoSeletivo = baseAlunos.tp_aprovados ? Math.round((analistas / baseAlunos.tp_aprovados) * 100) : 0;
+
+    let matrMatrTotal = 0, mesMaxMatr = 'N/A', matrMatrMaxMes = 0;
+    if (typeof mesesOrdenados !== 'undefined' && mesesOrdenados.length) {
+      matrMatrTotal = mesesOrdenados.reduce((s,x) => s + (parseInt(matriculas[x.k]?.Quantidade) || 0), 0);
+      mesesOrdenados.forEach(x => {
+        const v = parseInt(matriculas[x.k]?.Quantidade) || 0;
+        if (v > matrMatrMaxMes) { matrMatrMaxMes = v; mesMaxMatr = x.k.split(/[.\/]/)[0]; mesMaxMatr = mesMaxMatr.charAt(0).toUpperCase()+mesMaxMatr.slice(1); }
+      });
+    }
+
+    const inadTxt = resumo['Inadimplência'] || '—';
+    const inadDesc = getDesc('RESUMO', 'Inadimplência') || '';
 
     const insights = `
       <div>
-        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${kpis.taxa_aprovacao_pct}% de conversão no seletivo) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
-        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência ASAAS crescente.</b><p>Cobranças crescem — total de ${matrMatrTotal} matrículas em 12 meses com pico em ${mesMaxMatr} (${matrMatrMaxMes} inscrições). Mantido o ritmo, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
+        <div class="insight"><div class="ico g">🧲</div><div><b>A esteira de talentos é o maior ativo estratégico do curso.</b><p>${analistasTotal} alunos formados viraram analistas ECGNOW (${pctConversaoSeletivo}% de conversão sobre os aprovados) e ${analistas} estão ativos na ECGNow. Além da receita, o CPVH reduz custo e risco de contratação de uma função crítica.</p></div></div>
+        <div class="insight"><div class="ico b">📈</div><div><b>Recorrência ASAAS crescente.</b><p>Cobranças crescem — total de ${matrMatrTotal} matrículas no período com pico em ${mesMaxMatr} (${matrMatrMaxMes} inscrições). Mantido o ritmo, a recorrência se estabiliza como receita previsível da linha Educação.</p></div></div>
         <div class="insight"><div class="ico g">🎓</div><div><b>Base de alunos com forte potencial.</b><p>${total} alunos cadastrados com ${ativoEstudando} estudando agora. Engajamento Alto+Médio de ${pct_engajAltoMedio}% indica base comprometida. Taxa de conclusão de ${taxaConclusao}% mostra desempenho positivo.</p></div></div>
       </div>
       <div>
-        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${kpis.inadimplencia_valor} distribuídos em ${kpis.inadimplencia_qtd} alunos (~${pct_inadequimplencia}% da base ativa). Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
+        <div class="insight"><div class="ico y">⚠️</div><div><b>Inadimplência merece régua de cobrança.</b><p>${inadTxt}${inadDesc ? ' (' + inadDesc + ')' : ''}. Um fluxo de cobrança automatizado (lembrete → renegociação → bloqueio) protegeria a margem da linha.</p></div></div>
         <div class="insight"><div class="ico y">📉</div><div><b>Churn histórico demanda ação.</b><p>${churnQtd} alunos cancelaram ou abandonaram (${churnRate}% da base). Cancelamentos e abandonos são oportunidades para reengajamento com réguas automáticas de e-mail/WhatsApp por marco da trilha.</p></div></div>
-        <div class="insight"><div class="ico r">🕳️</div><div><b>Progresso teórico como indicador crítico.</b><p>${baseAlunos.abaixo_50pct} alunos (${baseAlunos.abaixo_50pct_pct}%) têm menos de 50% do teórico concluído. Apenas ${ativos30} acessaram nos últimos 30 dias (${(kpis.ativos_30_dias && kpis.ativos_30_dias.percentual) || '0'}%). Reengajamento é prioritário para reduzir abandono.</p></div></div>
+        <div class="insight"><div class="ico b">📊</div><div><b>Engajamento acompanha a base.</b><p>${ativos30} alunos acessaram a plataforma nos últimos 30 dias. Reengajamento contínuo é prioritário para reduzir abandono ao longo da trilha.</p></div></div>
       </div>
     `;
 
