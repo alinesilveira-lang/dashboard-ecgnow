@@ -128,6 +128,23 @@ async function lerInadimplenciaAoVivo(){
   }
 }
 
+/* Indicadores de Capacitação Continuada (CC), ao vivo do servidor da Mentoria.
+ *
+ * Mesmo padrão de lerInadimplenciaAoVivo: o servidor já consulta o Postgres e
+ * expõe só o agregado em /api/publico/cc, sem PII. Sem fallback de planilha
+ * aqui — CC não tem aba própria na planilha, é dado novo (matrícula criada
+ * na Etapa 3 da migração de CC na Mentoria). Se o servidor estiver fora, o
+ * card mostra "indisponível" em vez de inventar um número de outra fonte.
+ */
+async function lerCCAoVivo(){
+  const API='https://mentoria-viver-de-holter-production.up.railway.app/api/publico/cc';
+  const r=await fetch(API);
+  if(!r.ok) throw new Error('servidor respondeu '+r.status);
+  const d=await r.json();
+  if(typeof d.ativos!=='number') throw new Error('resposta sem ativos');
+  return {ativos:d.ativos, receitaTotal:d.receita_total||0, consultadoEm:d.consultado_em};
+}
+
 /* Avisa na tela quando a planilha não responde, em vez de deixar o card vazio
  * sem explicação. */
 function avisarErro(ids,e){

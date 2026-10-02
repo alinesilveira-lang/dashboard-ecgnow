@@ -77,6 +77,12 @@ svg text{font-family:'Nunito',sans-serif}
         <div id="chart2"></div>
       </div>
       <div class="card chart-card">
+        <h3>Capacitação Continuada (CC)</h3>
+        <div class="hint">Alunos em matrícula de CC ativa e receita já recebida em ciclos pagos. CC é mensal — não renovar não é inadimplência.</div>
+        <div class="hint" id="cc-resumo" style="color:#0D2137;font-weight:600"></div>
+        <div class="hint" id="cc-fonte" style="font-weight:600"></div>
+      </div>
+      <div class="card chart-card">
         <h3>Inadimplência · Faixas de atraso</h3>
         <div class="hint">Onde está o valor em aberto, por gravidade do atraso.</div>
         <div id="chart3"></div>
@@ -187,6 +193,24 @@ lerInadimplenciaAoVivo()
     }
   })
   .catch(e=>avisarErro(['chart1','chart2','chart3'],e));
+
+lerCCAoVivo()
+  .then(cc=>{
+    const res=document.getElementById('cc-resumo');
+    if(res) res.textContent=cc.ativos+' aluno(s) em CC ativo · '+moedaBR(cc.receitaTotal)+' recebidos em ciclos pagos';
+    const fonte=document.getElementById('cc-fonte');
+    if(fonte){
+      const h=cc.consultadoEm?new Date(cc.consultadoEm)
+        .toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+      fonte.textContent='Ao vivo da Mentoria'+(h?' · consultado '+h:'');
+      fonte.style.color='#059669';
+    }
+  })
+  .catch(e=>{
+    const res=document.getElementById('cc-resumo');
+    if(res) res.textContent='Indisponível agora.';
+    console.error('[financeiro] CC indisponível:',e.message);
+  });
 </script>
 
 
